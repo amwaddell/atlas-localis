@@ -113,7 +113,7 @@ def _make_rewrite_query_node(
     )
 
     def rewrite_query_node(state: SupervisorState) -> dict[str, Any]:
-        chat_history = state.get("chat_history", [])
+        chat_history = state.get("chat_history") or []
         conversation_summary = state.get("conversation_summary", "")
         question = state["question"]
 
@@ -294,17 +294,17 @@ def _make_local_rag_node(rag_subgraph: Any) -> Any:
                 result = rag_subgraph.invoke(sub_input)
 
                 return {
-                    "retrieved": result.get("retrieved", []),
-                    "opened": result.get("opened", []),
-                    "answer_text": result.get("answer_text", ""),
-                    "citations": result.get("citations", []),
-                    "web_citations": result.get("web_citations", []),
+                    "retrieved": result.get("retrieved") or [],
+                    "opened": result.get("opened") or [],
+                    "answer_text": result.get("answer_text") or "",
+                    "citations": result.get("citations") or [],
+                    "web_citations": result.get("web_citations") or [],
                     "web_search_used": result.get("web_search_used", False),
-                    "web_results": result.get("web_results", []),
-                    "tokens_in": result.get("tokens_in", 0),
-                    "tokens_out": result.get("tokens_out", 0),
-                    "model_latency_ms": result.get("model_latency_ms", 0.0),
-                    "prompt_meta": result.get("prompt_meta", {}),
+                    "web_results": result.get("web_results") or [],
+                    "tokens_in": result.get("tokens_in") or 0,
+                    "tokens_out": result.get("tokens_out") or 0,
+                    "model_latency_ms": result.get("model_latency_ms") or 0.0,
+                    "prompt_meta": result.get("prompt_meta") or {},
                     "subgraph_used": "rag_graph",
                     "error": result.get("error"),
                 }
@@ -350,7 +350,7 @@ def _make_web_research_node(
                     query=question,
                     max_results=5,
                 )
-                web_results = search_result.get("results", [])
+                web_results = search_result.get("results") or []
 
                 if not web_results:
                     return {
@@ -437,19 +437,19 @@ def _make_timeline_research_node(researcher_subgraph: Any) -> Any:
                 result = researcher_subgraph.invoke(sub_input)
 
                 return {
-                    "retrieved": result.get("retrieved", []),
-                    "opened": result.get("opened", []),
-                    "answer_text": result.get("answer_text", ""),
-                    "citations": result.get("citations", []),
-                    "web_citations": result.get("web_citations", []),
-                    "timeline": result.get("timeline", []),
-                    "timeline_raw": result.get("timeline_raw", ""),
-                    "citation_validation": result.get("citation_validation", {}),
-                    "repair_attempts": result.get("repair_attempts", 0),
-                    "tokens_in": result.get("tokens_in", 0),
-                    "tokens_out": result.get("tokens_out", 0),
-                    "model_latency_ms": result.get("model_latency_ms", 0.0),
-                    "prompt_meta": result.get("prompt_meta", {}),
+                    "retrieved": result.get("retrieved") or [],
+                    "opened": result.get("opened") or [],
+                    "answer_text": result.get("answer_text") or "",
+                    "citations": result.get("citations") or [],
+                    "web_citations": result.get("web_citations") or [],
+                    "timeline": result.get("timeline") or [],
+                    "timeline_raw": result.get("timeline_raw") or "",
+                    "citation_validation": result.get("citation_validation") or {},
+                    "repair_attempts": result.get("repair_attempts") or 0,
+                    "tokens_in": result.get("tokens_in") or 0,
+                    "tokens_out": result.get("tokens_out") or 0,
+                    "model_latency_ms": result.get("model_latency_ms") or 0.0,
+                    "prompt_meta": result.get("prompt_meta") or {},
                     "subgraph_used": "researcher_graph",
                     "error": result.get("error"),
                 }
@@ -590,19 +590,82 @@ def _make_math_node(
 
 
 def _make_merge_node() -> Any:
-    """Pass-through node: exists for observability and as a stable merge point."""
+    """
+    Final merge point: normalizes state before it reaches the caller.
+
+    LangGraph sets TypedDict fields to ``None`` when no node writes
+    them.  On the decomposed path, fields like ``route``, ``timeline``,
+    ``calculator_result`` etc. are never set and remain ``None``.
+    The display layer / runner then crashes iterating over ``None``.
+
+    This node converts every ``None`` to the appropriate empty default
+    so downstream code never sees ``None`` for list/str/int/float fields.
+    """
+
+    # Fields and their safe empty defaults
+    _LIST_FIELDS = (
+        "retrieved",
+        "opened",
+        "citations",
+        "web_citations",
+        "web_results",
+        "sub_questions",
+        "sub_results",
+        "timeline",
+        "chat_history",
+    )
+    _STR_FIELDS = (
+        "answer_text",
+        "rewritten_query",
+        "route",
+        "router_method",
+        "router_rationale",
+        "subgraph_used",
+        "timeline_raw",
+        "conversation_summary",
+    )
+    _INT_FIELDS = ("tokens_in", "tokens_out", "repair_attempts")
+    _FLOAT_FIELDS = (
+        "model_latency_ms",
+        "router_latency_ms",
+        "router_confidence",
+        "decompose_latency_ms",
+    )
+    _DICT_FIELDS = ("prompt_meta", "citation_validation", "calculator_result")
+    _BOOL_FIELDS = ("is_decomposed", "web_search_used")
 
     def merge_node(state: SupervisorState) -> dict[str, Any]:
         with start_span(
             "graph.supervisor.merge",
             attributes={
-                "route": state.get("route", "unknown"),
-                "subgraph_used": state.get("subgraph_used", "unknown"),
+                "route": state.get("route") or "n/a",
+                "subgraph_used": state.get("subgraph_used") or "n/a",
                 "has_answer": bool(state.get("answer_text")),
-                "is_decomposed": state.get("is_decomposed", False),  # ← NEW
+                "is_decomposed": state.get("is_decomposed", False),
             },
         ):
-            return {}
+            updates: dict[str, Any] = {}
+
+            for key in _LIST_FIELDS:
+                if state.get(key) is None:
+                    updates[key] = []
+            for key in _STR_FIELDS:
+                if state.get(key) is None:
+                    updates[key] = ""
+            for key in _INT_FIELDS:
+                if state.get(key) is None:
+                    updates[key] = 0
+            for key in _FLOAT_FIELDS:
+                if state.get(key) is None:
+                    updates[key] = 0.0
+            for key in _DICT_FIELDS:
+                if state.get(key) is None:
+                    updates[key] = {}
+            for key in _BOOL_FIELDS:
+                if state.get(key) is None:
+                    updates[key] = False
+
+            return updates
 
     return merge_node
 

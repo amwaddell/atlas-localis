@@ -8,31 +8,25 @@ When a user asks a complex question with multiple independent parts
 2. Runs each sub-question through the RAG pipeline in parallel
 3. Synthesises all sub-answers into a single coherent response
 
-Integration
+Citation handling
+-----------------
+Small local models cannot reliably copy 16-character hex chunk_ids
+during synthesis.  To work around this, the synthesise node:
+
+1. Replaces raw ``[chunk_id_hash]`` in sub-answers with short labels
+   (``[REF_A1]``, ``[REF_B1]``, etc.) before sending to the LLM.
+2. Tells the LLM to preserve these short labels.
+3. After synthesis, maps labels back to real chunk_ids.
+4. Lets ``numberize_result()`` do the final ``[chunk_id]`` → ``[1]``
+   conversion for display.
+
+None-safety
 -----------
-The three node factories (``_make_decompose_node``,
-``_make_parallel_retrieve_node``, ``_make_synthesise_node``) are
-imported by ``supervisor_graph.py`` and wired as a pre-routing path.
-Simple questions pass through unchanged to normal routing.
-
-Supervisor topology after integration::
-
-    decompose_check ──[needs_decomposition]──→ parallel_retrieve → synthesise → merge → END
-                    ──[simple]──────────────→ route_question → [dispatch] → … → merge → END
-
-Usage (standalone, for testing)::
-
-    from workbench.graphs.decomposer import (
-        make_decompose_node,
-        make_parallel_retrieve_node,
-        make_synthesise_node,
-    )
-
-Dependencies
-------------
-- ``concurrent.futures`` for parallel sub-graph invocations
-- Existing ``rag_graph`` compiled subgraph for per-question retrieval
-- LLM via ``model.generate(messages, **settings)``
+LangGraph may set TypedDict fields to ``None`` rather than leaving
+them absent.  ``dict.get("key", [])`` returns ``None`` when the key
+exists with value ``None`` — the default only applies to *missing*
+keys.  All state access here uses ``state.get(key) or default``
+to handle both cases.
 """
 
 from __future__ import annotations
@@ -53,14 +47,35 @@ from workbench.prompting.prompt_builder import (
 #  Constants                                                          #
 # ------------------------------------------------------------------ #
 
-# Maximum sub-questions we'll allow (safety cap)
 MAX_SUB_QUESTIONS = 5
-
-# Default parallelism for sub-graph invocations
 DEFAULT_MAX_WORKERS = 4
 
+# Same pattern as citations.py _BRACKET_TOKEN_RE
+_BRACKET_TOKEN_RE = re.compile(r"\[([A-Za-z0-9_]+)\]")
+
+# Letters for per-sub-question label prefixes
+_LABEL_PREFIXES = "ABCDE"
+
+
 # ------------------------------------------------------------------ #
-#  Decomposition prompt (fallback when no PromptBuilder template)     #
+#  Safe state getters                                                 #
+# ------------------------------------------------------------------ #
+
+
+def _slist(state: dict[str, Any], key: str) -> list:
+    return state.get(key) or []
+
+
+def _sstr(state: dict[str, Any], key: str) -> str:
+    return state.get(key) or ""
+
+
+def _sint(state: dict[str, Any], key: str) -> int:
+    return state.get(key) or 0
+
+
+# ------------------------------------------------------------------ #
+#  Decomposition prompt (fallback)                                    #
 # ------------------------------------------------------------------ #
 
 _FALLBACK_DECOMPOSE_PROMPT = """\
@@ -90,7 +105,7 @@ JSON array of self-contained sub-questions — no commentary:
 """
 
 # ------------------------------------------------------------------ #
-#  Synthesis prompt (fallback when no PromptBuilder template)         #
+#  Synthesis prompt (fallback)                                        #
 # ------------------------------------------------------------------ #
 
 _FALLBACK_SYNTHESISE_PROMPT = """\
@@ -98,11 +113,18 @@ You are a research assistant.  The user asked a multi-part question.  \
 Each part was researched separately.  Your job is to combine the \
 sub-answers into a single coherent response.
 
-RULES:
-1. Preserve ALL citations exactly as they appear (e.g. [chunk_id]).
-2. Write a unified, paragraph-based answer — not a list of separate answers.
-3. If a sub-answer says it lacks evidence, acknowledge that gap.
-4. Keep the answer concise and well-structured.
+CITATION RULES (CRITICAL):
+1. Each sub-answer contains short reference labels like [REF_A1], \
+[REF_B1], etc.
+2. You MUST copy these labels exactly into your combined answer.
+3. Place labels immediately after the claim they support.
+4. Do NOT invent new labels.  Do NOT use [1], [2], etc.  Only use \
+the [REF_xx] labels from the sub-answers.
+
+STRUCTURE:
+- Write a unified, paragraph-based answer — not a list of sub-answers.
+- If a sub-answer says it lacks evidence, acknowledge that gap.
+- End with a brief summary sentence.
 
 {conversation_context}
 ORIGINAL QUESTION: {question}
@@ -110,7 +132,7 @@ ORIGINAL QUESTION: {question}
 --- SUB-ANSWERS ---
 {sub_answers_block}
 
-Write your combined answer now, preserving all citations.\
+Write your combined answer now.  Copy every [REF_xx] label exactly.\
 """
 
 # ------------------------------------------------------------------ #
@@ -122,42 +144,113 @@ def _parse_decompose_response(text: str) -> list[str] | None:
     """
     Parse the LLM's decomposition response.
 
-    Returns:
-        ``None`` if the model said SINGLE (no decomposition needed).
-        A list of sub-question strings if decomposition was requested.
+    Returns ``None`` for SINGLE, a list of sub-question strings otherwise.
     """
     cleaned = text.strip()
 
-    # Check for SINGLE verdict
     if cleaned.upper().startswith("SINGLE"):
         return None
 
-    # Try to extract a JSON array
-    # The model might wrap it in markdown fences
     cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
     cleaned = re.sub(r"\s*```$", "", cleaned)
 
     try:
         parsed = json.loads(cleaned)
         if isinstance(parsed, list) and all(isinstance(q, str) for q in parsed):
-            # Safety: cap and filter empties
             sub_qs = [q.strip() for q in parsed if q.strip()]
             if len(sub_qs) >= 2:
                 return sub_qs[:MAX_SUB_QUESTIONS]
     except (json.JSONDecodeError, TypeError):
         pass
 
-    # If we can't parse it, treat as SINGLE (safe fallback)
     return None
 
 
-def _format_sub_answers(sub_results: list[dict[str, Any]]) -> str:
-    """Format sub-question results into a text block for the synthesis prompt."""
+# ------------------------------------------------------------------ #
+#  Citation label helpers                                             #
+# ------------------------------------------------------------------ #
+
+
+def _build_label_map(sub_results: list[dict[str, Any]]) -> dict[str, str]:
+    """
+    Build chunk_id → REF_A1 / REF_B1 / … label mapping.
+
+    Each sub-question gets a letter prefix (A, B, C, …).
+    Each unique chunk within that sub-question gets a number.
+    """
+    chunk_id_to_label: dict[str, str] = {}
+    label_counter: dict[str, int] = {}
+
+    for i, sr in enumerate(sub_results):
+        prefix = _LABEL_PREFIXES[i] if i < len(_LABEL_PREFIXES) else chr(65 + i)
+
+        # Gather from opened evidence
+        for chunk in sr.get("opened") or []:
+            cid = chunk.get("chunk_id") or ""
+            if cid and cid not in chunk_id_to_label:
+                label_counter.setdefault(prefix, 0)
+                label_counter[prefix] += 1
+                chunk_id_to_label[cid] = f"REF_{prefix}{label_counter[prefix]}"
+
+        # Catch any cited IDs not in opened
+        for cid in sr.get("citations") or []:
+            if cid and cid not in chunk_id_to_label:
+                label_counter.setdefault(prefix, 0)
+                label_counter[prefix] += 1
+                chunk_id_to_label[cid] = f"REF_{prefix}{label_counter[prefix]}"
+
+    return chunk_id_to_label
+
+
+def _replace_ids_with_labels(text: str, id_to_label: dict[str, str]) -> str:
+    """Replace [chunk_id] → [REF_A1] in text."""
+
+    def _sub(match: re.Match) -> str:
+        token = match.group(1)
+        if token in id_to_label:
+            return f"[{id_to_label[token]}]"
+        return match.group(0)
+
+    return _BRACKET_TOKEN_RE.sub(_sub, text)
+
+
+def _replace_labels_with_ids(text: str, label_to_id: dict[str, str]) -> str:
+    """Replace [REF_A1] → [chunk_id] in synthesised text."""
+
+    def _sub(match: re.Match) -> str:
+        token = match.group(1)
+        if token in label_to_id:
+            return f"[{label_to_id[token]}]"
+        return match.group(0)
+
+    return re.sub(r"\[(REF_[A-Z]\d+)\]", _sub, text)
+
+
+def _strip_invalid_brackets(text: str, valid_ids: set[str]) -> str:
+    """Remove any [token] that isn't a valid chunk_id — cleans LLM junk."""
+    if not valid_ids:
+        return text
+
+    def _sub(match: re.Match) -> str:
+        return match.group(0) if match.group(1) in valid_ids else ""
+
+    cleaned = _BRACKET_TOKEN_RE.sub(_sub, text)
+    cleaned = re.sub(r"  +", " ", cleaned)
+    cleaned = re.sub(r" ([.,;:!?])", r"\1", cleaned)
+    return cleaned
+
+
+def _format_sub_answers_labelled(
+    sub_results: list[dict[str, Any]],
+    id_to_label: dict[str, str],
+) -> str:
+    """Format sub-answers for synthesis prompt, with REF labels."""
     parts: list[str] = []
     for i, sr in enumerate(sub_results, 1):
-        q = sr.get("question", f"Sub-question {i}")
-        a = sr.get("answer_text", "(no answer)")
-        parts.append(f"[Part {i}] {q}\n{a}")
+        q = sr.get("question") or f"Sub-question {i}"
+        a = sr.get("answer_text") or "(no answer)"
+        a_labelled = _replace_ids_with_labels(a, id_to_label)
+        parts.append(f"--- Part {i}: {q} ---\n{a_labelled}")
     return "\n\n".join(parts)
 
 
@@ -175,16 +268,6 @@ def make_decompose_node(
     """
     Create the decomposition-check node.
 
-    When ``enabled=False``, the node always returns ``is_decomposed=False``
-    and the supervisor falls through to normal routing.
-
-    When enabled, calls the LLM to decide whether the question has
-    multiple independent parts.  If yes, extracts sub-questions.
-
-    State reads:
-        ``question``, ``chat_history``, ``conversation_summary``,
-        ``rewritten_query``
-
     State writes:
         ``is_decomposed``, ``sub_questions``, ``decompose_latency_ms``
     """
@@ -195,13 +278,10 @@ def make_decompose_node(
     }
 
     def decompose_node(state: dict[str, Any]) -> dict[str, Any]:
-        # Use the rewritten query if available (chat coreference resolved),
-        # otherwise fall back to the raw question
-        question = state.get("rewritten_query") or state["question"]
-        chat_history = state.get("chat_history", [])
-        conversation_summary = state.get("conversation_summary", "")
+        question = _sstr(state, "rewritten_query") or state["question"]
+        chat_history = _slist(state, "chat_history")
+        conversation_summary = _sstr(state, "conversation_summary")
 
-        # --- Disabled: pass through immediately -----------------------
         if not enabled:
             return {
                 "is_decomposed": False,
@@ -216,7 +296,6 @@ def make_decompose_node(
             t0 = time.time()
 
             try:
-                # Build conversation context for chat-aware decomposition
                 conversation_context = ""
                 if chat_history:
                     conversation_context = (
@@ -228,7 +307,6 @@ def make_decompose_node(
                         + "\n"
                     )
 
-                # Build prompt
                 if prompt_builder is not None:
                     try:
                         user_prompt = prompt_builder.render(
@@ -273,7 +351,6 @@ def make_decompose_node(
                 }
 
             except Exception as exc:
-                # Decomposition failure is non-fatal — treat as SINGLE
                 latency_ms = (time.time() - t0) * 1000
                 add_span_attributes({"decompose_error": str(exc)[:200]})
                 return {
@@ -286,14 +363,8 @@ def make_decompose_node(
 
 
 def decompose_dispatcher(state: dict[str, Any]) -> str:
-    """
-    Conditional edge: route to parallel retrieval or normal routing.
-
-    Returns:
-        ``"parallel_retrieve"`` if the question was decomposed.
-        ``"route_question"`` for simple (non-decomposed) questions.
-    """
-    if state.get("is_decomposed", False) and state.get("sub_questions"):
+    """Route to parallel retrieval or normal routing."""
+    if state.get("is_decomposed", False) and _slist(state, "sub_questions"):
         return "parallel_retrieve"
     return "route_question"
 
@@ -305,25 +376,15 @@ def make_parallel_retrieve_node(
     """
     Create the parallel retrieval node.
 
-    Invokes the compiled ``rag_subgraph`` once per sub-question,
-    concurrently via ``ThreadPoolExecutor``.  Collects all results
-    into ``state["sub_results"]``.
-
-    Each sub-invocation gets the full chat context so that
-    ``rewrite_query`` inside the rag_graph can resolve coreferences.
-
-    State reads:
-        ``sub_questions``, ``chat_history``, ``conversation_summary``
-
     State writes:
         ``sub_results``, ``retrieved``, ``opened``, ``citations``,
         ``tokens_in``, ``tokens_out``
     """
 
     def parallel_retrieve_node(state: dict[str, Any]) -> dict[str, Any]:
-        sub_questions = state.get("sub_questions", [])
-        chat_history = state.get("chat_history", [])
-        conversation_summary = state.get("conversation_summary", "")
+        sub_questions = _slist(state, "sub_questions")
+        chat_history = _slist(state, "chat_history")
+        conversation_summary = _sstr(state, "conversation_summary")
 
         with start_span(
             "graph.parallel_retrieve",
@@ -335,7 +396,6 @@ def make_parallel_retrieve_node(
             t0 = time.time()
 
             def _run_sub(question: str) -> dict[str, Any]:
-                """Invoke rag_subgraph for a single sub-question."""
                 sub_input: dict[str, Any] = {"question": question}
                 if chat_history:
                     sub_input["chat_history"] = chat_history
@@ -344,9 +404,6 @@ def make_parallel_retrieve_node(
 
                 result = rag_subgraph.invoke(sub_input)
 
-                # Use `or []` (not just `.get(k, [])`) because
-                # LangGraph may set list fields to None rather
-                # than leaving them absent from the state dict.
                 return {
                     "question": question,
                     "answer_text": result.get("answer_text") or "",
@@ -360,24 +417,21 @@ def make_parallel_retrieve_node(
                     "error": result.get("error"),
                 }
 
-            # --- Fan-out: run all sub-questions in parallel ------------
             sub_results: list[dict[str, Any]] = []
 
             try:
                 with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                    future_to_question = {
+                    future_to_q = {
                         executor.submit(_run_sub, q): q for q in sub_questions
                     }
-
-                    for future in as_completed(future_to_question):
-                        question = future_to_question[future]
+                    for future in as_completed(future_to_q):
+                        q = future_to_q[future]
                         try:
-                            result = future.result()
-                            sub_results.append(result)
+                            sub_results.append(future.result())
                         except Exception as exc:
                             sub_results.append(
                                 {
-                                    "question": question,
+                                    "question": q,
                                     "answer_text": "",
                                     "citations": [],
                                     "web_citations": [],
@@ -390,28 +444,27 @@ def make_parallel_retrieve_node(
                                 }
                             )
             except Exception as exc:
-                # ThreadPool itself failed — still return what we have
                 add_span_attributes({"parallel_error": str(exc)[:200]})
 
-            # --- Sort sub_results to match original question order -----
+            # Sort to match original question order
             order = {q: i for i, q in enumerate(sub_questions)}
             sub_results.sort(key=lambda r: order.get(r.get("question", ""), 999))
 
-            # --- Aggregate metadata across sub-results -----------------
-            all_retrieved: list[dict[str, Any]] = []
-            all_opened: list[dict[str, Any]] = []
-            all_citations: list[str] = []
-            all_web_citations: list[str] = []
-            total_tokens_in = 0
-            total_tokens_out = 0
+            # Aggregate
+            all_retrieved: list = []
+            all_opened: list = []
+            all_citations: list = []
+            all_web_citations: list = []
+            total_in = 0
+            total_out = 0
 
             for sr in sub_results:
                 all_retrieved.extend(sr.get("retrieved") or [])
                 all_opened.extend(sr.get("opened") or [])
                 all_citations.extend(sr.get("citations") or [])
                 all_web_citations.extend(sr.get("web_citations") or [])
-                total_tokens_in += sr.get("tokens_in") or 0
-                total_tokens_out += sr.get("tokens_out") or 0
+                total_in += sr.get("tokens_in") or 0
+                total_out += sr.get("tokens_out") or 0
 
             latency_ms = (time.time() - t0) * 1000
 
@@ -428,10 +481,10 @@ def make_parallel_retrieve_node(
                 "sub_results": sub_results,
                 "retrieved": all_retrieved,
                 "opened": all_opened,
-                "citations": list(dict.fromkeys(all_citations)),  # dedupe, keep order
+                "citations": list(dict.fromkeys(all_citations)),
                 "web_citations": list(dict.fromkeys(all_web_citations)),
-                "tokens_in": total_tokens_in,
-                "tokens_out": total_tokens_out,
+                "tokens_in": total_in,
+                "tokens_out": total_out,
             }
 
     return parallel_retrieve_node
@@ -445,13 +498,9 @@ def make_synthesise_node(
     """
     Create the synthesis node.
 
-    Takes the sub-results produced by ``parallel_retrieve_node``
-    and calls the LLM to combine them into a single coherent answer
-    that preserves all citations.
-
-    State reads:
-        ``question``, ``sub_results``, ``chat_history``,
-        ``conversation_summary``
+    Uses short REF labels so the LLM can copy citations reliably,
+    then maps them back to real chunk_ids afterward.  The downstream
+    ``numberize_result()`` handles the final [chunk_id] → [1] display.
 
     State writes:
         ``answer_text``, ``citations``, ``web_citations``,
@@ -462,33 +511,44 @@ def make_synthesise_node(
 
     def synthesise_node(state: dict[str, Any]) -> dict[str, Any]:
         question = state["question"]
-        sub_results = state.get("sub_results", [])
-        chat_history = state.get("chat_history", [])
-        conversation_summary = state.get("conversation_summary", "")
+        sub_results = _slist(state, "sub_results")
+        chat_history = _slist(state, "chat_history")
+        conversation_summary = _sstr(state, "conversation_summary")
 
-        # Edge case: no sub-results at all
         if not sub_results:
             return {
                 "answer_text": (
                     "I don't have enough evidence in the provided "
                     "articles to fully answer this question."
                 ),
+                "citations": [],
+                "web_citations": [],
                 "subgraph_used": "decomposer",
                 "prompt_meta": {"variant": "synthesise_empty"},
             }
 
-        # If only one sub-result came back (e.g. one sub-q failed),
-        # just return that answer directly — no synthesis needed
+        # --- Collect all valid chunk_ids ------------------------------
+        all_valid_ids: set[str] = set()
+        for sr in sub_results:
+            for cid in sr.get("citations") or []:
+                if cid:
+                    all_valid_ids.add(cid)
+            for chunk in sr.get("opened") or []:
+                cid = chunk.get("chunk_id") or ""
+                if cid:
+                    all_valid_ids.add(cid)
+
+        # Single successful sub-result → passthrough (no synthesis)
         successful = [sr for sr in sub_results if sr.get("answer_text")]
         if len(successful) == 1:
             sr = successful[0]
             return {
-                "answer_text": sr["answer_text"],
-                "citations": sr.get("citations", []),
-                "web_citations": sr.get("web_citations", []),
-                "tokens_in": state.get("tokens_in", 0),
-                "tokens_out": state.get("tokens_out", 0),
-                "model_latency_ms": sr.get("model_latency_ms", 0.0),
+                "answer_text": sr.get("answer_text") or "",
+                "citations": sr.get("citations") or [],
+                "web_citations": sr.get("web_citations") or [],
+                "tokens_in": _sint(state, "tokens_in"),
+                "tokens_out": _sint(state, "tokens_out"),
+                "model_latency_ms": sr.get("model_latency_ms") or 0.0,
                 "prompt_meta": {"variant": "synthesise_single_passthrough"},
                 "subgraph_used": "decomposer",
             }
@@ -501,7 +561,11 @@ def make_synthesise_node(
             },
         ):
             try:
-                # Build conversation context
+                # --- Build label map ----------------------------------
+                id_to_label = _build_label_map(sub_results)
+                label_to_id = {v: k for k, v in id_to_label.items()}
+
+                # --- Conversation context -----------------------------
                 conversation_context = ""
                 if chat_history:
                     conversation_context = (
@@ -513,9 +577,12 @@ def make_synthesise_node(
                         + "\n"
                     )
 
-                sub_answers_block = _format_sub_answers(sub_results)
+                # --- Build labelled sub-answers -----------------------
+                sub_answers_block = _format_sub_answers_labelled(
+                    sub_results, id_to_label
+                )
 
-                # Build prompt
+                # --- Build synthesis prompt ---------------------------
                 if prompt_builder is not None:
                     try:
                         user_prompt = prompt_builder.render(
@@ -540,64 +607,69 @@ def make_synthesise_node(
                 messages = [{"role": "user", "content": user_prompt}]
                 response = model.generate(messages, **gen_settings)
 
-                # Aggregate tokens: sub-retrieval tokens + synthesis tokens
-                prev_tokens_in = state.get("tokens_in", 0)
-                prev_tokens_out = state.get("tokens_out", 0)
+                # --- Post-process citations ---------------------------
+                # 1. REF labels → real chunk_ids
+                answer_with_ids = _replace_labels_with_ids(response.text, label_to_id)
+                # 2. Strip any invented [1], [2], partial hashes, etc.
+                clean_answer = _strip_invalid_brackets(answer_with_ids, all_valid_ids)
 
-                # Re-extract citations from the synthesised answer
-                # (the LLM should preserve them, but let's verify)
-                all_known_ids: list[str] = []
-                all_known_urls: list[str] = []
-                for sr in sub_results:
-                    all_known_ids.extend(sr.get("citations") or [])
-                    all_known_urls.extend(sr.get("web_citations") or [])
+                # --- Token accounting ---------------------------------
+                prev_in = _sint(state, "tokens_in")
+                prev_out = _sint(state, "tokens_out")
 
-                from workbench.graphs.rag_graph import (
+                # --- Extract citations from cleaned answer ------------
+                # Import from canonical source (citations.py)
+                from workbench.prompting.citations import (
                     extract_citations,
                     extract_web_citations,
                 )
 
-                final_citations = extract_citations(
-                    response.text, list(dict.fromkeys(all_known_ids))
-                )
-                final_web_citations = extract_web_citations(
-                    response.text, list(dict.fromkeys(all_known_urls))
-                )
+                final_citations = extract_citations(clean_answer, list(all_valid_ids))
+
+                all_urls: list[str] = []
+                for sr in sub_results:
+                    for url in sr.get("web_citations") or []:
+                        if url and url not in all_urls:
+                            all_urls.append(url)
+
+                final_web_citations = extract_web_citations(clean_answer, all_urls)
 
                 add_span_attributes(
                     {
-                        "synthesised_answer_length": len(response.text),
+                        "synthesised_length": len(clean_answer),
+                        "labels_mapped": len(id_to_label),
                         "final_citation_count": len(final_citations),
-                        "synthesis_tokens_in": response.tokens_in,
-                        "synthesis_tokens_out": response.tokens_out,
                     }
                 )
 
                 return {
-                    "answer_text": response.text,
+                    "answer_text": clean_answer,
                     "citations": final_citations,
                     "web_citations": final_web_citations,
-                    "tokens_in": prev_tokens_in + response.tokens_in,
-                    "tokens_out": prev_tokens_out + response.tokens_out,
-                    "model_latency_ms": response.latency_ms,
+                    "tokens_in": prev_in + (response.tokens_in or 0),
+                    "tokens_out": prev_out + (response.tokens_out or 0),
+                    "model_latency_ms": response.latency_ms or 0.0,
                     "prompt_meta": {
                         "variant": "synthesise_decomposed",
                         "sub_question_count": len(sub_results),
+                        "labels_mapped": len(id_to_label),
                     },
                     "subgraph_used": "decomposer",
                 }
 
             except Exception as exc:
-                # Synthesis failed — concatenate sub-answers as fallback
+                # Fallback: concatenate sub-answers (they already
+                # have real chunk_ids from the rag_graph)
                 fallback_parts = []
                 for sr in sub_results:
-                    if sr.get("answer_text"):
-                        fallback_parts.append(sr["answer_text"])
+                    a = sr.get("answer_text") or ""
+                    if a:
+                        fallback_parts.append(a)
 
                 return {
-                    "answer_text": "\n\n".join(fallback_parts)
-                    if fallback_parts
-                    else "",
+                    "answer_text": "\n\n".join(fallback_parts),
+                    "citations": list(all_valid_ids),
+                    "web_citations": [],
                     "subgraph_used": "decomposer",
                     "prompt_meta": {"variant": "synthesise_fallback"},
                     "error": f"synthesise_node: {type(exc).__name__}: {exc}",
