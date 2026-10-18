@@ -24,7 +24,8 @@ import pytest
 
 from workbench.graphs.decomposer import (
     MAX_SUB_QUESTIONS,
-    _format_sub_answers,
+    _build_label_map,
+    _format_sub_answers_labelled,
     _parse_decompose_response,
     decompose_dispatcher,
     make_decompose_node,
@@ -394,7 +395,7 @@ class TestSynthesiseNode:
 
     def test_combines_sub_answers(self):
         model = FakeModel(
-            responses=["WW1 started in 1914 [chunk_a] and ended in 1918 [chunk_b]."]
+            responses=["WW1 started in 1914 [REF_A1] and ended in 1918 [REF_B1]."]
         )
         node = make_synthesise_node(model=model)
         result = node(
@@ -405,12 +406,14 @@ class TestSynthesiseNode:
                         "question": "When did WW1 start?",
                         "answer_text": "WW1 started in 1914. [chunk_a]",
                         "citations": ["chunk_a"],
+                        "opened": [{"chunk_id": "chunk_a"}],
                         "web_citations": [],
                     },
                     {
                         "question": "When did WW1 end?",
                         "answer_text": "WW1 ended in 1918. [chunk_b]",
                         "citations": ["chunk_b"],
+                        "opened": [{"chunk_id": "chunk_b"}],
                         "web_citations": [],
                     },
                 ],
@@ -439,6 +442,7 @@ class TestSynthesiseNode:
                         "question": "Q1",
                         "answer_text": "Direct answer. [chunk_1]",
                         "citations": ["chunk_1"],
+                        "opened": [{"chunk_id": "chunk_1"}],
                         "web_citations": [],
                     },
                     {
@@ -450,7 +454,8 @@ class TestSynthesiseNode:
                 ],
             }
         )
-        assert result["answer_text"] == "Direct answer. [chunk_1]"
+        assert result["answer_text"].startswith("Direct answer. [chunk_1]")
+        assert "Research incomplete for: Q2" in result["answer_text"]
         assert result["prompt_meta"]["variant"] == "synthesise_single_passthrough"
 
     def test_synthesis_error_falls_back_to_concatenation(self):
@@ -461,8 +466,16 @@ class TestSynthesiseNode:
             {
                 "question": "Q?",
                 "sub_results": [
-                    {"question": "Q1", "answer_text": "A1", "citations": []},
-                    {"question": "Q2", "answer_text": "A2", "citations": []},
+                    {
+                        "question": "Q1",
+                        "answer_text": "A1 [c1]",
+                        "opened": [{"chunk_id": "c1"}],
+                    },
+                    {
+                        "question": "Q2",
+                        "answer_text": "A2 [c2]",
+                        "opened": [{"chunk_id": "c2"}],
+                    },
                 ],
             }
         )
@@ -471,14 +484,22 @@ class TestSynthesiseNode:
         assert result["error"]
 
     def test_accumulates_tokens(self):
-        model = FakeModel(responses=["Combined answer."])
+        model = FakeModel(responses=["Combined answer [REF_A1][REF_B1]."])
         node = make_synthesise_node(model=model)
         result = node(
             {
                 "question": "Q?",
                 "sub_results": [
-                    {"question": "Q1", "answer_text": "A1", "citations": []},
-                    {"question": "Q2", "answer_text": "A2", "citations": []},
+                    {
+                        "question": "Q1",
+                        "answer_text": "A1 [c1]",
+                        "opened": [{"chunk_id": "c1"}],
+                    },
+                    {
+                        "question": "Q2",
+                        "answer_text": "A2 [c2]",
+                        "opened": [{"chunk_id": "c2"}],
+                    },
                 ],
                 "tokens_in": 200,  # from parallel retrieve
                 "tokens_out": 100,
@@ -527,13 +548,277 @@ class TestFormatSubAnswers:
             {"question": "Q1", "answer_text": "A1"},
             {"question": "Q2", "answer_text": "A2"},
         ]
-        block = _format_sub_answers(sub_results)
-        assert "[Part 1] Q1" in block
-        assert "[Part 2] Q2" in block
+        block = _format_sub_answers_labelled(sub_results, _build_label_map(sub_results))
+        assert "--- Part 1: Q1 ---" in block
+        assert "--- Part 2: Q2 ---" in block
         assert "A1" in block
         assert "A2" in block
 
     def test_handles_missing_answer(self):
         sub_results = [{"question": "Q1"}]
-        block = _format_sub_answers(sub_results)
+        block = _format_sub_answers_labelled(sub_results, _build_label_map(sub_results))
         assert "(no answer)" in block
+
+
+def _evidence_results():
+    return [
+        {
+            "question": "Q1",
+            "answer_text": "First [abc123].",
+            "citations": ["phantom"],
+            "opened": [{"chunk_id": "abc123"}, {"chunk_id": "unused"}],
+        },
+        {
+            "question": "Q2",
+            "answer_text": "Second [def456].",
+            "citations": None,
+            "opened": [{"chunk_id": "def456"}],
+        },
+    ]
+
+
+@pytest.mark.parametrize("prompt_path", ["template", "no_builder", "missing_template"])
+def test_real_and_fallback_prompts_roundtrip_labels(prompt_path, tmp_path):
+    from workbench.prompting.citations import numberize_citations
+    from workbench.prompting.prompt_builder import PromptBuilder
+
+    builder = {
+        "template": PromptBuilder(),
+        "no_builder": None,
+        "missing_template": PromptBuilder(templates_dir=tmp_path),
+    }[prompt_path]
+    model = MagicMock()
+    model.generate.return_value = FakeResponse("Combined [REF_B1] then [REF_A1].")
+    result = make_synthesise_node(model, builder)(
+        {
+            "question": "Q",
+            "sub_results": _evidence_results(),
+            "chat_history": None,
+            "conversation_summary": None,
+            "tokens_in": None,
+            "tokens_out": None,
+        }
+    )
+    prompt = model.generate.call_args.args[0][0]["content"]
+    assert "[REF_A1]" in prompt and "[REF_B1]" in prompt
+    assert "[abc123]" not in prompt and "[def456]" not in prompt
+    assert "raw chunk IDs" in prompt or "Only use" in prompt
+    assert result["answer_text"] == "Combined [def456] then [abc123]."
+    assert result["citations"] == ["def456", "abc123"]
+    assert result["tokens_in"] == 10 and result["tokens_out"] == 5
+    text, mapping = numberize_citations(
+        result["answer_text"],
+        [chunk for sr in _evidence_results() for chunk in sr["opened"]],
+    )
+    assert text == "Combined [1] then [2]."
+    assert [entry["chunk_id"] for entry in mapping] == ["def456", "abc123"]
+
+
+@pytest.mark.parametrize(
+    "draft",
+    [
+        "Invented [REF_Z9].",
+        "Invented [REF_A2].",
+        "Invented [].",
+        "Invented [1].",
+        "Invented [abc].",
+        "Invented [phantom].",
+        "No references.",
+        "",
+        "Mixed [REF_A1] and [bogus].",
+        "Cited [REF_A1].\n\nUnsupported.\n\nMore unsupported.",
+    ],
+)
+def test_invalid_draft_is_rejected_whole_and_fallback_cites_only_present_ids(draft):
+    result = make_synthesise_node(FakeModel([draft]))(
+        {
+            "question": "Q",
+            "sub_results": _evidence_results(),
+        }
+    )
+    assert result["prompt_meta"]["variant"] == "synthesise_fallback"
+    assert result["answer_text"] == "First [abc123].\n\nSecond [def456]."
+    assert result["citations"] == ["abc123", "def456"]
+    assert "unused" not in result["citations"]
+    assert result["error"]
+
+
+def test_worker_citation_list_cannot_mint_evidence_and_empty_registry_abstains():
+    results = [
+        {
+            "question": "Q1",
+            "answer_text": "Unsupported [phantom].",
+            "citations": ["phantom"],
+            "opened": None,
+        },
+        {"question": "Q2", "answer_text": "Unsupported [1].", "opened": []},
+    ]
+    assert _build_label_map(results) == {}
+    result = make_synthesise_node(FakeModel(["Invented [REF_A1]."]))(
+        {
+            "question": "Q",
+            "sub_results": results,
+        }
+    )
+    assert result["citations"] == []
+    assert "Unsupported" not in result["answer_text"]
+    assert "Invented" not in result["answer_text"]
+    assert "don't have enough evidence" in result["answer_text"]
+    assert result["prompt_meta"]["missing_parts"] == ["Q1", "Q2"]
+
+
+def test_shared_evidence_has_one_label_and_none_answers_are_formatted():
+    results = [
+        {"question": None, "answer_text": None, "opened": None, "citations": None},
+        {"question": "Q2", "answer_text": "A [same]", "opened": [{"chunk_id": "same"}]},
+        {"question": "Q3", "answer_text": "B [same]", "opened": [{"chunk_id": "same"}]},
+    ]
+    mapping = _build_label_map(results)
+    assert mapping == {"same": "REF_B1"}
+    block = _format_sub_answers_labelled(results, mapping)
+    assert "Sub-question 1" in block and "(no answer)" in block
+    assert block.count("[REF_B1]") == 2
+
+
+def test_none_state_through_decompose_retrieve_synthesise_and_supervisor_merge():
+    from workbench.graphs.supervisor_graph import _make_merge_node
+
+    state = {
+        "question": "Q",
+        "chat_history": None,
+        "conversation_summary": None,
+        "sub_questions": None,
+        "sub_results": None,
+        "tokens_in": None,
+        "tokens_out": None,
+    }
+    assert not make_decompose_node(FakeModel())(state)["is_decomposed"]
+    assert make_parallel_retrieve_node(FakeRagSubgraph())(state)["sub_results"] == []
+    assert make_synthesise_node(FakeModel())(state)["citations"] == []
+    merged = _make_merge_node()(state)
+    assert merged["chat_history"] == [] and merged["tokens_in"] == 0
+    assert merged["answer_text"] == ""
+
+
+def test_partial_fallback_rejects_failed_worker_text_and_keeps_web_citations():
+    model = MagicMock()
+    model.generate.side_effect = RuntimeError("down")
+    results = _evidence_results() + [
+        {
+            "question": "Q3",
+            "answer_text": "Failed [bad].",
+            "error": "failed",
+            "opened": [{"chunk_id": "bad"}],
+        },
+        {
+            "question": "Q4",
+            "answer_text": "Web https://example.org/source",
+            "web_citations": [
+                "https://example.org/source",
+                "https://example.org/unused",
+            ],
+        },
+    ]
+    result = make_synthesise_node(model)({"question": "Q", "sub_results": results})
+    assert "Failed [bad]" not in result["answer_text"]
+    assert "Research incomplete for: Q3" in result["answer_text"]
+    assert result["citations"] == ["abc123", "def456"]
+    assert result["web_citations"] == ["https://example.org/source"]
+
+
+def test_partial_generated_answer_always_discloses_missing_worker():
+    results = _evidence_results() + [
+        {"question": "Q3", "answer_text": None, "error": "down"}
+    ]
+    result = make_synthesise_node(FakeModel(["Combined [REF_A1][REF_B1]."]))(
+        {
+            "question": "Q",
+            "sub_results": results,
+        }
+    )
+    assert "Research incomplete for: Q3" in result["answer_text"]
+    assert result["citations"] == ["abc123", "def456"]
+
+
+def test_none_response_usage_and_failed_evidence_not_eligible():
+    model = MagicMock()
+    model.generate.return_value = FakeResponse(
+        "Combined [REF_A1][REF_B1].", None, None, None
+    )
+    results = _evidence_results() + [
+        {
+            "question": "Q3",
+            "answer_text": "Bad [bad].",
+            "error": "down",
+            "opened": [{"chunk_id": "bad"}],
+        }
+    ]
+    result = make_synthesise_node(model)(
+        {"question": "Q", "sub_results": results, "tokens_in": None, "tokens_out": None}
+    )
+    assert result["tokens_in"] == 0 and result["tokens_out"] == 0
+    assert result["model_latency_ms"] == 0.0
+    assert "bad" not in _build_label_map(results)
+    assert "Bad [bad]" not in model.generate.call_args.args[0][0]["content"]
+
+
+def test_rejected_draft_usage_is_still_accounted():
+    result = make_synthesise_node(FakeModel(["Bad [1]."]))(
+        {
+            "question": "Q",
+            "sub_results": _evidence_results(),
+            "tokens_in": 100,
+            "tokens_out": 50,
+        }
+    )
+    assert result["tokens_in"] == 110 and result["tokens_out"] == 55
+
+
+def test_compiled_supervisor_decomposed_path_with_real_template(monkeypatch):
+    from workbench.graphs.supervisor_graph import build_supervisor_graph
+    from workbench.prompting.prompt_builder import PromptBuilder
+
+    results = {sr["question"]: sr for sr in _evidence_results()}
+    monkeypatch.setattr(
+        "workbench.graphs.rag_graph.build_rag_graph",
+        lambda **kwargs: FakeRagSubgraph(results=results),
+    )
+    model = FakeModel(['["Q1", "Q2"]', "Combined [REF_A1][REF_B1]."])
+    graph = build_supervisor_graph(
+        search_tool=MagicMock(),
+        open_chunk_tool=MagicMock(),
+        model=model,
+        prompt_builder=PromptBuilder(),
+        decomposer_max_workers=1,
+    )
+    result = graph.invoke(
+        {
+            "question": "Compare Q1 and Q2",
+            "chat_history": None,
+            "conversation_summary": None,
+        }
+    )
+    assert result["is_decomposed"] is True
+    assert result["answer_text"] == "Combined [abc123][def456]."
+    assert result["citations"] == ["abc123", "def456"]
+    assert result["timeline"] == [] and result["route"] == ""
+    assert model._call_count == 2
+
+
+def test_parallel_retrieval_normalizes_none_worker_fields():
+    fields = [
+        "answer_text",
+        "citations",
+        "web_citations",
+        "retrieved",
+        "opened",
+        "tokens_in",
+        "tokens_out",
+        "model_latency_ms",
+    ]
+    result = make_parallel_retrieve_node(
+        FakeRagSubgraph(default_result=dict.fromkeys(fields))
+    )({"sub_questions": ["Q1", "Q2"], "chat_history": None})
+    assert result["tokens_in"] == 0 and result["tokens_out"] == 0
+    assert result["opened"] == [] and result["citations"] == []
+    assert [sr["answer_text"] for sr in result["sub_results"]] == ["", ""]

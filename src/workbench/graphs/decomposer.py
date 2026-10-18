@@ -182,18 +182,13 @@ def _build_label_map(sub_results: list[dict[str, Any]]) -> dict[str, str]:
     label_counter: dict[str, int] = {}
 
     for i, sr in enumerate(sub_results):
+        if sr.get("error"):
+            continue
         prefix = _LABEL_PREFIXES[i] if i < len(_LABEL_PREFIXES) else chr(65 + i)
 
         # Gather from opened evidence
         for chunk in sr.get("opened") or []:
             cid = chunk.get("chunk_id") or ""
-            if cid and cid not in chunk_id_to_label:
-                label_counter.setdefault(prefix, 0)
-                label_counter[prefix] += 1
-                chunk_id_to_label[cid] = f"REF_{prefix}{label_counter[prefix]}"
-
-        # Catch any cited IDs not in opened
-        for cid in sr.get("citations") or []:
             if cid and cid not in chunk_id_to_label:
                 label_counter.setdefault(prefix, 0)
                 label_counter[prefix] += 1
@@ -226,18 +221,30 @@ def _replace_labels_with_ids(text: str, label_to_id: dict[str, str]) -> str:
     return re.sub(r"\[(REF_[A-Z]\d+)\]", _sub, text)
 
 
-def _strip_invalid_brackets(text: str, valid_ids: set[str]) -> str:
-    """Remove any [token] that isn't a valid chunk_id — cleans LLM junk."""
-    if not valid_ids:
-        return text
+def _checked_citations(
+    text: str, valid_ids: set[str], urls: list[str]
+) -> tuple[list[str], list[str]]:
+    """Reject invalid/uncited prose; this checks references, never entailment."""
+    from workbench.prompting.citations import extract_web_citations
 
-    def _sub(match: re.Match) -> str:
-        return match.group(0) if match.group(1) in valid_ids else ""
-
-    cleaned = _BRACKET_TOKEN_RE.sub(_sub, text)
-    cleaned = re.sub(r"  +", " ", cleaned)
-    cleaned = re.sub(r" ([.,;:!?])", r"\1", cleaned)
-    return cleaned
+    tokens = re.findall(r"\[([^\[\]\n]*)\]", text)
+    if any(token not in valid_ids for token in tokens):
+        raise ValueError("Unknown citation marker")
+    citations = list(dict.fromkeys(tokens))
+    web_citations = extract_web_citations(text, urls)
+    paragraphs = [part for part in text.split("\n\n") if part.strip()]
+    cited_paragraphs = sum(
+        bool(_BRACKET_TOKEN_RE.search(part))
+        or any(url in part for url in web_citations)
+        for part in paragraphs
+    )
+    if (
+        not paragraphs
+        or not (citations or web_citations)
+        or cited_paragraphs / len(paragraphs) < 0.5
+    ):
+        raise ValueError("Insufficient citation coverage")
+    return citations, web_citations
 
 
 def _format_sub_answers_labelled(
@@ -248,7 +255,11 @@ def _format_sub_answers_labelled(
     parts: list[str] = []
     for i, sr in enumerate(sub_results, 1):
         q = sr.get("question") or f"Sub-question {i}"
-        a = sr.get("answer_text") or "(no answer)"
+        a = (
+            "(research failed)"
+            if sr.get("error")
+            else sr.get("answer_text") or "(no answer)"
+        )
         a_labelled = _replace_ids_with_labels(a, id_to_label)
         parts.append(f"--- Part {i}: {q} ---\n{a_labelled}")
     return "\n\n".join(parts)
@@ -527,31 +538,69 @@ def make_synthesise_node(
                 "prompt_meta": {"variant": "synthesise_empty"},
             }
 
-        # --- Collect all valid chunk_ids ------------------------------
-        all_valid_ids: set[str] = set()
-        for sr in sub_results:
-            for cid in sr.get("citations") or []:
-                if cid:
-                    all_valid_ids.add(cid)
-            for chunk in sr.get("opened") or []:
-                cid = chunk.get("chunk_id") or ""
-                if cid:
-                    all_valid_ids.add(cid)
+        # Only locally opened evidence can establish a chunk reference.
+        all_urls = list(
+            dict.fromkeys(
+                url
+                for sr in sub_results
+                if not sr.get("error")
+                for url in sr.get("web_citations") or []
+                if url
+            )
+        )
 
-        # Single successful sub-result → passthrough (no synthesis)
-        successful = [sr for sr in sub_results if sr.get("answer_text")]
-        if len(successful) == 1:
-            sr = successful[0]
+        response = None
+
+        def fallback(error: str | None = None) -> dict[str, Any]:
+            parts = []
+            citations = []
+            web_citations = []
+            missing = []
+            for i, sr in enumerate(sub_results, 1):
+                text = sr.get("answer_text") or ""
+                try:
+                    if sr.get("error"):
+                        raise ValueError("Worker failed")
+                    ids = set(_build_label_map([sr]))
+                    cited, web = _checked_citations(
+                        text, ids, sr.get("web_citations") or []
+                    )
+                except ValueError:
+                    missing.append(sr.get("question") or f"Part {i}")
+                    continue
+                parts.append(text)
+                citations.extend(cited)
+                web_citations.extend(web)
+            if not parts:
+                parts.append(
+                    "I don't have enough evidence in the provided articles to fully answer this question."
+                )
+            if missing:
+                parts.append("Research incomplete for: " + "; ".join(missing) + ".")
             return {
-                "answer_text": sr.get("answer_text") or "",
-                "citations": sr.get("citations") or [],
-                "web_citations": sr.get("web_citations") or [],
-                "tokens_in": _sint(state, "tokens_in"),
-                "tokens_out": _sint(state, "tokens_out"),
-                "model_latency_ms": sr.get("model_latency_ms") or 0.0,
-                "prompt_meta": {"variant": "synthesise_single_passthrough"},
+                "answer_text": "\n\n".join(parts),
+                "citations": list(dict.fromkeys(citations)),
+                "web_citations": list(dict.fromkeys(web_citations)),
+                "tokens_in": _sint(state, "tokens_in")
+                + ((response.tokens_in or 0) if response else 0),
+                "tokens_out": _sint(state, "tokens_out")
+                + ((response.tokens_out or 0) if response else 0),
+                "model_latency_ms": (response.latency_ms or 0.0) if response else 0.0,
                 "subgraph_used": "decomposer",
+                "prompt_meta": {
+                    "variant": "synthesise_fallback",
+                    "missing_parts": missing,
+                },
+                "error": error,
             }
+
+        successful = [
+            sr for sr in sub_results if sr.get("answer_text") and not sr.get("error")
+        ]
+        if len(successful) <= 1:
+            result = fallback()
+            result["prompt_meta"]["variant"] = "synthesise_single_passthrough"
+            return result
 
         with start_span(
             "graph.synthesise",
@@ -563,7 +612,6 @@ def make_synthesise_node(
             try:
                 # --- Build label map ----------------------------------
                 id_to_label = _build_label_map(sub_results)
-                label_to_id = {v: k for k, v in id_to_label.items()}
 
                 # --- Conversation context -----------------------------
                 conversation_context = ""
@@ -581,6 +629,10 @@ def make_synthesise_node(
                 sub_answers_block = _format_sub_answers_labelled(
                     sub_results, id_to_label
                 )
+
+                # Only labels actually supplied in worker prose are eligible.
+                supplied = set(_BRACKET_TOKEN_RE.findall(sub_answers_block))
+                label_to_id = {v: k for k, v in id_to_label.items() if v in supplied}
 
                 # --- Build synthesis prompt ---------------------------
                 if prompt_builder is not None:
@@ -610,29 +662,22 @@ def make_synthesise_node(
                 # --- Post-process citations ---------------------------
                 # 1. REF labels → real chunk_ids
                 answer_with_ids = _replace_labels_with_ids(response.text, label_to_id)
-                # 2. Strip any invented [1], [2], partial hashes, etc.
-                clean_answer = _strip_invalid_brackets(answer_with_ids, all_valid_ids)
-
-                # --- Token accounting ---------------------------------
+                # Reject the whole draft rather than erase markers and retain claims.
+                clean_answer = answer_with_ids
+                final_citations, final_web_citations = _checked_citations(
+                    clean_answer, set(label_to_id.values()), all_urls
+                )
+                missing = [
+                    sr.get("question") or "Unknown part"
+                    for sr in sub_results
+                    if not sr.get("answer_text") or sr.get("error")
+                ]
+                if missing:
+                    clean_answer += (
+                        "\n\nResearch incomplete for: " + "; ".join(missing) + "."
+                    )
                 prev_in = _sint(state, "tokens_in")
                 prev_out = _sint(state, "tokens_out")
-
-                # --- Extract citations from cleaned answer ------------
-                # Import from canonical source (citations.py)
-                from workbench.prompting.citations import (
-                    extract_citations,
-                    extract_web_citations,
-                )
-
-                final_citations = extract_citations(clean_answer, list(all_valid_ids))
-
-                all_urls: list[str] = []
-                for sr in sub_results:
-                    for url in sr.get("web_citations") or []:
-                        if url and url not in all_urls:
-                            all_urls.append(url)
-
-                final_web_citations = extract_web_citations(clean_answer, all_urls)
 
                 add_span_attributes(
                     {
@@ -658,21 +703,6 @@ def make_synthesise_node(
                 }
 
             except Exception as exc:
-                # Fallback: concatenate sub-answers (they already
-                # have real chunk_ids from the rag_graph)
-                fallback_parts = []
-                for sr in sub_results:
-                    a = sr.get("answer_text") or ""
-                    if a:
-                        fallback_parts.append(a)
-
-                return {
-                    "answer_text": "\n\n".join(fallback_parts),
-                    "citations": list(all_valid_ids),
-                    "web_citations": [],
-                    "subgraph_used": "decomposer",
-                    "prompt_meta": {"variant": "synthesise_fallback"},
-                    "error": f"synthesise_node: {type(exc).__name__}: {exc}",
-                }
+                return fallback(f"synthesise_node: {type(exc).__name__}: {exc}")
 
     return synthesise_node
