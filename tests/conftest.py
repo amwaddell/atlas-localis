@@ -1,50 +1,58 @@
-"""
-Shared fixtures and markers for Day 9 chat + server tests.
+"""Model-free tests use real scoped telemetry; acceptance is explicit and fails closed."""
 
-Usage:
-    pytest tests/ -m "not integration"     # unit tests only
-    pytest tests/ -m integration            # server tests only
-    pytest tests/                            # everything
-"""
-
-from __future__ import annotations
-
-from unittest.mock import MagicMock
+import socket
 
 import pytest
-
-# ------------------------------------------------------------------ #
-#  Tracing / observability stubs                                       #
-# ------------------------------------------------------------------ #
-#  Graph nodes call start_span / add_span_attributes.  In unit tests
-#  we don't need real tracing, so we patch them globally.
+from opentelemetry.sdk.trace import TracerProvider
 
 
 @pytest.fixture(autouse=True)
-def _mock_tracing(monkeypatch):
-    """Disable tracing in all tests unless explicitly testing tracing."""
-    try:
-        import workbench.observability.tracing as tracing_mod
+def isolated_tracing(monkeypatch):
+    import workbench.observability.tracing as tracing
 
-        monkeypatch.setattr(
-            tracing_mod,
-            "start_span",
-            MagicMock(
-                return_value=MagicMock(__enter__=MagicMock(), __exit__=MagicMock())
-            ),
-        )
-        monkeypatch.setattr(tracing_mod, "add_span_attributes", MagicMock())
-    except ImportError:
-        pass  # tracing module not installed — nothing to mock
+    provider = TracerProvider()
+    monkeypatch.setattr(tracing, "_tracer_provider", provider)
+    monkeypatch.setattr(tracing, "_tracer", provider.get_tracer("atlas-tests"))
+    yield
+    provider.shutdown()
+    # Tests may install their own provider; close it before monkeypatch restores.
+    if tracing._tracer_provider is not provider and tracing._tracer_provider:
+        tracing._tracer_provider.shutdown()
 
 
-# ------------------------------------------------------------------ #
-#  Pytest markers                                                      #
-# ------------------------------------------------------------------ #
+@pytest.fixture(autouse=True)
+def no_external_network(request, monkeypatch):
+    """No model-free test may fetch assets or send telemetry outside loopback."""
+    if request.node.get_closest_marker("acceptance"):
+        return
+    original = socket.socket.connect
+
+    def connect(sock, address):
+        if isinstance(address, tuple) and address[0] not in {
+            "127.0.0.1",
+            "::1",
+            "localhost",
+        }:
+            raise AssertionError(
+                f"Model-free test attempted external connection: {address[0]}"
+            )
+        return original(sock, address)
+
+    monkeypatch.setattr(socket.socket, "connect", connect)
+    monkeypatch.setenv("HF_HUB_OFFLINE", "1")
+    monkeypatch.setenv("TRANSFORMERS_OFFLINE", "1")
+    monkeypatch.setenv("HF_HUB_DISABLE_TELEMETRY", "1")
 
 
-def pytest_configure(config):
-    """Register custom markers."""
-    config.addinivalue_line(
-        "markers", "integration: tests that require running servers"
+@pytest.fixture(autouse=True)
+def isolated_resource_lease(request, monkeypatch, tmp_path):
+    """Keep fixture ownership tests independent of a resident real application."""
+    if request.node.get_closest_marker("acceptance"):
+        return
+    from types import SimpleNamespace
+
+    import workbench.systems.runner as runner
+
+    monkeypatch.setattr(
+        runner, "tempfile", SimpleNamespace(gettempdir=lambda: str(tmp_path))
     )

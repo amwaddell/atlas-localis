@@ -18,35 +18,17 @@ import json
 from typing import Any
 
 import pytest
+from langchain_core.tools import BaseTool
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from pydantic import BaseModel, Field, ValidationError
 
 from workbench.core.types import ModelResponse
 from workbench.tools.base import ToolSpec
 from workbench.tools.open_chunk import OpenChunkArgs, OpenChunkTool
 from workbench.tools.search_wikipedia import SearchWikipediaArgs, SearchWikipediaTool
-from workbench.tools.timeline import TimelineArgs, TimelineTool
-
-# Try to import LangChain (optional)
-try:
-    from langchain_core.tools import BaseTool
-
-    HAS_LANGCHAIN = True
-except ImportError:
-    HAS_LANGCHAIN = False
-
-# Try to import OTel for span tests
-try:
-    from opentelemetry.sdk.resources import Resource
-    from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import SimpleSpanProcessor
-    from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
-        InMemorySpanExporter,
-    )
-
-    HAS_OTEL = True
-except ImportError:
-    HAS_OTEL = False
-
 
 # ================================================================== #
 #  Fixtures: a minimal ToolSpec subclass for unit testing              #
@@ -230,7 +212,6 @@ class TestErrorHandling:
 # ================================================================== #
 
 
-@pytest.mark.skipif(not HAS_OTEL, reason="opentelemetry SDK not installed")
 class TestToolSpecSpans:
     """Verify that execute() creates a trace span."""
 
@@ -316,7 +297,6 @@ class TestToolSpecSpans:
 # ================================================================== #
 
 
-@pytest.mark.skipif(not HAS_LANGCHAIN, reason="langchain-core not installed")
 class TestLangChainAdapter:
     """Verify to_langchain_tool() produces a working LangChain tool."""
 
@@ -346,7 +326,7 @@ class TestLangChainAdapter:
     def test_langchain_tool_validates_args(self) -> None:
         tool = EchoTool()
         lc_tool = tool.to_langchain_tool()
-        with pytest.raises(Exception):
+        with pytest.raises(ValidationError):
             # missing required 'message'
             lc_tool.invoke({})
 
@@ -370,18 +350,12 @@ class TestLangChainAdapter:
 class TestLangChainImportError:
     """Verify graceful error when langchain-core is missing."""
 
-    def test_import_error_message(self) -> None:
-        """If langchain isn't importable, we get a clear message.
-        (This test only runs meaningfully when langchain IS installed,
-        so it just verifies the happy path doesn't break.)"""
-        if HAS_LANGCHAIN:
-            tool = EchoTool()
-            lc_tool = tool.to_langchain_tool()
-            assert lc_tool is not None
-        else:
-            tool = EchoTool()
-            with pytest.raises(ImportError, match="langchain-core"):
-                tool.to_langchain_tool()
+    def test_import_error_message(self, monkeypatch) -> None:
+        import sys
+
+        monkeypatch.setitem(sys.modules, "langchain_core.tools", None)
+        with pytest.raises(ImportError, match="langchain-core"):
+            EchoTool().to_langchain_tool()
 
 
 # ================================================================== #
@@ -465,116 +439,6 @@ class TestOpenChunkMigrated:
         assert tool.name == "open_chunk"
 
 
-# ================================================================== #
-#  7. Migrated tool: TimelineTool                                     #
-# ================================================================== #
-
-
-class TestTimelineMigrated:
-    """Verify TimelineTool works through ToolSpec."""
-
-    def _make_tool(self) -> TimelineTool:
-        return TimelineTool(model=FakeModel())
-
-    def test_execute_returns_timeline(self) -> None:
-        tool = self._make_tool()
-        result = tool.execute(
-            question="When was Rome founded?",
-            opened_chunks=[
-                {
-                    "chunk_id": "c001",
-                    "document_id": "doc1",
-                    "title": "Rome",
-                    "section": None,
-                    "text": "Rome was founded.",
-                }
-            ],
-        )
-        assert result["count"] == 1
-        assert result["timeline"][0]["date"] == "509 BC"
-
-    def test_execute_returns_cited_chunk_ids(self) -> None:
-        tool = self._make_tool()
-        result = tool.execute(
-            question="test",
-            opened_chunks=[
-                {
-                    "chunk_id": "c001",
-                    "document_id": "doc1",
-                    "title": "Rome",
-                    "section": None,
-                    "text": "text",
-                }
-            ],
-        )
-        assert "c001" in result["cited_chunk_ids"]
-
-    def test_execute_returns_prompt_version(self) -> None:
-        tool = self._make_tool()
-        result = tool.execute(
-            question="test",
-            opened_chunks=[
-                {
-                    "chunk_id": "c001",
-                    "document_id": "doc1",
-                    "title": "Rome",
-                    "section": None,
-                    "text": "text",
-                }
-            ],
-        )
-        assert "prompt_version" in result
-        assert len(result["prompt_version"]) > 0
-
-    def test_schema_rejects_missing_question(self) -> None:
-        tool = self._make_tool()
-        with pytest.raises(ValidationError):
-            tool.execute(opened_chunks=[])
-
-    def test_schema_rejects_missing_chunks(self) -> None:
-        tool = self._make_tool()
-        with pytest.raises(ValidationError):
-            tool.execute(question="test")
-
-    def test_is_toolspec_subclass(self) -> None:
-        tool = self._make_tool()
-        assert isinstance(tool, ToolSpec)
-
-    def test_has_correct_name(self) -> None:
-        tool = self._make_tool()
-        assert tool.name == "timeline"
-
-
-# ================================================================== #
-#  8. _parse_timeline stays accessible as static method               #
-# ================================================================== #
-
-
-class TestParseTimelineStillWorks:
-    """
-    _parse_timeline is a static method used by tests/test_timeline_schema.py.
-    Verify it still works after the ToolSpec migration.
-    """
-
-    def test_valid_json_parsed(self) -> None:
-        raw = '[{"date": "509 BC", "event": "Founded", "supporting_chunk_ids": ["a"]}]'
-        items = TimelineTool._parse_timeline(raw, {"a"})
-        assert len(items) == 1
-        assert items[0].date == "509 BC"
-
-    def test_empty_returns_empty(self) -> None:
-        assert TimelineTool._parse_timeline("[]", None) == []
-
-    def test_garbage_raises(self) -> None:
-        with pytest.raises(ValueError):
-            TimelineTool._parse_timeline("not json", None)
-
-
-# ================================================================== #
-#  9. Args schemas are proper Pydantic models                         #
-# ================================================================== #
-
-
 class TestArgSchemas:
     """Verify that the args schemas are well-formed Pydantic models."""
 
@@ -587,14 +451,6 @@ class TestArgSchemas:
         args = OpenChunkArgs(chunk_id="abc")
         assert args.chunk_id == "abc"
 
-    def test_timeline_args_schema(self) -> None:
-        args = TimelineArgs(
-            question="q",
-            opened_chunks=[{"chunk_id": "x", "text": "y"}],
-        )
-        assert args.question == "q"
-        assert len(args.opened_chunks) == 1
-
     def test_search_args_json_schema(self) -> None:
         """args_schema should produce a valid JSON schema."""
         schema = SearchWikipediaArgs.model_json_schema()
@@ -604,8 +460,3 @@ class TestArgSchemas:
     def test_open_chunk_args_json_schema(self) -> None:
         schema = OpenChunkArgs.model_json_schema()
         assert "chunk_id" in schema["properties"]
-
-    def test_timeline_args_json_schema(self) -> None:
-        schema = TimelineArgs.model_json_schema()
-        assert "question" in schema["properties"]
-        assert "opened_chunks" in schema["properties"]

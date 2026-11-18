@@ -1,0 +1,10 @@
+{
+  "format": 1,
+  "implementation": "native llama.cpp Metal",
+  "build": 8130,
+  "commit": "ed4837891",
+  "source_reference": "https://github.com/ggml-org/llama.cpp/tree/ed4837891",
+  "license_reference": "https://github.com/ggml-org/llama.cpp/blob/ed4837891/LICENSE",
+  "observed_binary_sha256": "08fdafb92257b7e946f3a9b2794d5e74ae26446abfa4e7c5ae065fe14b270c73",
+  "binary_provenance": "Observed local AppleClang 17 arm64 build; not a publisher-verified downloadable binary. Setup validates the commit and records the supplied binary hash. Native binary/toolchain installation remains an explicit prerequisite."
+}

@@ -6,6 +6,7 @@ Integrates with Phoenix and other OTLP-compatible backends.
 """
 
 from contextlib import contextmanager
+from contextvars import ContextVar
 from typing import Any
 
 # Use stub if OpenTelemetry is not installed
@@ -23,7 +24,11 @@ except ImportError:
         trace,
     )
 
+from workbench.core.offline import local_url, validate_environment
 from workbench.core.run_context import get_run_context
+
+# Run-scoped disable/selection propagates through LangGraph task contexts.
+_scoped_tracer = ContextVar("workbench_tracer", default=None)
 
 # Global tracer instance
 _tracer: Any | None = None
@@ -48,6 +53,21 @@ def setup_tracing(
     Returns:
         Configured tracer instance
     """
+    validate_environment()
+    if exporter is not None:
+        endpoint = getattr(exporter, "_endpoint", None)
+        if isinstance(endpoint, str):
+            local_url(endpoint)
+            from workbench.core.local_http import LocalSession
+
+            if not isinstance(getattr(exporter, "_session", None), LocalSession):
+                raise ValueError(
+                    "HTTP exporters must use the proxy-free local Phoenix session"
+                )
+        elif not exporter.__class__.__module__.startswith(
+            ("opentelemetry.sdk.trace.export", "workbench.observability.otel_stub")
+        ):
+            raise ValueError("Unsupported exporter; use explicit local Phoenix")
     global _tracer, _tracer_provider
 
     # If already set up and not forcing reset, return existing tracer
@@ -127,7 +147,7 @@ def start_span(
             # Your code here
             pass
     """
-    tracer = get_tracer()
+    tracer = _scoped_tracer.get() or get_tracer()
 
     # Set default kind if not provided
     if kind is None:

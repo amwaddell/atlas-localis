@@ -416,7 +416,7 @@ def build_chunks_parquet(
         titles = articles.column("title").to_pylist()
         texts = articles.column("text").to_pylist()
 
-        for i, (doc_id, title, text) in enumerate(zip(page_ids, titles, texts)):
+        for i, (doc_id, title, text) in enumerate(zip(page_ids, titles, texts, strict=True)):
             for c in chunker.chunk(doc_id, title, text):
                 col_chunk_id.append(c.chunk_id)
                 col_doc_id.append(c.document_id)

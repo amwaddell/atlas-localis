@@ -7,7 +7,7 @@ Usage:
 
 Prerequisites:
     1. Download:   bash scripts/download_wikipedia.sh
-    2. (Optional)  phoenix serve   — to view traces in the Phoenix UI
+    2. (Optional)  bash scripts/run_phoenix.sh   — to view traces in the Phoenix UI
 
 This script will:
     - Parse the .xml.bz2 dump directly (no WikiExtractor needed)

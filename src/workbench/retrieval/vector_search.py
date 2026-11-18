@@ -25,6 +25,7 @@ from pathlib import Path
 
 import lancedb
 
+from workbench.core.offline import local_path
 from workbench.core.types import Query, RetrievalResult
 from workbench.data_build.embeddings import SentenceTransformerEmbedder
 from workbench.observability.tracing import add_span_attributes, start_span
@@ -46,6 +47,7 @@ class LanceDBVectorSearcher:
         embedder: SentenceTransformerEmbedder,
         table_name: str = "chunks",
     ) -> None:
+        db_path = local_path(db_path)
         self.db_path = db_path
         self.embedder = embedder
         self.table_name = table_name

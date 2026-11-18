@@ -1,0 +1,3662 @@
+{
+  "format": 1,
+  "metadata": {
+    "format": 1,
+    "command": [
+      "scripts/run_researcher_eval.py",
+      "--question-id",
+      "f01",
+      "--repetitions",
+      "3",
+      "--owned-native",
+      "--output",
+      "runs/reports/stage5-repeats-v1"
+    ],
+    "commit": "a5e491df9558ccbc8b849a916470ccf8d50110db",
+    "dirty": true,
+    "source_sha256": {
+      "configs/artifacts/models.json": "1eb083a5923f63c65da512a5ec714f7c5cfe55dc129856da3665dd827d32b22f",
+      "configs/artifacts/native.json": "d29d69bd91c38efd8e76c79542f649e3504c8c4a4c627575794f75ebe71439c1",
+      "configs/artifacts/wikipedia.json": "6f938b00f46080b0730aeec7d64a3d2e9bc2cc6d5bfb35ed1a97389125e949fa",
+      "configs/defaults.yaml": "55ef18ab3e5ddbf201f6cf3f5cebef86e6b4a53cb915d2e83afc2731484bd3f3",
+      "locks/ci-py312.txt": "20a83cd670e506645a307e65e3560c089ee11371a3d3794df68ac5901af11512",
+      "locks/dev-macos-arm64-py312.txt": "63e2615068162c56128bf1d6ba24397f904aeb2961573d92c220f4d5a36944e1",
+      "locks/phoenix-macos-arm64-py312.txt": "9447c260620a91faa988d206e241ffe1fcc112b3243b1a5b012cfdc8df7e1998",
+      "locks/runtime-macos-arm64-py312.txt": "ac22bf33c6b3f7c1eab504bc8f95fadbf44deeff674343f3413675d0a52aedc0",
+      "scripts/build_chunks.py": "0dc7acb578df44cebf4380253df197dc028378b7f11c54535b8d1d092e94b7b4",
+      "scripts/build_keyword_index.py": "dc99ebc2552814b4a4eefc7defc114c2c277da6674386cf26ff28ce80ff87779",
+      "scripts/build_vector_index.py": "8a6d6a0cb4b4377e9aeca4b420b9048b3842d20b439c281742dfea8e712a9d97",
+      "scripts/generate_locks.py": "bbb777b29e7a4cde85630e916618e8046b39a2a32e866ce4075edafcd01d88e7",
+      "scripts/langgraph_smoke.py": "9a160714986af2f210207fed613e458cde4e7730d8842c98cbef7405a0942d08",
+      "scripts/map_architecture.py": "896b0a6e0b7c1d63d1cce014f71ddae6170575357ccc88bdcf2cc22ff537d31b",
+      "scripts/native_runtime.py": "fb473830647fe19afe3f328e3b35f3b67e8d4147de3cc8892d836b2ec5dc309e",
+      "scripts/preflight.py": "68a6a96cb7beca534de0d4e0b56d00fadfd210f41bd3ee2b6a0bd5768b9045b4",
+      "scripts/probe_local_runtime.py": "54ba1b2dd9767ab09cfedd343234764647a11e07ab7054c8431ba5a479448b47",
+      "scripts/probe_provisioning.py": "a575b976acf0b003c890498ed707acba76c8b8e3609ab047cd3efa199682dcc4",
+      "scripts/provision.py": "905224b7c43dc0f295b10ac18d7f8b568ea93b8409a2e1d68e3a9cb390aa0f93",
+      "scripts/run_agent_chat.py": "c8a945af6e73d5029206678a2060921141b85fb97435f551ff230bd7a45f1054",
+      "scripts/run_ingest_wikipedia.py": "3d15ddac7620bf9cb419e15fc9bb12f5af9c9b986dd5dd2e65743c633040b6eb",
+      "scripts/run_researcher_eval.py": "94255bf89bf7c9b17b162ff80d135e1c448d4a5dff569258fbbc0c67bef6f27e",
+      "scripts/run_tests.py": "6704533fa507f81c9ba3eb16694973998ce935f44b5ef8d1eb9e0497e665839a",
+      "scripts/runtime_guard.py": "918d517ee3515f26e186b2d15df7f67987e4841255d80f3fbc8d4102e155ec71",
+      "scripts/smoke.py": "672fa86832a5e0c501838eacf6d3c5857d62a42e864a0bfa1accc648fdff6da4",
+      "scripts/trace_smoke_test.py": "78c8f82fd32a503d29a8d847dfacb412399124e53daba33d459df16a25b2d98e",
+      "src/workbench/__init__.py": "d32fb09cac6d610b3bebd3e5a4f2da7032e98bb8176f19ebe92de3dc3160577f",
+      "src/workbench/agents/__init__.py": "1c83c1a4b709c6bf503802baa0a084a18f201662fc223b9e4fbefb2ac1990113",
+      "src/workbench/agents/state.py": "b3669c8e7afb73e0c3f38e29bcbb2a2c93aa57e522c8ceb99afe8a962ab55406",
+      "src/workbench/core/__init__.py": "35855ce9cb0563012df4243b0b2aee1eb588251c0135887b1d904096f159ada0",
+      "src/workbench/core/config.py": "1e88191a7ef699547d7a6eba74b4293d6af6f4202dcf89bc70bdbba60cb17d5d",
+      "src/workbench/core/interfaces.py": "28adb754cb42f6c9af8868ac06067c440b292f4c1cff049fc66b8c6d1c99ea02",
+      "src/workbench/core/local_http.py": "f01c354808e1848780d5ae020f96793f778d6b8423de5b74aa94b0a1de523d82",
+      "src/workbench/core/offline.py": "38ab9469c18f26bdc7598e62ef4862a1cb0f30f54a623991529283f960853b63",
+      "src/workbench/core/registry.py": "c6f42fa9d9eca722e4b6466380790222d738aaf593560ce50dcf1eaeae9b1c14",
+      "src/workbench/core/run_context.py": "131b2093752cc80f7cfe24dc4b4376eaf432059bb6f2ff5af1af2cb490120838",
+      "src/workbench/core/types.py": "9e4ca593411e25e982e14f31afd075be593744dad4c11635be5a6363b1a875a6",
+      "src/workbench/data_build/__init__.py": "5b76095c3c19bd707f273b2e6c6da9d29fc0b8ef158f4b2e3a96daab0339b0e5",
+      "src/workbench/data_build/acquisition.py": "4a838cf14aeb29cacca82857f921640fc1382cda4a0e1a542f252e60a0f10357",
+      "src/workbench/data_build/chunking.py": "8b108c94c492a974cbd9e36c02e3c4b5cedc5c6a5f5b204807fa7ebbe94b5633",
+      "src/workbench/data_build/embeddings.py": "6801a2226aae13557545acf322bfe05b653a4b0f9878ba01599cfc62facb04a6",
+      "src/workbench/data_build/http_embedder.py": "e532cfefc34c7bdad83a0f7d0ee19730acb4536009e10561dc6613c3ba2a2513",
+      "src/workbench/data_build/index_keyword.py": "ce1d73415d562d39503d42a5db088a717df161fc61aa901fd6cc0475932ed8c2",
+      "src/workbench/data_build/index_vector.py": "1a7aaecaf084d52ac4129c822c0f753a4b27d6e0df235451aa15dbe7817da1cc",
+      "src/workbench/data_build/ingest_wikipedia.py": "5315f21662fc869304c1c1f98cc87a217be5521a1b7ee1795a472411803e18d0",
+      "src/workbench/data_build/lifecycle.py": "5d68f77f3b0fb944e9b957f33f99d6c88a60ffc46b61e0438d93f703eb547e92",
+      "src/workbench/data_build/manifests.py": "5ed20fd853d37c3d9c60d5cf03e7cb6c900a8c3af12cc533c457e804ca0a6e67",
+      "src/workbench/data_build/pipeline.py": "31c65ae6569604476619028322f748a9ea50feeefa3be4dfda23974abc605771",
+      "src/workbench/data_build/provisioning.py": "f86c4c1d139f18b2f7dbb3d42d10eda11d43f6e8a79d7efec63396c602204e09",
+      "src/workbench/data_build/snapshots.py": "f81b2de6971b837ba6d7917eed194e2d3e4bab1ec57780735611af5e79f8214b",
+      "src/workbench/evaluation/__init__.py": "d4757b4e89526232ecd34c81dd32d3201d6e28c499c0b7f73e43affa200db7c7",
+      "src/workbench/evaluation/benchmark.py": "8fb1ef98d2b338d31b5f8a325514b787f4abacf80d192e28e8975f20b9fbdd7b",
+      "src/workbench/evaluation/data/history-rubric-v1.json": "8f2d545368886d4f2b395181081e00ce479d50f40d3ad9bd450e698abdcc81dc",
+      "src/workbench/evaluation/data/history-v1.json": "ba592ffcc563a2f0ecba114b5970c0911fcc07926e370d9e61249dc79d7a2171",
+      "src/workbench/evaluation/datasets.py": "1400f58e2e616870a54d78dd246ff180206cdf5c292e151d088472a7ebe2e62f",
+      "src/workbench/evaluation/measures.py": "9de698b1a4d8a8820b51fa671953349aa0e8ee6ebb5ecb5c4643a37d830184a5",
+      "src/workbench/evaluation/reports.py": "1f7e9c7c9d47564223f345318a44e74c1d14ebe0373c187a6e5dfd6191fd59cd",
+      "src/workbench/evaluation/suite.py": "ebf1e99533f2b1c6a7685ff44d5805ed628d790aae7c23a13deef577a2bf4d04",
+      "src/workbench/evaluation/summarize.py": "d8ab43ed4405c762f655027065e9bedec3767efe24fc8a9f203e8f5748356a5b",
+      "src/workbench/graphs/__init__.py": "768c467898e5c0908eed56644248dc56bb390fdbcc54429f70267f53e0e1adb6",
+      "src/workbench/graphs/base_state.py": "b8ee00b78b13f278033738c533de079c7e97edc6b51e25e92ab904367f8e724c",
+      "src/workbench/graphs/execution.py": "252e915cb0f5ba75213d264a6b1fad9a36c647394733a82a7e319c6dfb883bd4",
+      "src/workbench/graphs/finding_dates.py": "4055d71447becb6f5ba004fc10fef40a91ba91bce7d4218ec9c6e003f52c69ec",
+      "src/workbench/graphs/planning.py": "fc1d41576bb7344036c0947aa89477e11708cc76c06892987c2d1b5634147582",
+      "src/workbench/graphs/research_models.py": "ef339271b6a5be00d6395559cb0e3fc76b784d80bfb6e76113694f13f48ad630",
+      "src/workbench/graphs/researcher_graph.py": "08301b909ff699219b15a990a21900989c1255681be896f2361a591c77c3a607",
+      "src/workbench/graphs/supervisor_graph.py": "e961a8c5a557c03851a277d7f04789b66f221d8457f445efeb5283151d981c50",
+      "src/workbench/graphs/synthesis.py": "618dd7e6b4d3c7ec5902020856edd13fc2d73bfac72e24cb28ed17d74219cae8",
+      "src/workbench/models/__init__.py": "3af3a159be413e3bb26c4c0ee4f6e4fecb7fa77c0e2a7ce6cf01ea093630cb2c",
+      "src/workbench/models/errors.py": "fbefded1f17e184e320a974ebab760b19f527bd95c2ddc14c75b4b48710b246d",
+      "src/workbench/models/language_model.py": "dee062981a003c170373463cd1b0761d86dce96b8536b2d3e126ead26e1af881",
+      "src/workbench/models/llamacpp_server.py": "bbf58f184d4a020f896e3906224f689c886db1969f7aa24fe65b4402fa33ef5e",
+      "src/workbench/models/local_inference.py": "b44afbfc0e5d2397910e12fa25667adcb6f2b6924c1dfac3f435de1f3bdfd0f6",
+      "src/workbench/models/native_process.py": "166f6abe3ec9cc20eba76afee3e8bf1d7b9a7b71102b4c308591310f23f1b205",
+      "src/workbench/models/structured_json.py": "45e4645672cbbf087d9bffd4973ef2256dfe79d2f7dc33e24203df63e9df9bc3",
+      "src/workbench/models/token_counting.py": "839c994949de33f06cee204a50723484ca7a318985384ff30fb45f5dc7131558",
+      "src/workbench/observability/__init__.py": "5c40ae330269ce6b02f0aa1fc48cd0af281e58578b1bcd9856ff3da2d2aee1c4",
+      "src/workbench/observability/lifecycle.py": "cb66272e3ab6fa1a77f922e5b07ff28526132266ca7316aaac9aa46d42df6479",
+      "src/workbench/observability/logging.py": "4ba5bfc5635e1d0d07f4f94f2b1066e387e6f1217d0afa793704bf3a4ba2f3fa",
+      "src/workbench/observability/metrics.py": "d0fb5e074b6494dea186f902d1a7668300374e8caf9f865c2f62852993747134",
+      "src/workbench/observability/otel_stub.py": "9b3afc2487bf77ce05a57fc00270402901dd55852f0082d8f92aa431ca7f204d",
+      "src/workbench/observability/phoenix.py": "7f93e16ef28128b92444b3e2c40a1e91845d59747066f6fe0ffe87b9c530b2a5",
+      "src/workbench/observability/tracing.py": "63d193e5f7abcc5a96d14e388f6e3c9cec13182ba8c48994c9966427952b17c6",
+      "src/workbench/prompting/__init__.py": "f081e9e0cebdd624ac7ecd9d5d4acf05e11b6d14b0192da8f9ec13a1e56bc55b",
+      "src/workbench/prompting/citations.py": "f24edee37ee702e0ee9909c335c554f5eb8363a72abf185f0654f54aac8a4511",
+      "src/workbench/prompting/prompt_builder.py": "cb73efbe4ba68038e4e3ce5a00b797ef59b0b8c47ecfb54fc9f8bdefb2fe3c34",
+      "src/workbench/prompting/templates/answer_with_citations.txt": "04bdced659157eb8c70bd69c20165a329afc231c00af458203e577ccd42d072a",
+      "src/workbench/prompting/templates/chat_answer_with_citations.txt": "78b13e144c33ecd305bcc552781cd226ab25a21c6e58a01f3eea841b3268aa32",
+      "src/workbench/prompting/templates/chat_query_rewrite.txt": "71a04f5ebbf51a6aaa2b1a3dbbed9518c89dfccc0d3a2bb8dd9e18d71142a428",
+      "src/workbench/prompting/templates/decompose_question.txt": "ae27200616ee0d7f2df4c66be49e88c00a6290b79c7c913168950a3a2cb593c8",
+      "src/workbench/prompting/templates/derive_findings_v1.txt": "3764b3e0cbc85dfdf0672ff3e54adb0202ba32d70dec96f8cde4dd1100146c38",
+      "src/workbench/prompting/templates/evidence_summary.txt": "49c39169b9aadd197176c114f1fe6cbdaa6f877e489c29c7a2ea9facca76575e",
+      "src/workbench/prompting/templates/normalize_intent_v1.txt": "963b0b01fdcbc16bcc08e4d6793e6a6e466ba741013d9e122f4b3728212fe532",
+      "src/workbench/prompting/templates/plan_research_v1.txt": "c96bd3eda623b560b0821298097a14adbef7dbc2f8868661703c2f64a8d66e72",
+      "src/workbench/prompting/templates/query_rewrite.txt": "a1e6dc985638f26375bf03dd77a05bc3197d9f1f0c3b0427e8ccb564fd0cc6c7",
+      "src/workbench/prompting/templates/synthesize_answers.txt": "1e3ceef336a84c3c313110f7b277d544187f7f5517bd2227f39e6753daf123bb",
+      "src/workbench/prompting/templates/synthesize_findings_v1.txt": "f74172685d56ac1921085b36c9aabb72731ae61f165831a1501200a3def57901",
+      "src/workbench/retrieval/__init__.py": "13503322d22fda6315a1d57ceab880260ef4d15092ddac461078b3fbdc352341",
+      "src/workbench/retrieval/context_builder.py": "43c64181696f547a6546254d00ed72e8ef6ee14b35a5945231bb6cf4f0bd8074",
+      "src/workbench/retrieval/evidence_packing.py": "302511b440709b57563919730f925e9cfab90e612039fb86d40452bf5b33f57c",
+      "src/workbench/retrieval/http_reranker.py": "53f5d3a32beb8ca7ea0b18af35ab468f21a3dcf910e1b2633df2fdd9df95b714",
+      "src/workbench/retrieval/hybrid.py": "1836c866e8d8f423044b0ba880252c88bb3c035f2024067f884db2c0884cc394",
+      "src/workbench/retrieval/keyword_search.py": "3b971c7308423582bd52f44062a1594d4082d335fbf52d4207207cede2ac3ffb",
+      "src/workbench/retrieval/rerankers.py": "3797eccfed78e44c4200dd9cd0c2ab2ae6767a09cb39d100f030e61c97da5cc8",
+      "src/workbench/retrieval/vector_search.py": "db6a03ed2d3f6090144067c890aa36c8ee7baa51983abf2b3ea5724e69b06da0",
+      "src/workbench/stores/__init__.py": "4a69b119ae865d073cd17ea81ebd67113dfc6c3ce985a141bf2d999a3c9cf48e",
+      "src/workbench/stores/chunk_store.py": "1ff0cd5708202af855e1c049b19d0e3560d7bc845e956fad9984a8e8874bf747",
+      "src/workbench/systems/__init__.py": "e86b813cf4dec4bf0eaf3f4398f1111d16a33c7568bca0400fdda97e4a78028b",
+      "src/workbench/systems/presentation.py": "d483efcb4b0f6bb7a8bb3b652ff1b3318f751ef1002c20ce27ab429c76126a45",
+      "src/workbench/systems/runner.py": "bb8508f9e713b5997c4090fed101ae819c7b3b690169379fb6d807daf6c657f5",
+      "src/workbench/tools/__init__.py": "39d133bfe33b93a983bbad6a04b95248fb0ae17a62019e8152f934d439918aef",
+      "src/workbench/tools/base.py": "02df6fd9d3cbb8cedbfa09c5d719cb7a3e1b2b0d6856061f3b8172634607e522",
+      "src/workbench/tools/open_chunk.py": "7748e433919cb085c5d739707f180cd1b1e0fa400b5fef389591d1e7e96a02f4",
+      "src/workbench/tools/search_wikipedia.py": "2bee87b356f1d7b921ed18e97f687ca5471ba1508e3897ad3cd5213e4371089d",
+      "src/workbench/tools/utility/__init__.py": "28c957d437a7ea23b3338bd1cb0cb2d4591717e10930a87f48b6eaf26d209cac",
+      "src/workbench/tools/utility/dates.py": "d3d8f054801874b1be3182c52e16f514b8162f9f624005ae290ef856d7729215",
+      "src/workbench/ui/__init__.py": "61a5a6b1d2d0d2a4fc500ef873c0e30fa034e2696df77c909673ae93a6e0d152",
+      "src/workbench/ui/chat_state.py": "b7acba5ba2fa2ba9b6c596eb56106690fd5fcbd6fcde6df3094791834f499868",
+      "src/workbench/ui/components.py": "b347e71e1349056f55b83b3ab6854e85733581878a6d4161cef15f42384cb1d1",
+      "src/workbench/ui/graph_runner.py": "71a2269ac3ad2120c43f05e2c13559b2192c5956a17902d8a23be9c8a76e3194",
+      "src/workbench/ui/renderers.py": "e574fb68b52553c883e10a2d9edaefe625acf900f7c62190b90985fdd6b3ef92",
+      "src/workbench/ui/streamlit_app.py": "eed5f7c09dcecb7ad807671ce01d89bbbea0025d607204b3e2795fd5f88fddd3"
+    },
+    "config": {
+      "model": {
+        "provider": "llamacpp_server",
+        "base_url": "http://127.0.0.1:8080",
+        "model_name": "ministral-3-8b-instruct",
+        "temperature": 0.7,
+        "max_tokens": 2048,
+        "timeout_seconds": 60
+      },
+      "embeddings": {
+        "provider": "local",
+        "model_name": "intfloat/multilingual-e5-base",
+        "batch_size": 4,
+        "device": "mps"
+      },
+      "retrieval": {
+        "strategy": "hybrid",
+        "keyword_top_k": 20,
+        "vector_top_k": 20,
+        "merge_top_n": 50,
+        "rrf_k": 60,
+        "final_top_k": 5
+      },
+      "reranking": {
+        "enabled": true,
+        "provider": "cross_encoder",
+        "model_name": "BAAI/bge-reranker-v2-m3",
+        "device": "mps",
+        "batch_size": 1,
+        "max_length": 8192
+      },
+      "chunking": {
+        "strategy": "paragraph_aware",
+        "target_size": 1000,
+        "max_size": 1500,
+        "min_chunk_size": 100
+      },
+      "paths": {
+        "data_dir": "./data",
+        "raw_data": "./data/raw",
+        "processed_data": "./data/processed",
+        "indexes_dir": "./data/indexes",
+        "active_index": "./data/indexes/active",
+        "index_snapshots": "./data/indexes/snapshots"
+      },
+      "runs": {
+        "output_dir": "runs/reports/stage5-repeats-v1",
+        "logs_dir": "runs/reports/stage5-repeats-v1/logs",
+        "traces_dir": "./runs/traces",
+        "reports_dir": "./runs/reports"
+      },
+      "observability": {
+        "enable_tracing": true,
+        "enable_metrics": false,
+        "phoenix_endpoint": "http://127.0.0.1:6006",
+        "log_level": "INFO"
+      },
+      "context": {
+        "prompt_tokens": 6000,
+        "output_tokens": 1200,
+        "max_chunks_per_doc": 3
+      }
+    },
+    "suite_version": "history-v1",
+    "suite_sha256": "23c69b1c2db25d90a96820bfc9ab8555df27bd8765b2ab8714d2cac782a0f4f3",
+    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+    "corpus_provenance": "Legacy owner index, Lance version 843; dump date/revision unknown. No migration/conversion performed.",
+    "models_manifest": {
+      "format": 1,
+      "models": [
+        {
+          "id": "intfloat/multilingual-e5-base",
+          "revision": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+          "license": "mit",
+          "license_reference": "https://huggingface.co/intfloat/multilingual-e5-base/blob/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/README.md",
+          "files": {
+            "1_Pooling/config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/1_Pooling/config.json",
+              "sha256": "f586ab6c734af7b8d14d898bfa7faa886f23b46f86dd1730514309893af13d75",
+              "size": 200,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "README.md": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/README.md",
+              "sha256": "9d129cb0b912b55c7b5378f976a9c35ae4796c80466b659ad63930d8ca090fca",
+              "size": 179345,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/config.json",
+              "sha256": "9dab198f24c8c0879e481cf7822005d5ecbceedbacb390ffafa594e28d31bac4",
+              "size": 694,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "model.safetensors": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/model.safetensors",
+              "sha256": "a18a44fad1d0b46ded15928144138cff1135d5cc8233bdd90be5f18822de09a7",
+              "size": 1112201288,
+              "verification": "publisher-lfs-sha256"
+            },
+            "modules.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/modules.json",
+              "sha256": "c6e29747481e8b5dd2b58401966aeac910de39092f90cda9a704b1545f902b04",
+              "size": 387,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "sentence_bert_config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/sentence_bert_config.json",
+              "sha256": "948201d8329907aae938fa62f9ceeed53f5694dacc2b87b9f3b78b37ee986529",
+              "size": 57,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "sentencepiece.bpe.model": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/sentencepiece.bpe.model",
+              "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+              "size": 5069051,
+              "verification": "publisher-lfs-sha256"
+            },
+            "special_tokens_map.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/special_tokens_map.json",
+              "sha256": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f",
+              "size": 280,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "tokenizer.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/tokenizer.json",
+              "sha256": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626",
+              "size": 17082660,
+              "verification": "publisher-lfs-sha256"
+            },
+            "tokenizer_config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/tokenizer_config.json",
+              "sha256": "efb5c0d09722e5fe59a462cd2a9976ee216d55b037597d997cd3fe833216da15",
+              "size": 418,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            }
+          }
+        },
+        {
+          "id": "BAAI/bge-reranker-v2-m3",
+          "revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+          "license": "apache-2.0",
+          "license_reference": "https://huggingface.co/BAAI/bge-reranker-v2-m3/blob/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/README.md",
+          "files": {
+            "README.md": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/README.md",
+              "sha256": "c887aa6dd2598f908bf0582ca7068cc816585c7a1b6a07df305b631ede0cb174",
+              "size": 17229,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "config.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/config.json",
+              "sha256": "13dcd6c31d9fec9d1d8e158702072f62d7fa7d312a64b9fe057bec9a08cfe41a",
+              "size": 795,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "model.safetensors": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/model.safetensors",
+              "sha256": "d9e3e081faff1eefb84019509b2f5558fd74c1a05a2c7db22f74174fcedb5286",
+              "size": 2271071852,
+              "verification": "publisher-lfs-sha256"
+            },
+            "sentencepiece.bpe.model": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/sentencepiece.bpe.model",
+              "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+              "size": 5069051,
+              "verification": "publisher-lfs-sha256"
+            },
+            "special_tokens_map.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/special_tokens_map.json",
+              "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+              "size": 964,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "tokenizer.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/tokenizer.json",
+              "sha256": "69564b696052886ed0ac63fa393e928384e0f8caada38c1f4864a9bfbf379c15",
+              "size": 17098273,
+              "verification": "publisher-lfs-sha256"
+            },
+            "tokenizer_config.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/tokenizer_config.json",
+              "sha256": "7e4c1cc848840aeccdd763458c18dd525eb0f795c992e00ebe9c28554e7db2d4",
+              "size": 1173,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            }
+          }
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+          "revision": "0102285ad796bd99af90f58de616092e5630e970",
+          "license": "apache-2.0",
+          "license_reference": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/blob/0102285ad796bd99af90f58de616092e5630e970/README.md",
+          "files": {
+            "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf": {
+              "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/resolve/0102285ad796bd99af90f58de616092e5630e970/Ministral-3-8B-Instruct-2512-Q4_K_M.gguf",
+              "size": 5198911904,
+              "sha256": "33e7a72cf5e6e2cfc2f2847075acc013d68bba023e35310cef86b5cf8fdca761",
+              "verification": "publisher-lfs-sha256"
+            }
+          }
+        }
+      ],
+      "embedding": {
+        "id": "intfloat/multilingual-e5-base",
+        "revision": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+        "dimension": 768,
+        "normalize": true,
+        "query_prefix": "query: ",
+        "passage_prefix": "passage: "
+      }
+    },
+    "cached_revisions": {
+      "intfloat/multilingual-e5-base": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+      "BAAI/bge-reranker-v2-m3": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e"
+    },
+    "native_manifest": {
+      "format": 1,
+      "implementation": "native llama.cpp Metal",
+      "build": 8130,
+      "commit": "ed4837891",
+      "source_reference": "https://github.com/ggml-org/llama.cpp/tree/ed4837891",
+      "license_reference": "https://github.com/ggml-org/llama.cpp/blob/ed4837891/LICENSE",
+      "observed_binary_sha256": "08fdafb92257b7e946f3a9b2794d5e74ae26446abfa4e7c5ae065fe14b270c73",
+      "binary_provenance": "Observed local AppleClang 17 arm64 build; not a publisher-verified downloadable binary. Setup validates the commit and records the supplied binary hash. Native binary/toolchain installation remains an explicit prerequisite."
+    },
+    "hardware": {
+      "platform": "macOS-26.7.1-arm64-arm-64bit",
+      "machine": "arm64",
+      "cpu": "Apple M4 Pro",
+      "memory_bytes": "51539607552"
+    },
+    "python": "3.12.7",
+    "packages": {
+      "datasets": "4.6.1",
+      "anyio": "4.12.1",
+      "shellingham": "1.5.4",
+      "soundfile": "0.12.1",
+      "ml_dtypes": "0.5.4",
+      "posthog": "7.9.4",
+      "ply": "3.11",
+      "threadpoolctl": "3.6.0",
+      "coloredlogs": "15.0.1",
+      "humanfriendly": "10.0",
+      "colpali_engine": "0.3.13",
+      "pexpect": "4.9.0",
+      "Authlib": "1.6.7",
+      "openinference-semantic-conventions": "0.1.26",
+      "arize-phoenix-evals": "2.9.0",
+      "requests": "2.32.5",
+      "uuid_utils": "0.14.1",
+      "aiohttp": "3.13.3",
+      "traitlets": "5.14.3",
+      "aioitertools": "0.13.0",
+      "multidict": "6.7.1",
+      "nest-asyncio": "1.6.0",
+      "arize-phoenix-otel": "0.14.0",
+      "asttokens": "3.0.1",
+      "diskcache": "5.6.3",
+      "ptyprocess": "0.7.0",
+      "einops": "0.8.2",
+      "langgraph-sdk": "0.3.8",
+      "filelock": "3.20.3",
+      "tzdata": "2025.3",
+      "iniconfig": "2.3.0",
+      "pytz": "2025.2",
+      "agentic-workbench": "0.0.0",
+      "toml": "0.10.2",
+      "uvicorn": "0.32.1",
+      "opentelemetry-sdk": "1.39.1",
+      "certifi": "2026.1.4",
+      "sse-starlette": "3.2.0",
+      "alembic": "1.18.3",
+      "prometheus_client": "0.24.1",
+      "pydeck": "0.9.1",
+      "jsonschema-specifications": "2025.9.1",
+      "cross-web": "0.4.1",
+      "executing": "2.2.1",
+      "python-multipart": "0.0.22",
+      "greenlet": "3.3.1",
+      "websockets": "16.0",
+      "pydantic": "2.12.5",
+      "ctranslate2": "4.7.1",
+      "grpcio": "1.78.0",
+      "propcache": "0.4.1",
+      "langchain-core": "1.2.15",
+      "optimum": "1.23.3",
+      "networkx": "3.6.1",
+      "wheel": "0.46.3",
+      "jsonpath-ng": "1.7.0",
+      "torch": "2.8.0",
+      "protobuf": "6.33.5",
+      "python-dotenv": "1.2.1",
+      "blinker": "1.9.0",
+      "jsonschema": "4.26.0",
+      "ipython": "9.10.0",
+      "ruff": "0.15.0",
+      "aiosqlite": "0.22.1",
+      "fsspec": "2026.2.0",
+      "jedi": "0.19.2",
+      "infinity_emb": "0.0.77",
+      "yarl": "1.23.0",
+      "tornado": "6.5.4",
+      "ormsgpack": "1.12.2",
+      "pystache": "0.6.8",
+      "idna": "3.11",
+      "debugpy": "1.8.20",
+      "typer": "0.24.1",
+      "cffi": "2.0.0",
+      "opentelemetry-exporter-otlp-proto-grpc": "1.39.1",
+      "fastapi": "0.131.0",
+      "rich": "13.9.4",
+      "zstandard": "0.25.0",
+      "setuptools": "82.0.0",
+      "openinference-instrumentation": "0.1.44",
+      "opentelemetry-proto": "1.39.1",
+      "starlette": "0.52.1",
+      "langgraph-checkpoint": "4.0.0",
+      "jsonpatch": "1.33",
+      "jsonpointer": "3.0.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "appnope": "0.1.4",
+      "openinference-instrumentation-langchain": "0.1.59",
+      "dnspython": "2.8.0",
+      "numpy": "1.26.4",
+      "prometheus-fastapi-instrumentator": "7.1.0",
+      "opentelemetry-api": "1.39.1",
+      "tenacity": "9.1.4",
+      "pillow": "12.1.1",
+      "prompt_toolkit": "3.0.52",
+      "email-validator": "2.3.0",
+      "httpcore": "1.0.9",
+      "decorator": "5.2.1",
+      "langgraph-prebuilt": "1.0.8",
+      "langgraph": "1.0.9",
+      "duckduckgo_search": "8.1.1",
+      "jupyter_client": "8.8.0",
+      "soupsieve": "2.8.3",
+      "stack-data": "0.6.3",
+      "jmespath": "1.1.0",
+      "langsmith": "0.7.6",
+      "charset-normalizer": "3.4.4",
+      "sympy": "1.14.0",
+      "huggingface_hub": "0.36.2",
+      "pip": "26.2.1",
+      "markdown-it-py": "4.0.0",
+      "ipykernel": "7.2.0",
+      "graphql-core": "3.2.7",
+      "torchvision": "0.23.0",
+      "pydantic-settings": "2.13.1",
+      "matplotlib-inline": "0.2.1",
+      "wrapt": "1.17.3",
+      "llama_cpp_python": "0.3.16",
+      "watchfiles": "1.1.1",
+      "narwhals": "2.17.0",
+      "opentelemetry-instrumentation": "0.60b1",
+      "sentence-transformers": "3.4.1",
+      "h11": "0.16.0",
+      "gitdb": "4.0.12",
+      "googleapis-common-protos": "1.72.0",
+      "pycparser": "3.0",
+      "httptools": "0.7.1",
+      "cachetools": "6.2.6",
+      "regex": "2026.1.15",
+      "importlib_metadata": "8.7.1",
+      "starlette-context": "0.3.6",
+      "mdurl": "0.1.2",
+      "python-dateutil": "2.9.0.post0",
+      "mpmath": "1.3.0",
+      "PyYAML": "6.0.3",
+      "timm": "1.0.25",
+      "opentelemetry-exporter-otlp-proto-http": "1.39.1",
+      "typer-slim": "0.23.0",
+      "parso": "0.8.6",
+      "multiprocess": "0.70.18",
+      "transformers": "4.57.6",
+      "pydantic_core": "2.41.5",
+      "Mako": "1.3.10",
+      "urllib3": "2.6.3",
+      "frozenlist": "1.8.0",
+      "strawberry-graphql": "0.287.3",
+      "wcwidth": "0.6.0",
+      "typing_extensions": "4.15.0",
+      "streamlit": "1.54.0",
+      "aiosignal": "1.4.0",
+      "jupyter_core": "5.9.1",
+      "click": "8.2.1",
+      "beautifulsoup4": "4.14.3",
+      "joblib": "1.5.3",
+      "cryptography": "46.0.4",
+      "hf-xet": "1.2.0",
+      "Jinja2": "3.1.6",
+      "referencing": "0.37.0",
+      "pandas": "2.3.3",
+      "pyasn1": "0.6.2",
+      "MarkupSafe": "3.0.3",
+      "dill": "0.4.0",
+      "langchain": "1.2.10",
+      "pure_eval": "0.2.3",
+      "grpc-interceptor": "0.15.4",
+      "deprecation": "2.1.0",
+      "distro": "1.9.0",
+      "GitPython": "3.1.46",
+      "flatbuffers": "25.12.19",
+      "arize-phoenix": "12.35.0",
+      "pluggy": "1.6.0",
+      "Pygments": "2.19.2",
+      "aiohappyeyeballs": "2.6.1",
+      "pyarrow": "23.0.0",
+      "lance-namespace": "0.4.5",
+      "attrs": "25.4.0",
+      "requests-toolbelt": "1.0.0",
+      "platformdirs": "4.5.1",
+      "primp": "1.0.0",
+      "packaging": "26.0",
+      "opentelemetry-exporter-otlp": "1.39.1",
+      "onnx": "1.20.1",
+      "lancedb": "0.29.2",
+      "httpx": "0.28.1",
+      "smmap": "5.0.2",
+      "tqdm": "4.67.3",
+      "sqlean.py": "3.50.4.5",
+      "backoff": "2.2.1",
+      "safetensors": "0.7.0",
+      "tokenizers": "0.22.2",
+      "uvloop": "0.22.1",
+      "psutil": "7.2.2",
+      "orjson": "3.11.7",
+      "altair": "6.0.0",
+      "lance-namespace-urllib3-client": "0.4.5",
+      "peft": "0.17.1",
+      "lxml": "6.0.2",
+      "typing-inspection": "0.4.2",
+      "scipy": "1.17.0",
+      "zipp": "3.23.0",
+      "annotated-types": "0.7.0",
+      "accelerate": "1.12.0",
+      "ldap3": "2.9.1",
+      "rpds-py": "0.30.0",
+      "six": "1.17.0",
+      "pyzmq": "27.1.0",
+      "opentelemetry-exporter-otlp-proto-common": "1.39.1",
+      "scikit-learn": "1.8.0",
+      "xxhash": "3.6.0",
+      "arize-phoenix-client": "1.28.1",
+      "lia-web": "0.3.1",
+      "opentelemetry-semantic-conventions": "0.60b1",
+      "SQLAlchemy": "2.0.46",
+      "annotated-doc": "0.0.4",
+      "pytest": "9.0.2",
+      "comm": "0.2.3",
+      "atlas-localis": "0.0.0"
+    },
+    "limitations": [
+      "Legacy corpus dump date and index build provenance unknown.",
+      "No independent human review; agent labels are provisional.",
+      "Parent RSS high-water excludes native server; Metal allocation is not additive physical memory."
+    ]
+  },
+  "selection": {
+    "split": "development",
+    "case_ids": [
+      "f01"
+    ],
+    "repetitions": 3,
+    "controls": {
+      "forced_single_task": false,
+      "rerank": null
+    }
+  },
+  "results": [
+    {
+      "question_id": "f01",
+      "question": "When did the Roman Republic end?",
+      "question_meta": {
+        "id": "f01",
+        "category": "single",
+        "split": "development",
+        "question": "When did the Roman Republic end?",
+        "seed_ids": [
+          "hist_001"
+        ],
+        "scope": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "task_facets": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+        "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+        "evidence": [
+          {
+            "chunk_id": "1510dc7a9342c459",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 797,
+            "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+            "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          },
+          {
+            "chunk_id": "75b50d1b43560333",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 800,
+            "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+            "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          }
+        ],
+        "rubric": "history-rubric-v1",
+        "annotation": {
+          "reviewer": "codex-agent",
+          "status": "provisional; human review pending",
+          "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+        }
+      },
+      "result": {
+        "final_validation": {
+          "status": "passed",
+          "errors": []
+        },
+        "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "units": [
+          {
+            "text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested.",
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "9d2933fd24abfe50",
+                "start": 0,
+                "end": 783
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "75b50d1b43560333",
+                "start": 0,
+                "end": 800
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "1510dc7a9342c459",
+                "start": 0,
+                "end": 797
+              }
+            ]
+          },
+          {
+            "text": "Scholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date.",
+            "finding_ids": [
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "75b50d1b43560333",
+                "start": 0,
+                "end": 800
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              }
+            ]
+          }
+        ],
+        "answer_text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested. [1][2][3][4]\n\nScholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date. [3][2]",
+        "citations": [
+          {
+            "number": 1,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "9d2933fd24abfe50",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "9d2933fd24abfe50",
+                  "start": 0,
+                  "end": 783
+                },
+                "document_id": "1006782",
+                "title": "Battle of Thapsus",
+                "section": null,
+                "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate.",
+                "text_hash": "ee509ff8f017bc959b23968161a799ffcf9eca4ef0901b4d1b2cdf2bce0aadee",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          },
+          {
+            "number": 2,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "56f2e56051bb3640",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "56f2e56051bb3640",
+                  "start": 0,
+                  "end": 871
+                },
+                "document_id": "15583",
+                "title": "Augustus",
+                "section": null,
+                "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5",
+              "t1.f2"
+            ]
+          },
+          {
+            "number": 3,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "75b50d1b43560333",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "75b50d1b43560333",
+                  "start": 0,
+                  "end": 800
+                },
+                "document_id": "41095",
+                "title": "Roman Republic",
+                "section": null,
+                "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+                "text_hash": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5",
+              "t1.f2"
+            ]
+          },
+          {
+            "number": 4,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "1510dc7a9342c459",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "1510dc7a9342c459",
+                  "start": 0,
+                  "end": 797
+                },
+                "document_id": "41095",
+                "title": "Roman Republic",
+                "section": null,
+                "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+                "text_hash": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "task_id": "t1",
+            "status": "insufficient_evidence",
+            "admitted_findings": 5,
+            "used_findings": 5,
+            "gaps": [
+              "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+              "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+              "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay.",
+              "t1.f6: synthesis budget omitted supported material."
+            ]
+          }
+        ],
+        "gaps": [
+          "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+          "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+          "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay.",
+          "t1.f6: synthesis budget omitted supported material."
+        ],
+        "conflicts": [
+          [
+            "t1.f1",
+            "t1.f4"
+          ],
+          [
+            "t1.f3",
+            "t1.f4"
+          ]
+        ],
+        "warnings": [],
+        "error": null,
+        "diagnostics": {
+          "retrieved": 32,
+          "opened": 32,
+          "presented": 5,
+          "tokens_in": 5614,
+          "tokens_out": 1079,
+          "elapsed_ms": 43589.26308299124
+        },
+        "fingerprints": [
+          {
+            "component": "code",
+            "identity": "57984a92f79ac851502e0e9de0dcfacac0e815aef80a2c5093a9fb019363e6e2"
+          },
+          {
+            "component": "snapshot",
+            "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+          },
+          {
+            "component": "models",
+            "identity": "4dea95604fb91780a777d871a0812f556f153cc6feac662bc434b0403e076285"
+          },
+          {
+            "component": "config",
+            "identity": "57f08aa79c9f1a466676b0d7dcea2123c465b847687440b9253631b1b7166636"
+          },
+          {
+            "component": "evaluation_controls",
+            "identity": "{\"forced_single_task\": false, \"rerank\": null}"
+          },
+          {
+            "component": "prompts",
+            "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+          }
+        ]
+      },
+      "metrics": {
+        "citation_count": 4,
+        "citations": [
+          "9d2933fd24abfe50",
+          "56f2e56051bb3640",
+          "75b50d1b43560333",
+          "1510dc7a9342c459"
+        ],
+        "unique_cited_titles": 3,
+        "title_list": [
+          "Augustus",
+          "Battle of Thapsus",
+          "Roman Republic"
+        ],
+        "retrieved_count": 32,
+        "opened_count": 32,
+        "presented_count": 5,
+        "total_latency_ms": 43589.26308299124,
+        "tokens_in": 5614,
+        "tokens_out": 1079,
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "final_validation": "passed",
+        "tasks": 1,
+        "failed_tasks": 0,
+        "warnings": []
+      },
+      "error": null,
+      "observation": {
+        "calls": [],
+        "spans": [
+          {
+            "name": "normalize_question",
+            "elapsed_ms": 0.039,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 4012.085,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "plan",
+            "elapsed_ms": 4017.739,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "retrieve.keyword",
+            "elapsed_ms": 57.243,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 57.2
+            }
+          },
+          {
+            "name": "embedding.query",
+            "elapsed_ms": 157.31,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "model_name": "intfloat/multilingual-e5-base",
+              "query_length": 354,
+              "query_prefix": "query: ",
+              "device": "mps:0"
+            }
+          },
+          {
+            "name": "retrieve.vector",
+            "elapsed_ms": 214.525,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 214.5
+            }
+          },
+          {
+            "name": "retrieve.hybrid_merge",
+            "elapsed_ms": 272.012,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "keyword_count": 20,
+              "vector_count": 20,
+              "merged_count": 32,
+              "duration_ms": 272.0
+            }
+          },
+          {
+            "name": "chunk_store.get_many",
+            "elapsed_ms": 50.183,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "requested_count": 32,
+              "found_count": 32,
+              "duration_ms": 50.2
+            }
+          },
+          {
+            "name": "retrieve.hydrate",
+            "elapsed_ms": 50.234,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "rerank.cross_encoder",
+            "elapsed_ms": 2371.834,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "model_name": "BAAI/bge-reranker-v2-m3",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "input_count": 32,
+              "top_n": 50,
+              "output_count": 32,
+              "duration_ms": 2371.8,
+              "top_score": 0.9017
+            }
+          },
+          {
+            "name": "retrieve.rerank",
+            "elapsed_ms": 2371.921,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.retrieve",
+            "elapsed_ms": 2694.396,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.pack_evidence",
+            "elapsed_ms": 15.475,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 18964.549,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.derive_findings",
+            "elapsed_ms": 18967.818,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.041,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.finish_task",
+            "elapsed_ms": 0.109,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "researcher.task",
+            "elapsed_ms": 21680.671,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "task_id": "t1",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          },
+          {
+            "name": "aggregate",
+            "elapsed_ms": 35.022,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 17849.484,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "synthesize",
+            "elapsed_ms": 17851.917,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "validate_final",
+            "elapsed_ms": 0.075,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "finalize",
+            "elapsed_ms": 0.237,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "atlas_localis.question",
+            "elapsed_ms": 43589.237,
+            "attributes": {
+              "run_id": "d3ecb190f55d444bba78e8d9d5da5cac",
+              "run_type": "application",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          }
+        ],
+        "note": "Call inputs/responses and generation settings projected into review_packet; full schemas/templates identified by hashes."
+      },
+      "failures": {
+        "planner_fallback": 0,
+        "worker_repair_attempts": 0,
+        "synthesis_repair_attempts": 0,
+        "synthesis_fallback": 0,
+        "failed_tasks": 0,
+        "coverage_gaps": 1,
+        "final_validation_failure": 0,
+        "operational_error": null
+      },
+      "resources": {
+        "parent_peak_rss_bytes": 1729314816,
+        "metal_driver_allocated_bytes_at_sample": 4387979264
+      },
+      "repeat": 1,
+      "review_packet": [
+        {
+          "schema": "PlanProposal",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "81e20416c14529f8c355fbe06268636698cd8865a28bd9e68dd7f09c04c7c6ea",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?"
+            }
+          ],
+          "response": {
+            "tasks": [
+              {
+                "label": "Roman Republic End Date and Historical Context",
+                "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                "needs_timeline": true
+              }
+            ]
+          },
+          "error": null,
+          "wall_ms": 4012.1573749929667,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t1",
+          "input": [
+            {
+              "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Battle of Thapsus",
+                  "section": null,
+                  "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences"
+                },
+                {
+                  "alias": "E3",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC."
+                },
+                {
+                  "alias": "E4",
+                  "title": "Roman legion",
+                  "section": null,
+                  "text": "Late Republic\nThroughout Rome's Late Republic, the legions played an important political role. By the 1st century BC the threat of the legions under a demagogue was recognized. Roman Governors were not allowed to leave their provinces with their legions. When Julius Caesar broke this rule, leaving his province of Gaul and crossing the Rubicon into Italy, he precipitated a constitutional crisis. This crisis and the civil wars which followed brought an end to the Republic and led to the foundation of the Empire under Augustus in 27 BC."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "Julius Caesar’s assassination on March 15, 44 BC, by senators led by Brutus and Cassius marked the end of his dictatorship and triggered civil wars that destabilized the Republic.",
+                "evidence_refs": [
+                  "E1",
+                  "E5"
+                ],
+                "date_text": "March 15, 44 BC"
+              },
+              {
+                "statement": "The Second Triumvirate (Octavian, Mark Antony, and Lepidus) formed in 43 BC to avenge Caesar’s death, consolidating power and suppressing Republican factions through military force.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "Octavian defeated his rivals (Antony and Cleopatra) at the Battle of Actium on September 2, 31 BC, eliminating the last major opposition and securing his dominance over Rome.",
+                "evidence_refs": [
+                  "E2"
+                ],
+                "date_text": "2 September 31 BC"
+              },
+              {
+                "statement": "The Senate officially granted Octavian the title *Augustus* and conferred unprecedented powers on January 16, 27 BC, marking the formal transition from Republic to Empire.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": "16 January 27 BC"
+              },
+              {
+                "statement": "Julius Caesar’s appointment as *dictator perpetuo* (dictator for life) in 44 BC by the Senate is widely cited by scholars as a pivotal moment signaling the Republic’s collapse into autocracy.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The civil wars from 49 BC to 44 BC, exacerbated by Caesar’s defiance of constitutional norms (e.g., crossing the Rubicon with his legions), eroded Republican institutions permanently.",
+                "evidence_refs": [
+                  "E3",
+                  "E4"
+                ],
+                "date_text": null
+              }
+            ],
+            "gaps": [
+              "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+              "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+              "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay."
+            ]
+          },
+          "error": null,
+          "wall_ms": 18964.544916001614,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "AnswerDraft",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "d41cb9d34c531e8e61907d2f75491012c02566761b4b7edbe35d5800b494ac1d",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?",
+              "tasks": [
+                {
+                  "task": {
+                    "label": "Roman Republic End Date and Historical Context",
+                    "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                    "needs_timeline": true,
+                    "task_id": "t1"
+                  },
+                  "status": "insufficient_evidence",
+                  "gaps": [
+                    "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+                    "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+                    "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay."
+                  ],
+                  "error": null
+                }
+              ],
+              "findings": [
+                {
+                  "alias": "F1",
+                  "finding_id": "t1.f1",
+                  "statement": "Julius Caesar’s assassination on March 15, 44 BC, by senators led by Brutus and Cassius marked the end of his dictatorship and triggered civil wars that destabilized the Republic.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "9d2933fd24abfe50",
+                      "start": 0,
+                      "end": 783
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": "March 15, 44 BC"
+                },
+                {
+                  "alias": "F2",
+                  "finding_id": "t1.f2",
+                  "statement": "The Second Triumvirate (Octavian, Mark Antony, and Lepidus) formed in 43 BC to avenge Caesar’s death, consolidating power and suppressing Republican factions through military force.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F3",
+                  "finding_id": "t1.f3",
+                  "statement": "Octavian defeated his rivals (Antony and Cleopatra) at the Battle of Actium on September 2, 31 BC, eliminating the last major opposition and securing his dominance over Rome.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    }
+                  ],
+                  "date_text": "2 September 31 BC"
+                },
+                {
+                  "alias": "F4",
+                  "finding_id": "t1.f4",
+                  "statement": "The Senate officially granted Octavian the title *Augustus* and conferred unprecedented powers on January 16, 27 BC, marking the formal transition from Republic to Empire.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": "16 January 27 BC"
+                },
+                {
+                  "alias": "F5",
+                  "finding_id": "t1.f5",
+                  "statement": "Julius Caesar’s appointment as *dictator perpetuo* (dictator for life) in 44 BC by the Senate is widely cited by scholars as a pivotal moment signaling the Republic’s collapse into autocracy.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "1510dc7a9342c459",
+                      "start": 0,
+                      "end": 797
+                    }
+                  ],
+                  "date_text": null
+                }
+              ],
+              "excerpts": [
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "9d2933fd24abfe50",
+                    "start": 0,
+                    "end": 783
+                  },
+                  "document_id": "1006782",
+                  "title": "Battle of Thapsus",
+                  "section": null,
+                  "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate.",
+                  "text_hash": "ee509ff8f017bc959b23968161a799ffcf9eca4ef0901b4d1b2cdf2bce0aadee",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "56f2e56051bb3640",
+                    "start": 0,
+                    "end": 871
+                  },
+                  "document_id": "15583",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                  "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "75b50d1b43560333",
+                    "start": 0,
+                    "end": 800
+                  },
+                  "document_id": "41095",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+                  "text_hash": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "1510dc7a9342c459",
+                    "start": 0,
+                    "end": 797
+                  },
+                  "document_id": "41095",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+                  "text_hash": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                }
+              ],
+              "budget_omissions": [
+                "t1.f6: synthesis budget omitted supported material."
+              ]
+            }
+          ],
+          "response": {
+            "units": [
+              {
+                "text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested.",
+                "finding_ids": [
+                  "F1",
+                  "F3",
+                  "F4",
+                  "F5"
+                ]
+              },
+              {
+                "text": "Scholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date.",
+                "finding_ids": [
+                  "F2",
+                  "F3",
+                  "F4"
+                ]
+              }
+            ],
+            "conflict_groups": [
+              [
+                "F1",
+                "F4"
+              ],
+              [
+                "F3",
+                "F4"
+              ]
+            ]
+          },
+          "error": null,
+          "wall_ms": 17849.46941700764,
+          "finish_reason": "stop"
+        }
+      ]
+    },
+    {
+      "question_id": "f01",
+      "question": "When did the Roman Republic end?",
+      "question_meta": {
+        "id": "f01",
+        "category": "single",
+        "split": "development",
+        "question": "When did the Roman Republic end?",
+        "seed_ids": [
+          "hist_001"
+        ],
+        "scope": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "task_facets": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+        "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+        "evidence": [
+          {
+            "chunk_id": "1510dc7a9342c459",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 797,
+            "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+            "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          },
+          {
+            "chunk_id": "75b50d1b43560333",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 800,
+            "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+            "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          }
+        ],
+        "rubric": "history-rubric-v1",
+        "annotation": {
+          "reviewer": "codex-agent",
+          "status": "provisional; human review pending",
+          "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+        }
+      },
+      "result": {
+        "final_validation": {
+          "status": "passed",
+          "errors": []
+        },
+        "run_id": "16232816bc4b4336825c5645c1f0da74",
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "units": [
+          {
+            "text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested.",
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "9d2933fd24abfe50",
+                "start": 0,
+                "end": 783
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "75b50d1b43560333",
+                "start": 0,
+                "end": 800
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "1510dc7a9342c459",
+                "start": 0,
+                "end": 797
+              }
+            ]
+          },
+          {
+            "text": "Scholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date.",
+            "finding_ids": [
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "75b50d1b43560333",
+                "start": 0,
+                "end": 800
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              }
+            ]
+          }
+        ],
+        "answer_text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested. [1][2][3][4]\n\nScholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date. [3][2]",
+        "citations": [
+          {
+            "number": 1,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "9d2933fd24abfe50",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "9d2933fd24abfe50",
+                  "start": 0,
+                  "end": 783
+                },
+                "document_id": "1006782",
+                "title": "Battle of Thapsus",
+                "section": null,
+                "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate.",
+                "text_hash": "ee509ff8f017bc959b23968161a799ffcf9eca4ef0901b4d1b2cdf2bce0aadee",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          },
+          {
+            "number": 2,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "56f2e56051bb3640",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "56f2e56051bb3640",
+                  "start": 0,
+                  "end": 871
+                },
+                "document_id": "15583",
+                "title": "Augustus",
+                "section": null,
+                "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5",
+              "t1.f2"
+            ]
+          },
+          {
+            "number": 3,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "75b50d1b43560333",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "75b50d1b43560333",
+                  "start": 0,
+                  "end": 800
+                },
+                "document_id": "41095",
+                "title": "Roman Republic",
+                "section": null,
+                "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+                "text_hash": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5",
+              "t1.f2"
+            ]
+          },
+          {
+            "number": 4,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "1510dc7a9342c459",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "1510dc7a9342c459",
+                  "start": 0,
+                  "end": 797
+                },
+                "document_id": "41095",
+                "title": "Roman Republic",
+                "section": null,
+                "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+                "text_hash": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "task_id": "t1",
+            "status": "insufficient_evidence",
+            "admitted_findings": 5,
+            "used_findings": 5,
+            "gaps": [
+              "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+              "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+              "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay.",
+              "t1.f6: synthesis budget omitted supported material."
+            ]
+          }
+        ],
+        "gaps": [
+          "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+          "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+          "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay.",
+          "t1.f6: synthesis budget omitted supported material."
+        ],
+        "conflicts": [
+          [
+            "t1.f1",
+            "t1.f4"
+          ],
+          [
+            "t1.f3",
+            "t1.f4"
+          ]
+        ],
+        "warnings": [],
+        "error": null,
+        "diagnostics": {
+          "retrieved": 32,
+          "opened": 32,
+          "presented": 5,
+          "tokens_in": 5614,
+          "tokens_out": 1079,
+          "elapsed_ms": 28852.640375000192
+        },
+        "fingerprints": [
+          {
+            "component": "code",
+            "identity": "57984a92f79ac851502e0e9de0dcfacac0e815aef80a2c5093a9fb019363e6e2"
+          },
+          {
+            "component": "snapshot",
+            "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+          },
+          {
+            "component": "models",
+            "identity": "4dea95604fb91780a777d871a0812f556f153cc6feac662bc434b0403e076285"
+          },
+          {
+            "component": "config",
+            "identity": "57f08aa79c9f1a466676b0d7dcea2123c465b847687440b9253631b1b7166636"
+          },
+          {
+            "component": "evaluation_controls",
+            "identity": "{\"forced_single_task\": false, \"rerank\": null}"
+          },
+          {
+            "component": "prompts",
+            "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+          }
+        ]
+      },
+      "metrics": {
+        "citation_count": 4,
+        "citations": [
+          "9d2933fd24abfe50",
+          "56f2e56051bb3640",
+          "75b50d1b43560333",
+          "1510dc7a9342c459"
+        ],
+        "unique_cited_titles": 3,
+        "title_list": [
+          "Augustus",
+          "Battle of Thapsus",
+          "Roman Republic"
+        ],
+        "retrieved_count": 32,
+        "opened_count": 32,
+        "presented_count": 5,
+        "total_latency_ms": 28852.640375000192,
+        "tokens_in": 5614,
+        "tokens_out": 1079,
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "final_validation": "passed",
+        "tasks": 1,
+        "failed_tasks": 0,
+        "warnings": []
+      },
+      "error": null,
+      "observation": {
+        "calls": [],
+        "spans": [
+          {
+            "name": "normalize_question",
+            "elapsed_ms": 0.022,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 2975.146,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "plan",
+            "elapsed_ms": 2979.803,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "retrieve.keyword",
+            "elapsed_ms": 33.545,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 33.5
+            }
+          },
+          {
+            "name": "embedding.query",
+            "elapsed_ms": 37.415,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "model_name": "intfloat/multilingual-e5-base",
+              "query_length": 354,
+              "query_prefix": "query: ",
+              "device": "mps:0"
+            }
+          },
+          {
+            "name": "retrieve.vector",
+            "elapsed_ms": 97.161,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 96.9
+            }
+          },
+          {
+            "name": "retrieve.hybrid_merge",
+            "elapsed_ms": 130.888,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "keyword_count": 20,
+              "vector_count": 20,
+              "merged_count": 32,
+              "duration_ms": 130.9
+            }
+          },
+          {
+            "name": "chunk_store.get_many",
+            "elapsed_ms": 0.268,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "requested_count": 32,
+              "found_count": 32,
+              "duration_ms": 0.3
+            }
+          },
+          {
+            "name": "retrieve.hydrate",
+            "elapsed_ms": 0.305,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "rerank.cross_encoder",
+            "elapsed_ms": 1679.018,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "model_name": "BAAI/bge-reranker-v2-m3",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "input_count": 32,
+              "top_n": 50,
+              "output_count": 32,
+              "duration_ms": 1679.0,
+              "top_score": 0.9017
+            }
+          },
+          {
+            "name": "retrieve.rerank",
+            "elapsed_ms": 1679.105,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.retrieve",
+            "elapsed_ms": 1810.509,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.pack_evidence",
+            "elapsed_ms": 16.747,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 15147.046,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.derive_findings",
+            "elapsed_ms": 15150.228,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.033,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.finish_task",
+            "elapsed_ms": 0.123,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "researcher.task",
+            "elapsed_ms": 16979.915,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "task_id": "t1",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          },
+          {
+            "name": "aggregate",
+            "elapsed_ms": 34.642,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 8852.346,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "synthesize",
+            "elapsed_ms": 8854.907,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "validate_final",
+            "elapsed_ms": 0.086,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "finalize",
+            "elapsed_ms": 0.329,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "atlas_localis.question",
+            "elapsed_ms": 28852.498,
+            "attributes": {
+              "run_id": "16232816bc4b4336825c5645c1f0da74",
+              "run_type": "application",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          }
+        ],
+        "note": "Call inputs/responses and generation settings projected into review_packet; full schemas/templates identified by hashes."
+      },
+      "failures": {
+        "planner_fallback": 0,
+        "worker_repair_attempts": 0,
+        "synthesis_repair_attempts": 0,
+        "synthesis_fallback": 0,
+        "failed_tasks": 0,
+        "coverage_gaps": 1,
+        "final_validation_failure": 0,
+        "operational_error": null
+      },
+      "resources": {
+        "parent_peak_rss_bytes": 1754185728,
+        "metal_driver_allocated_bytes_at_sample": 4387979264
+      },
+      "repeat": 2,
+      "review_packet": [
+        {
+          "schema": "PlanProposal",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "81e20416c14529f8c355fbe06268636698cd8865a28bd9e68dd7f09c04c7c6ea",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?"
+            }
+          ],
+          "response": {
+            "tasks": [
+              {
+                "label": "Roman Republic End Date and Historical Context",
+                "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                "needs_timeline": true
+              }
+            ]
+          },
+          "error": null,
+          "wall_ms": 2975.2667080028914,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t1",
+          "input": [
+            {
+              "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Battle of Thapsus",
+                  "section": null,
+                  "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences"
+                },
+                {
+                  "alias": "E3",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC."
+                },
+                {
+                  "alias": "E4",
+                  "title": "Roman legion",
+                  "section": null,
+                  "text": "Late Republic\nThroughout Rome's Late Republic, the legions played an important political role. By the 1st century BC the threat of the legions under a demagogue was recognized. Roman Governors were not allowed to leave their provinces with their legions. When Julius Caesar broke this rule, leaving his province of Gaul and crossing the Rubicon into Italy, he precipitated a constitutional crisis. This crisis and the civil wars which followed brought an end to the Republic and led to the foundation of the Empire under Augustus in 27 BC."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "Julius Caesar’s assassination on March 15, 44 BC, by senators led by Brutus and Cassius marked the end of his dictatorship and triggered civil wars that destabilized the Republic.",
+                "evidence_refs": [
+                  "E1",
+                  "E5"
+                ],
+                "date_text": "March 15, 44 BC"
+              },
+              {
+                "statement": "The Second Triumvirate (Octavian, Mark Antony, and Lepidus) formed in 43 BC to avenge Caesar’s death, consolidating power and suppressing Republican factions through military force.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "Octavian defeated his rivals (Antony and Cleopatra) at the Battle of Actium on September 2, 31 BC, eliminating the last major opposition and securing his dominance over Rome.",
+                "evidence_refs": [
+                  "E2"
+                ],
+                "date_text": "2 September 31 BC"
+              },
+              {
+                "statement": "The Senate officially granted Octavian the title *Augustus* and conferred unprecedented powers on January 16, 27 BC, marking the formal transition from Republic to Empire.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": "16 January 27 BC"
+              },
+              {
+                "statement": "Julius Caesar’s appointment as *dictator perpetuo* (dictator for life) in 44 BC by the Senate is widely cited by scholars as a pivotal moment signaling the Republic’s collapse into autocracy.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The civil wars from 49 BC to 44 BC, exacerbated by Caesar’s defiance of constitutional norms (e.g., crossing the Rubicon with his legions), eroded Republican institutions permanently.",
+                "evidence_refs": [
+                  "E3",
+                  "E4"
+                ],
+                "date_text": null
+              }
+            ],
+            "gaps": [
+              "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+              "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+              "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay."
+            ]
+          },
+          "error": null,
+          "wall_ms": 15147.05541600415,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "AnswerDraft",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "d41cb9d34c531e8e61907d2f75491012c02566761b4b7edbe35d5800b494ac1d",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?",
+              "tasks": [
+                {
+                  "task": {
+                    "label": "Roman Republic End Date and Historical Context",
+                    "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                    "needs_timeline": true,
+                    "task_id": "t1"
+                  },
+                  "status": "insufficient_evidence",
+                  "gaps": [
+                    "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+                    "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+                    "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay."
+                  ],
+                  "error": null
+                }
+              ],
+              "findings": [
+                {
+                  "alias": "F1",
+                  "finding_id": "t1.f1",
+                  "statement": "Julius Caesar’s assassination on March 15, 44 BC, by senators led by Brutus and Cassius marked the end of his dictatorship and triggered civil wars that destabilized the Republic.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "9d2933fd24abfe50",
+                      "start": 0,
+                      "end": 783
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": "March 15, 44 BC"
+                },
+                {
+                  "alias": "F2",
+                  "finding_id": "t1.f2",
+                  "statement": "The Second Triumvirate (Octavian, Mark Antony, and Lepidus) formed in 43 BC to avenge Caesar’s death, consolidating power and suppressing Republican factions through military force.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F3",
+                  "finding_id": "t1.f3",
+                  "statement": "Octavian defeated his rivals (Antony and Cleopatra) at the Battle of Actium on September 2, 31 BC, eliminating the last major opposition and securing his dominance over Rome.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    }
+                  ],
+                  "date_text": "2 September 31 BC"
+                },
+                {
+                  "alias": "F4",
+                  "finding_id": "t1.f4",
+                  "statement": "The Senate officially granted Octavian the title *Augustus* and conferred unprecedented powers on January 16, 27 BC, marking the formal transition from Republic to Empire.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": "16 January 27 BC"
+                },
+                {
+                  "alias": "F5",
+                  "finding_id": "t1.f5",
+                  "statement": "Julius Caesar’s appointment as *dictator perpetuo* (dictator for life) in 44 BC by the Senate is widely cited by scholars as a pivotal moment signaling the Republic’s collapse into autocracy.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "1510dc7a9342c459",
+                      "start": 0,
+                      "end": 797
+                    }
+                  ],
+                  "date_text": null
+                }
+              ],
+              "excerpts": [
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "9d2933fd24abfe50",
+                    "start": 0,
+                    "end": 783
+                  },
+                  "document_id": "1006782",
+                  "title": "Battle of Thapsus",
+                  "section": null,
+                  "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate.",
+                  "text_hash": "ee509ff8f017bc959b23968161a799ffcf9eca4ef0901b4d1b2cdf2bce0aadee",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "56f2e56051bb3640",
+                    "start": 0,
+                    "end": 871
+                  },
+                  "document_id": "15583",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                  "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "75b50d1b43560333",
+                    "start": 0,
+                    "end": 800
+                  },
+                  "document_id": "41095",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+                  "text_hash": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "1510dc7a9342c459",
+                    "start": 0,
+                    "end": 797
+                  },
+                  "document_id": "41095",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+                  "text_hash": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                }
+              ],
+              "budget_omissions": [
+                "t1.f6: synthesis budget omitted supported material."
+              ]
+            }
+          ],
+          "response": {
+            "units": [
+              {
+                "text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested.",
+                "finding_ids": [
+                  "F1",
+                  "F3",
+                  "F4",
+                  "F5"
+                ]
+              },
+              {
+                "text": "Scholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date.",
+                "finding_ids": [
+                  "F2",
+                  "F3",
+                  "F4"
+                ]
+              }
+            ],
+            "conflict_groups": [
+              [
+                "F1",
+                "F4"
+              ],
+              [
+                "F3",
+                "F4"
+              ]
+            ]
+          },
+          "error": null,
+          "wall_ms": 8852.38116599794,
+          "finish_reason": "stop"
+        }
+      ]
+    },
+    {
+      "question_id": "f01",
+      "question": "When did the Roman Republic end?",
+      "question_meta": {
+        "id": "f01",
+        "category": "single",
+        "split": "development",
+        "question": "When did the Roman Republic end?",
+        "seed_ids": [
+          "hist_001"
+        ],
+        "scope": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "task_facets": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+        "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+        "evidence": [
+          {
+            "chunk_id": "1510dc7a9342c459",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 797,
+            "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+            "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          },
+          {
+            "chunk_id": "75b50d1b43560333",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 800,
+            "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+            "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          }
+        ],
+        "rubric": "history-rubric-v1",
+        "annotation": {
+          "reviewer": "codex-agent",
+          "status": "provisional; human review pending",
+          "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+        }
+      },
+      "result": {
+        "final_validation": {
+          "status": "passed",
+          "errors": []
+        },
+        "run_id": "4c34e03c81c94c7392812c438d6faeae",
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "units": [
+          {
+            "text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested.",
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "9d2933fd24abfe50",
+                "start": 0,
+                "end": 783
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "75b50d1b43560333",
+                "start": 0,
+                "end": 800
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "1510dc7a9342c459",
+                "start": 0,
+                "end": 797
+              }
+            ]
+          },
+          {
+            "text": "Scholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date.",
+            "finding_ids": [
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "75b50d1b43560333",
+                "start": 0,
+                "end": 800
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              }
+            ]
+          }
+        ],
+        "answer_text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested. [1][2][3][4]\n\nScholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date. [3][2]",
+        "citations": [
+          {
+            "number": 1,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "9d2933fd24abfe50",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "9d2933fd24abfe50",
+                  "start": 0,
+                  "end": 783
+                },
+                "document_id": "1006782",
+                "title": "Battle of Thapsus",
+                "section": null,
+                "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate.",
+                "text_hash": "ee509ff8f017bc959b23968161a799ffcf9eca4ef0901b4d1b2cdf2bce0aadee",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          },
+          {
+            "number": 2,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "56f2e56051bb3640",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "56f2e56051bb3640",
+                  "start": 0,
+                  "end": 871
+                },
+                "document_id": "15583",
+                "title": "Augustus",
+                "section": null,
+                "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5",
+              "t1.f2"
+            ]
+          },
+          {
+            "number": 3,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "75b50d1b43560333",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "75b50d1b43560333",
+                  "start": 0,
+                  "end": 800
+                },
+                "document_id": "41095",
+                "title": "Roman Republic",
+                "section": null,
+                "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+                "text_hash": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5",
+              "t1.f2"
+            ]
+          },
+          {
+            "number": 4,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "1510dc7a9342c459",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "1510dc7a9342c459",
+                  "start": 0,
+                  "end": 797
+                },
+                "document_id": "41095",
+                "title": "Roman Republic",
+                "section": null,
+                "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+                "text_hash": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "task_id": "t1",
+            "status": "insufficient_evidence",
+            "admitted_findings": 5,
+            "used_findings": 5,
+            "gaps": [
+              "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+              "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+              "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay.",
+              "t1.f6: synthesis budget omitted supported material."
+            ]
+          }
+        ],
+        "gaps": [
+          "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+          "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+          "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay.",
+          "t1.f6: synthesis budget omitted supported material."
+        ],
+        "conflicts": [
+          [
+            "t1.f1",
+            "t1.f4"
+          ],
+          [
+            "t1.f3",
+            "t1.f4"
+          ]
+        ],
+        "warnings": [],
+        "error": null,
+        "diagnostics": {
+          "retrieved": 32,
+          "opened": 32,
+          "presented": 5,
+          "tokens_in": 5614,
+          "tokens_out": 1079,
+          "elapsed_ms": 28833.754958002828
+        },
+        "fingerprints": [
+          {
+            "component": "code",
+            "identity": "57984a92f79ac851502e0e9de0dcfacac0e815aef80a2c5093a9fb019363e6e2"
+          },
+          {
+            "component": "snapshot",
+            "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+          },
+          {
+            "component": "models",
+            "identity": "4dea95604fb91780a777d871a0812f556f153cc6feac662bc434b0403e076285"
+          },
+          {
+            "component": "config",
+            "identity": "57f08aa79c9f1a466676b0d7dcea2123c465b847687440b9253631b1b7166636"
+          },
+          {
+            "component": "evaluation_controls",
+            "identity": "{\"forced_single_task\": false, \"rerank\": null}"
+          },
+          {
+            "component": "prompts",
+            "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+          }
+        ]
+      },
+      "metrics": {
+        "citation_count": 4,
+        "citations": [
+          "9d2933fd24abfe50",
+          "56f2e56051bb3640",
+          "75b50d1b43560333",
+          "1510dc7a9342c459"
+        ],
+        "unique_cited_titles": 3,
+        "title_list": [
+          "Augustus",
+          "Battle of Thapsus",
+          "Roman Republic"
+        ],
+        "retrieved_count": 32,
+        "opened_count": 32,
+        "presented_count": 5,
+        "total_latency_ms": 28833.754958002828,
+        "tokens_in": 5614,
+        "tokens_out": 1079,
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "final_validation": "passed",
+        "tasks": 1,
+        "failed_tasks": 0,
+        "warnings": []
+      },
+      "error": null,
+      "observation": {
+        "calls": [],
+        "spans": [
+          {
+            "name": "normalize_question",
+            "elapsed_ms": 0.026,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 2928.014,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "plan",
+            "elapsed_ms": 2932.619,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "retrieve.keyword",
+            "elapsed_ms": 32.658,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 32.6
+            }
+          },
+          {
+            "name": "embedding.query",
+            "elapsed_ms": 35.886,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "model_name": "intfloat/multilingual-e5-base",
+              "query_length": 354,
+              "query_prefix": "query: ",
+              "device": "mps:0"
+            }
+          },
+          {
+            "name": "retrieve.vector",
+            "elapsed_ms": 93.899,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 93.9
+            }
+          },
+          {
+            "name": "retrieve.hybrid_merge",
+            "elapsed_ms": 126.688,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "keyword_count": 20,
+              "vector_count": 20,
+              "merged_count": 32,
+              "duration_ms": 126.7
+            }
+          },
+          {
+            "name": "chunk_store.get_many",
+            "elapsed_ms": 0.277,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "requested_count": 32,
+              "found_count": 32,
+              "duration_ms": 0.3
+            }
+          },
+          {
+            "name": "retrieve.hydrate",
+            "elapsed_ms": 0.317,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "rerank.cross_encoder",
+            "elapsed_ms": 1671.122,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "model_name": "BAAI/bge-reranker-v2-m3",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "input_count": 32,
+              "top_n": 50,
+              "output_count": 32,
+              "duration_ms": 1671.1,
+              "top_score": 0.9017
+            }
+          },
+          {
+            "name": "retrieve.rerank",
+            "elapsed_ms": 1671.2,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.retrieve",
+            "elapsed_ms": 1798.379,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.pack_evidence",
+            "elapsed_ms": 14.672,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 15192.499,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.derive_findings",
+            "elapsed_ms": 15195.522,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.032,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.finish_task",
+            "elapsed_ms": 0.111,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "researcher.task",
+            "elapsed_ms": 17010.528,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "task_id": "t1",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          },
+          {
+            "name": "aggregate",
+            "elapsed_ms": 34.979,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 8850.71,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "synthesize",
+            "elapsed_ms": 8853.008,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "validate_final",
+            "elapsed_ms": 0.081,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "finalize",
+            "elapsed_ms": 0.281,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "atlas_localis.question",
+            "elapsed_ms": 28833.646,
+            "attributes": {
+              "run_id": "4c34e03c81c94c7392812c438d6faeae",
+              "run_type": "application",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          }
+        ],
+        "note": "Call inputs/responses and generation settings projected into review_packet; full schemas/templates identified by hashes."
+      },
+      "failures": {
+        "planner_fallback": 0,
+        "worker_repair_attempts": 0,
+        "synthesis_repair_attempts": 0,
+        "synthesis_fallback": 0,
+        "failed_tasks": 0,
+        "coverage_gaps": 1,
+        "final_validation_failure": 0,
+        "operational_error": null
+      },
+      "resources": {
+        "parent_peak_rss_bytes": 1759150080,
+        "metal_driver_allocated_bytes_at_sample": 4387979264
+      },
+      "repeat": 3,
+      "review_packet": [
+        {
+          "schema": "PlanProposal",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "81e20416c14529f8c355fbe06268636698cd8865a28bd9e68dd7f09c04c7c6ea",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?"
+            }
+          ],
+          "response": {
+            "tasks": [
+              {
+                "label": "Roman Republic End Date and Historical Context",
+                "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                "needs_timeline": true
+              }
+            ]
+          },
+          "error": null,
+          "wall_ms": 2928.0781249981374,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t1",
+          "input": [
+            {
+              "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Battle of Thapsus",
+                  "section": null,
+                  "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences"
+                },
+                {
+                  "alias": "E3",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC."
+                },
+                {
+                  "alias": "E4",
+                  "title": "Roman legion",
+                  "section": null,
+                  "text": "Late Republic\nThroughout Rome's Late Republic, the legions played an important political role. By the 1st century BC the threat of the legions under a demagogue was recognized. Roman Governors were not allowed to leave their provinces with their legions. When Julius Caesar broke this rule, leaving his province of Gaul and crossing the Rubicon into Italy, he precipitated a constitutional crisis. This crisis and the civil wars which followed brought an end to the Republic and led to the foundation of the Empire under Augustus in 27 BC."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "Julius Caesar’s assassination on March 15, 44 BC, by senators led by Brutus and Cassius marked the end of his dictatorship and triggered civil wars that destabilized the Republic.",
+                "evidence_refs": [
+                  "E1",
+                  "E5"
+                ],
+                "date_text": "March 15, 44 BC"
+              },
+              {
+                "statement": "The Second Triumvirate (Octavian, Mark Antony, and Lepidus) formed in 43 BC to avenge Caesar’s death, consolidating power and suppressing Republican factions through military force.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "Octavian defeated his rivals (Antony and Cleopatra) at the Battle of Actium on September 2, 31 BC, eliminating the last major opposition and securing his dominance over Rome.",
+                "evidence_refs": [
+                  "E2"
+                ],
+                "date_text": "2 September 31 BC"
+              },
+              {
+                "statement": "The Senate officially granted Octavian the title *Augustus* and conferred unprecedented powers on January 16, 27 BC, marking the formal transition from Republic to Empire.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": "16 January 27 BC"
+              },
+              {
+                "statement": "Julius Caesar’s appointment as *dictator perpetuo* (dictator for life) in 44 BC by the Senate is widely cited by scholars as a pivotal moment signaling the Republic’s collapse into autocracy.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The civil wars from 49 BC to 44 BC, exacerbated by Caesar’s defiance of constitutional norms (e.g., crossing the Rubicon with his legions), eroded Republican institutions permanently.",
+                "evidence_refs": [
+                  "E3",
+                  "E4"
+                ],
+                "date_text": null
+              }
+            ],
+            "gaps": [
+              "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+              "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+              "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay."
+            ]
+          },
+          "error": null,
+          "wall_ms": 15192.497416996048,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "AnswerDraft",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "d41cb9d34c531e8e61907d2f75491012c02566761b4b7edbe35d5800b494ac1d",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?",
+              "tasks": [
+                {
+                  "task": {
+                    "label": "Roman Republic End Date and Historical Context",
+                    "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                    "needs_timeline": true,
+                    "task_id": "t1"
+                  },
+                  "status": "insufficient_evidence",
+                  "gaps": [
+                    "No primary source explicitly defines a single, universally accepted date for the Republic’s end; modern scholars debate whether Actium (31 BC), Augustus’ *Augustus* title (27 BC), or Caesar’s dictatorship (44 BC) marks the definitive transition.",
+                    "The early emperors’ claim that the *Res Publica* persisted under their 'protection' lacks consensus among historians, as secondary analyses vary on whether symbolic continuity existed or if the Republic ceased to function entirely.",
+                    "The role of the First Triumvirate (60 BC) in Republic’s decline is referenced but not detailed in the provided excerpts, limiting analysis of its long-term impact on institutional decay."
+                  ],
+                  "error": null
+                }
+              ],
+              "findings": [
+                {
+                  "alias": "F1",
+                  "finding_id": "t1.f1",
+                  "statement": "Julius Caesar’s assassination on March 15, 44 BC, by senators led by Brutus and Cassius marked the end of his dictatorship and triggered civil wars that destabilized the Republic.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "9d2933fd24abfe50",
+                      "start": 0,
+                      "end": 783
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": "March 15, 44 BC"
+                },
+                {
+                  "alias": "F2",
+                  "finding_id": "t1.f2",
+                  "statement": "The Second Triumvirate (Octavian, Mark Antony, and Lepidus) formed in 43 BC to avenge Caesar’s death, consolidating power and suppressing Republican factions through military force.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F3",
+                  "finding_id": "t1.f3",
+                  "statement": "Octavian defeated his rivals (Antony and Cleopatra) at the Battle of Actium on September 2, 31 BC, eliminating the last major opposition and securing his dominance over Rome.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    }
+                  ],
+                  "date_text": "2 September 31 BC"
+                },
+                {
+                  "alias": "F4",
+                  "finding_id": "t1.f4",
+                  "statement": "The Senate officially granted Octavian the title *Augustus* and conferred unprecedented powers on January 16, 27 BC, marking the formal transition from Republic to Empire.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "75b50d1b43560333",
+                      "start": 0,
+                      "end": 800
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": "16 January 27 BC"
+                },
+                {
+                  "alias": "F5",
+                  "finding_id": "t1.f5",
+                  "statement": "Julius Caesar’s appointment as *dictator perpetuo* (dictator for life) in 44 BC by the Senate is widely cited by scholars as a pivotal moment signaling the Republic’s collapse into autocracy.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "1510dc7a9342c459",
+                      "start": 0,
+                      "end": 797
+                    }
+                  ],
+                  "date_text": null
+                }
+              ],
+              "excerpts": [
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "9d2933fd24abfe50",
+                    "start": 0,
+                    "end": 783
+                  },
+                  "document_id": "1006782",
+                  "title": "Battle of Thapsus",
+                  "section": null,
+                  "text": "However, the victory at Thapsus marked the beginning of the end for Caesar himself. His actions in North Africa had alienated many of his supporters in Rome, and his opponents saw him as a tyrant who needed to be stopped. On March 15, 44 BC, he was assassinated by a group of senators led by Brutus and Cassius.\n\nConclusion\n\nThe Battle of Thapsus was a significant event in Roman history, marking the end of the Roman Republic and the beginning of the Roman Empire. It was a hard-fought battle, with both sides displaying incredible bravery and determination. In the end, Julius Caesar emerged as the victor, but his victory was short-lived. His assassination marked the end of an era and the beginning of a new one, with Rome ruled by a series of emperors rather than by the Senate.",
+                  "text_hash": "ee509ff8f017bc959b23968161a799ffcf9eca4ef0901b4d1b2cdf2bce0aadee",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "56f2e56051bb3640",
+                    "start": 0,
+                    "end": 871
+                  },
+                  "document_id": "15583",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                  "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "75b50d1b43560333",
+                    "start": 0,
+                    "end": 800
+                  },
+                  "document_id": "41095",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+                  "text_hash": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "1510dc7a9342c459",
+                    "start": 0,
+                    "end": 797
+                  },
+                  "document_id": "41095",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+                  "text_hash": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                }
+              ],
+              "budget_omissions": [
+                "t1.f6: synthesis budget omitted supported material."
+              ]
+            }
+          ],
+          "response": {
+            "units": [
+              {
+                "text": "The Roman Republic’s end is debated among scholars, with key events spanning 44–27 BC. Julius Caesar’s assassination on **March 15, 44 BC** (F1) destabilized the Republic, but the transition to empire was gradual. His appointment as *dictator perpetuo* (F5) marked a critical shift toward autocracy, though the Republic technically persisted until the Senate’s formal grant of powers to Octavian in **27 BC** (F4). The Battle of Actium (31 BC, F3) eliminated opposition, but the Republic’s symbolic continuity under early emperors remains contested.",
+                "finding_ids": [
+                  "F1",
+                  "F3",
+                  "F4",
+                  "F5"
+                ]
+              },
+              {
+                "text": "Scholars disagree whether the Republic ended at Caesar’s death (44 BC), Actium (31 BC), or Augustus’ *Augustus* title (27 BC). While the Senate’s 27 BC decree (F4) is often cited as the definitive transition, early emperors claimed the *Res Publica* remained under their protection, complicating consensus. The Second Triumvirate’s consolidation of power (F2) further eroded Republican institutions, but institutional collapse was uneven, leaving no single, universally accepted date.",
+                "finding_ids": [
+                  "F2",
+                  "F3",
+                  "F4"
+                ]
+              }
+            ],
+            "conflict_groups": [
+              [
+                "F1",
+                "F4"
+              ],
+              [
+                "F3",
+                "F4"
+              ]
+            ]
+          },
+          "error": null,
+          "wall_ms": 8850.746875003097,
+          "finish_reason": "stop"
+        }
+      ]
+    }
+  ],
+  "retrieval": [],
+  "errors": [],
+  "native_startup_wall_ms": 1382.5335419969633,
+  "native_resources": {
+    "native_peak_sampled_rss_bytes": 7416299520,
+    "sample_count": 190,
+    "interval_seconds": 0.5,
+    "errors": [],
+    "scope": "RSS of llama-server matching benchmark endpoint port, sampled not exact peak"
+  },
+  "model_load_wall_ms": 3826.7970829911064,
+  "checked_excerpt_count": 37,
+  "effective_config": {
+    "model": {
+      "provider": "llamacpp_server",
+      "base_url": "http://127.0.0.1:62542",
+      "model_name": "ministral-3-8b-instruct",
+      "temperature": 0.7,
+      "max_tokens": 2048,
+      "timeout_seconds": 60
+    },
+    "embeddings": {
+      "provider": "local",
+      "model_name": "intfloat/multilingual-e5-base",
+      "batch_size": 4,
+      "device": "mps"
+    },
+    "retrieval": {
+      "strategy": "hybrid",
+      "keyword_top_k": 20,
+      "vector_top_k": 20,
+      "merge_top_n": 50,
+      "rrf_k": 60,
+      "final_top_k": 5
+    },
+    "reranking": {
+      "enabled": true,
+      "provider": "cross_encoder",
+      "model_name": "BAAI/bge-reranker-v2-m3",
+      "device": "mps",
+      "batch_size": 1,
+      "max_length": 8192
+    },
+    "chunking": {
+      "strategy": "paragraph_aware",
+      "target_size": 1000,
+      "max_size": 1500,
+      "min_chunk_size": 100
+    },
+    "paths": {
+      "data_dir": "./data",
+      "raw_data": "./data/raw",
+      "processed_data": "./data/processed",
+      "indexes_dir": "./data/indexes",
+      "active_index": "./data/indexes/active",
+      "index_snapshots": "./data/indexes/snapshots"
+    },
+    "runs": {
+      "output_dir": "runs/reports/stage5-repeats-v1",
+      "logs_dir": "runs/reports/stage5-repeats-v1/logs",
+      "traces_dir": "./runs/traces",
+      "reports_dir": "./runs/reports"
+    },
+    "observability": {
+      "enable_tracing": true,
+      "enable_metrics": false,
+      "phoenix_endpoint": "http://127.0.0.1:6006",
+      "log_level": "INFO"
+    },
+    "context": {
+      "prompt_tokens": 6000,
+      "output_tokens": 1200,
+      "max_chunks_per_doc": 3
+    }
+  },
+  "fingerprints": [
+    {
+      "component": "code",
+      "identity": "57984a92f79ac851502e0e9de0dcfacac0e815aef80a2c5093a9fb019363e6e2"
+    },
+    {
+      "component": "snapshot",
+      "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+    },
+    {
+      "component": "models",
+      "identity": "4dea95604fb91780a777d871a0812f556f153cc6feac662bc434b0403e076285"
+    },
+    {
+      "component": "config",
+      "identity": "57f08aa79c9f1a466676b0d7dcea2123c465b847687440b9253631b1b7166636"
+    },
+    {
+      "component": "evaluation_controls",
+      "identity": "{\"forced_single_task\": false, \"rerank\": null}"
+    },
+    {
+      "component": "prompts",
+      "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+    }
+  ],
+  "resources": {
+    "parent_peak_rss_bytes": 1759150080,
+    "metal_driver_allocated_bytes_at_sample": 4387979264
+  },
+  "projection_source_sha256": "38267c220e491f0993907acc399e158509679508037a50ee55cea9cc2c1a29c5",
+  "selected_from": {
+    "total_results": 3,
+    "selected_ids": [
+      "f01"
+    ],
+    "reason": "Fixed development/conversation/error examples; not an accuracy sample"
+  },
+  "source_report_path": "runs/reports/stage5-repeats-v1/report.json",
+  "source_report_sha256": "5e6d444dc70417a192f51e77be22f8015e411ef60d5bc023505573863f7860f1",
+  "recorded_dates": [
+    "2026-10-19"
+  ]
+}

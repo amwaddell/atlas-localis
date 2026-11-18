@@ -1,0 +1,1423 @@
+{
+  "version": "history-v1",
+  "frozen_before_runs": true,
+  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+  "corpus_provenance": "Legacy owner index, Lance version 843; dump date/revision unknown. No migration/conversion performed.",
+  "rubric": "history-rubric-v1",
+  "split_policy": "8 development (2 per category), 16 held out. No prompt/runtime/default tuning in Stage 5.",
+  "cases": [
+    {
+      "id": "f01",
+      "category": "single",
+      "split": "development",
+      "question": "When did the Roman Republic end?",
+      "seed_ids": [
+        "hist_001"
+      ],
+      "scope": [
+        "27 BC and competing end dates; do not conflate Republic with Western Empire"
+      ],
+      "task_facets": [
+        "27 BC and competing end dates; do not conflate Republic with Western Empire"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "1510dc7a9342c459",
+          "article": "Roman Republic",
+          "section": "",
+          "start": 0,
+          "end": 797,
+          "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+          "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "75b50d1b43560333",
+          "article": "Roman Republic",
+          "section": "",
+          "start": 0,
+          "end": 800,
+          "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+          "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "f02",
+      "category": "single",
+      "split": "held_out",
+      "question": "In what year was the Berlin Wall taken down?",
+      "seed_ids": [
+        "hist_009"
+      ],
+      "scope": [
+        "1989; distinguish construction in 1961"
+      ],
+      "task_facets": [
+        "1989; distinguish construction in 1961"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "665b93b9f67bffee",
+          "article": "Berlin Wall",
+          "section": "",
+          "start": 0,
+          "end": 856,
+          "excerpt": "{{infobox building\n|name = Berlin Wall\n|image = Berlinermauer.jpg\n|image_size = 267px\n|image_caption = Berlin Wall, with graffiti and death strip. The side with the graffiti on is the West. This was at a street called Bethaniendamm\n|image_map = Berlin-wall-map en.svg\n|location_country = \n|coordinates = \n|other_dimensions = \n|size = \n|start_date = 13 August 1961\n|building_type = Wall\n|demolition_date=9 November 1989}}\nThe Berlin Wall (German: Berliner Mauer) was a wall that separated the city of Berlin in Germany from 1961 to 1989. It separated the eastern half from the western half. Many people believed it was a symbol of the Cold War. The Berlin Wall was taken down on November 9, 1989. The Berlin Wall was about long. It was built to prevent people from escaping from the eastern half of Berlin to the western half of Berlin.\n\nDivision of Germany",
+          "excerpt_sha256": "f55d63d73d775bf22a4f9c4e77770d27db5734b3b53171a98cae86eb5ae7f531",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "1375203976cb0bee",
+          "article": "Berlin Wall",
+          "section": "",
+          "start": 0,
+          "end": 733,
+          "excerpt": "After World War II ended, Germany was divided into four zones, one zone for each of the main Allied countries: France, the United Kingdom, the United States and the Soviet Union. Its capital Berlin was also divided into four zones, so that it was an enclave, like an island inside the Soviet zone. On May 8, 1949, the French, United Kingdom and US zones were made into West Germany (Federal Republic of Germany, Bundesrepublik Deutschland, BRD) and West Berlin. The Soviet zones were made into East Germany and East Berlin. East Germany (German Democratic Republic, Deutsche Demokratische Republik, DDR) was founded on October 7, 1949. Europe, Germany and Berlin were divided by an iron curtain.\n\nWhat led to the building of the wall",
+          "excerpt_sha256": "8d41c6ebe91e7a4826a81c9a37949c0b0e2ab8f2c6a5f3d98801fb4a9a625c30",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "f03",
+      "category": "single",
+      "split": "held_out",
+      "question": "What disease is thought to have caused the Black Death?",
+      "seed_ids": [
+        "hist_011"
+      ],
+      "scope": [
+        "Bubonic plague / Yersinia pestis; preserve source uncertainty"
+      ],
+      "task_facets": [
+        "Bubonic plague / Yersinia pestis; preserve source uncertainty"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "4b0a4ae03327b417",
+          "article": "Black Death",
+          "section": "",
+          "start": 0,
+          "end": 837,
+          "excerpt": "The Black Death (1346-1353) was a pandemic in Europe and Asia during the 14th century. It was at its worst between 1347 and 1352.\n\nThis outbreak of disease killed between 25 million and 50 million people across Europe. This was between 30% and 60% of Europe's population at the time. This was the deadliest event in known human history.\n\nAt the time, 14th-century European writers called the pandemic the \"Great Mortality\". After later epidemics, it was named \"the Black Death.\"\n\nCause\nHistorians and scientists cannot be sure which disease caused the Black Death. However, most think that it was the bubonic plague. That is a bacterial infection caused by the Yersinia pestis species of bacteria.\n\nNot everybody agrees that plague caused the Black Death. Some scientists and historians think it was anthrax or a viral hemorrhagic fever.",
+          "excerpt_sha256": "07dadb8c5b5ea6207f2397d1e112d4f0d6fc44848c96bd0ee25ed2cd5c5bd030",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "9176f69fc074dff8",
+          "article": "Black Death",
+          "section": "",
+          "start": 0,
+          "end": 949,
+          "excerpt": "Incorrect theories about causes\nThe plague happened far before scientists discovered germs, and people at the time had no way of understanding infections. Instead, they blamed the Black Death on other things.\n\nHumorism\nAt the time, doctors believed in Hippocrates's theory of humorism. According to this theory, the body consists of different fluids. If these \"humors\" are in harmony (balanced well), a person is healthy. When they are out of balance, disease results.\n\nMiasma\nThis theory did not explain why disease spreads from one person to another. Most people thought that infection was caused by miasma (\"bad air\"). Since that answer was based on astrology, many people believed it, and it was translated into many languages.\n\nReligion\nMany people thought diseases were a punishment from God. Trying to please God, many participated in religious ceremonies (including Confession and Communion). They also asked for forgiveness and did penance.",
+          "excerpt_sha256": "503b29d0a6c0d269240c16531a2e32a4b07dcb83ee3a0b7f8c4044d7e602a7de",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "f04",
+      "category": "single",
+      "split": "held_out",
+      "question": "Which regions did the Silk Road connect?",
+      "seed_ids": [
+        "hist_016"
+      ],
+      "scope": [
+        "China, Asia, Middle East and Mediterranean; no single road"
+      ],
+      "task_facets": [
+        "China, Asia, Middle East and Mediterranean; no single road"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "7b119e4ce27c1e8b",
+          "article": "Silk Road",
+          "section": "",
+          "start": 0,
+          "end": 752,
+          "excerpt": "from China to India]]\nThe Silk Road was a group of trade routes across Asia that connected China with the Mediterranean region. It allowed Chinese traders to exchange things with Middle Eastern and Mediterranean traders.\n\nThe Silk Road was extremely important in world history. For the first time, people in different areas - and on different continents - could trade. The Silk Road was the first-ever connection between Chinese Civilisation, other parts of Asia, the Middle East; and Europeans.:\n\nThe silk trade\nAt the time, silk was only made in China, so it was extremely rare and expensive in Europe. For this reason, having silk was a sign of power, wealth, and importance for Europeans. Now, for the first time, it became much easier to get silk.",
+          "excerpt_sha256": "8fe475154852bfc7e9aa3057414a76ddf8fb4af2c73ad9c175b50c5cb6c304eb",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "9e3702221d95c460",
+          "article": "Silk Road",
+          "section": "",
+          "start": 0,
+          "end": 862,
+          "excerpt": "The silk trade brought a lot of wealth to China - and also to cities and markets along the Silk Road (like Samarkand and Bukharal in modern-day Uzbekistan). Trade on the Silk Road also helped ancient cultures grow in Chinese; Egyptian; Mesopotamia; Persia; India; and Roman Civilisation.\n\nA German geographer first called the route the Seidenstraße (\"The Silk Road\") in 1877. He chose this name because traders used it to bring silk from east to west.\nWine\nSpices\nPaper (from China)\nMetals and jewels\nSlaves (most likely)\nIdeas and knowledge\nSilk (Fabrics)\n\nTraders also brought other things; for example, they brought chess pieces from northern India to China and Persia.\n\nMost likely, no trader traveled the entire Silk Road alone. Instead, they traded goods at every stopping point along the Road. They sometimes made deals to get past difficult places.\n\nPath",
+          "excerpt_sha256": "d07503f1cbe9dfa4a8cfc7f332fe0a24b604eabf1a271c3912597dca7bc3245c",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "f05",
+      "category": "single",
+      "split": "development",
+      "question": "Which emperor did they support?",
+      "seed_ids": [
+        "hist_018"
+      ],
+      "scope": [
+        "Resolve they to Satsuma and Choshu; Emperor Meiji"
+      ],
+      "task_facets": [
+        "Resolve they to Satsuma and Choshu; Emperor Meiji"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "09ae9749d15b2c88",
+          "article": "Meiji Restoration",
+          "section": "",
+          "start": 0,
+          "end": 875,
+          "excerpt": "The Meiji Restoration (明治維新) was a time of great change in Japan. In the Japanese language, Meiji-ishin is the term for the Meiji Restoration. The term describes a series of events that changed the shape of Japan’s political and social systems. These changes took place mainly in the three years from 1866 to 1869, at the beginning of the Meiji period.\n\nEnd of the Shogunate\nIn 1866, the Tokugawa Shogunate was ruling Japan. In the year 1866, two domains, the local government at that time, came together under an alliance. The name of this alliance was the Sat-cho Alliance. This was an alliance between the Satsuma Domain and the Chōshū Domain, and a person named Sakamoto Ryoma brought the two domains together. These two domains supported the Emperor Meiji of Japan who, at the time, did not have much power. With their support the emperor could regain much of his power.",
+          "excerpt_sha256": "b384dfffea49db513bd371c872972e1650ae2b3ba46f2a5b2225860e786b0e79",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "e0ff15ef1c255e0f",
+          "article": "Meiji Restoration",
+          "section": "",
+          "start": 0,
+          "end": 939,
+          "excerpt": "The Tokugawa Shogunate’s rule ended on 9th November 1867, but they still retained some authority and power. In the Boshin War of 1868, an army from Satsuma Province and Choshu defeated the forces of the Tokugawa Shogunate. This completely ended the power of the Tokugawa Shogunate.\n\nThe Revolution of the country's system\nAfter defeating the Tokugawa Shogunate, the leaders of the Meiji Restoration started to reform the system of the country. They acted in the name of Japan’s emperor, to restore (that is, to return) the emperor’s powers. But, the leaders also kept to themselves a number of powers. In fact, even after the Meiji Restoration, an oligarchy, a small group, had the real power and ruled in the name of the emperor.\n\nAfter the Meiji Restoration started, Japan’s progress was fast. The revolution included centralizing power, changing the tax system, starting the educational system, constructing factories and railways, etc.",
+          "excerpt_sha256": "e1ee583f11a3830716839974b64bc4134f3b1c318e09169f8dd21b3ffda3889a",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "9d2b5ac1d8e6dadd",
+          "article": "Meiji Restoration",
+          "section": "",
+          "start": 0,
+          "end": 514,
+          "excerpt": "Industrialization developed rapidly and within next three to four decades (by 1905) the Empire of Japan had become a military power, comparable to the great powers of the time.\n\nLeaders\nOkubo Toshimichi (1830-1878)\nKido Takayoshi (1833-1877)\nSaigo Takamori (1827-1877)\nIwakura Tomomi (1825-1883)\nIto Hirobumi (1841-1909)\nKuroda Kiyotaka (1840-1900)\nMatsukata Masayoshi (1835-1924)\nOyama Iwao (1842-1916)\nSaigo Tsugumichi (1843-1902)\nYamagata Aritomo (1838-1922)\nInoue Kaoru (1835-1905)\nSaionji Kinmochi (1849-1940)",
+          "excerpt_sha256": "c4d641a7896fec58c608ea84afc022651f31d94c24a03d3ea56cd04acf110824",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Tell me about Satsuma and Choshu in the Meiji Restoration."
+        },
+        {
+          "role": "assistant",
+          "content": "They formed an alliance supporting an emperor."
+        }
+      ]
+    },
+    {
+      "id": "f06",
+      "category": "single",
+      "split": "held_out",
+      "question": "Who commanded the Ottoman conquest of Constantinople in 1453?",
+      "seed_ids": [
+        "hist_014"
+      ],
+      "scope": [
+        "Mehmed II; distinguish Constantine XI"
+      ],
+      "task_facets": [
+        "Mehmed II; distinguish Constantine XI"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "5cacb872f2e6d235",
+          "article": "Fall of Constantinople",
+          "section": "",
+          "start": 0,
+          "end": 926,
+          "excerpt": "illustration of the 1453 Fall of Constantinople at the hands of the Ottoman Empire]]\n\nThe Fall of Constantinople occurred when the Ottoman Empire took over Constantinople, the capital city of the Byzantine Empire, on 29 May 1453. The Ottomans were commanded by 21-year-old Ottoman Sultan Mehmed II, who defeated an army commanded by Byzantine Emperor Constantine XI Palaiologos. The conquest of Constantinople followed a 53-day siege started on 6 April 1453. After the conquest of the city, Constantinople became the capital of the Ottoman Empire. Today, Constantinople is known as Istanbul.\n\nThis event marks the end of the Byzantine Empire, and so it was the end of the Roman Empire, which had lasted for nearly 1,500 years. Previous Ottoman Sultans had taken most of the Empire in previous centuries. Some places, like the Morea Despotate and Empire of Trebizond were not defeated by the Ottomans until several years later.",
+          "excerpt_sha256": "3ebb58537f2135a3754f5421510f76d6edbeb80cb9913534fcd13bf576abdb64",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "cc3642d1c4405103",
+          "article": "Fall of Constantinople",
+          "section": "",
+          "start": 0,
+          "end": 468,
+          "excerpt": "The fall of Constantinople had important results, because the Ottoman Empire at last had control of the Balkans. Nothing could stop them from further Muslim conquests into Europe, which went on until after the Battle of Vienna in 1683. After the fall of Constantinople and the Byzantine Empire, many refugees escaped to Western Europe and helped create humanism. In particular, the arrival in Italy of Greek scholars is said to have helped the Renaissance.\n\nReferences",
+          "excerpt_sha256": "db66895d160b58cce6b2baf7e1edc84c65b07713ef4beadeb767fd93f9f282c0",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "c01",
+      "category": "comparative",
+      "split": "development",
+      "question": "How did World War I start and what were its major turning points?",
+      "seed_ids": [
+        "hist_003"
+      ],
+      "scope": [
+        "Assassination and alliance escalation",
+        "1917 US entry/Russian departure and 1918 end"
+      ],
+      "task_facets": [
+        "Assassination and alliance escalation",
+        "1917 US entry/Russian departure and 1918 end"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "c147efb4d96822a0",
+          "article": "World War I",
+          "section": "",
+          "start": 0,
+          "end": 694,
+          "excerpt": "| casualties2 = \nfurther details...\n----\nMilitary deaths by country\n\nBefore the war, European countries had formed alliances to protect themselves. However, that made them divide themselves into two groups. When Archduke Franz Ferdinand of Austria was assassinated on 28 June 1914, Austria-Hungary blamed Serbia and declared war on it. Russia then declared war on Austria-Hungary, which set off a chain of events in which members from both groups of countries declared war on each other.\n\nThe two sides were the Allied Powers (mainly Russia, France, the British Empire and later Italy and the United States) and the Central Powers (mainly German Empire, Austria-Hungary and the Ottoman Empire).",
+          "excerpt_sha256": "d510cbb3c0999edfe6862f2e667888dd969c103107240ddac050d63988901c60",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "a5f7470c1e81528a",
+          "article": "World War I",
+          "section": "",
+          "start": 0,
+          "end": 862,
+          "excerpt": "There was fighting in many different fronts (areas). The French and the British fought the Germans on the Western Front in France and Belgium. Germany had tried to defeat France quickly with the Schlieffen Plan but were stopped in the First Battle of the Marne. Most of the fighting on the western front was trench warfare. The Russians fought the Germans and Austro-Hungarians on the Eastern Front in Central and Eastern Europe. Fighting on the eastern front was not trench warfare as in the west, but mobile warfare. The other main areas of fighting were in the Middle East, in the Gallipoli region of the Ottoman Empire and between Italy and Austria-Hungary. Fighting also took place in southeastern Europe, Africa, China, at sea and in the air. World War I was the first major war in which tanks, airplanes and submarines (or U-boats) were important weapons.",
+          "excerpt_sha256": "3f1032d35432be04bd7bedee6b3c5e0633fb47d3c8131454a4a5607e1c1d5ac9",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "36cab64b11d6a392",
+          "article": "World War I",
+          "section": "",
+          "start": 0,
+          "end": 929,
+          "excerpt": "End\nIn 1917, the Russian Revolution led to Russia leaving the war in March 1918. Also in 1917, the United States entered the war, but it took a year for most of its army to arrive. From the time of the Russian departure, before the American arrival, the Germans launched a huge attack in March 1918 to try to win the war, but it failed.\n\nFrom August to November 1918, the Allied Powers won a large victory against the Germans during the Hundred Days Offensive. Austria-Hungary and the Ottoman Empire then agreed to stop fighting. The German government collapsed, and a new government was forced to agree to stop the fighting on 11 November 1918. Basically, the Germans ran out of men.\n\nAlso, the influenza pandemic of 1918 had a big influence. It killed many people in Europe: it lasted for three years, from January 1918 to December 1920. About 500&nbsp;million The countries had allies that entered the war in a matter of days.",
+          "excerpt_sha256": "83e1a9ae6c83a9683f0fc41368bc5526d07f92cc0959f3bd8a0a53e0e0ce15cc",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "c02",
+      "category": "comparative",
+      "split": "held_out",
+      "question": "What were the causes and consequences of the Black Death in Europe?",
+      "seed_ids": [
+        "hist_011"
+      ],
+      "scope": [
+        "Disease and spread with uncertainty",
+        "Mortality and social/economic consequences only if sourced"
+      ],
+      "task_facets": [
+        "Disease and spread with uncertainty",
+        "Mortality and social/economic consequences only if sourced"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "4b0a4ae03327b417",
+          "article": "Black Death",
+          "section": "",
+          "start": 0,
+          "end": 837,
+          "excerpt": "The Black Death (1346-1353) was a pandemic in Europe and Asia during the 14th century. It was at its worst between 1347 and 1352.\n\nThis outbreak of disease killed between 25 million and 50 million people across Europe. This was between 30% and 60% of Europe's population at the time. This was the deadliest event in known human history.\n\nAt the time, 14th-century European writers called the pandemic the \"Great Mortality\". After later epidemics, it was named \"the Black Death.\"\n\nCause\nHistorians and scientists cannot be sure which disease caused the Black Death. However, most think that it was the bubonic plague. That is a bacterial infection caused by the Yersinia pestis species of bacteria.\n\nNot everybody agrees that plague caused the Black Death. Some scientists and historians think it was anthrax or a viral hemorrhagic fever.",
+          "excerpt_sha256": "07dadb8c5b5ea6207f2397d1e112d4f0d6fc44848c96bd0ee25ed2cd5c5bd030",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "9176f69fc074dff8",
+          "article": "Black Death",
+          "section": "",
+          "start": 0,
+          "end": 949,
+          "excerpt": "Incorrect theories about causes\nThe plague happened far before scientists discovered germs, and people at the time had no way of understanding infections. Instead, they blamed the Black Death on other things.\n\nHumorism\nAt the time, doctors believed in Hippocrates's theory of humorism. According to this theory, the body consists of different fluids. If these \"humors\" are in harmony (balanced well), a person is healthy. When they are out of balance, disease results.\n\nMiasma\nThis theory did not explain why disease spreads from one person to another. Most people thought that infection was caused by miasma (\"bad air\"). Since that answer was based on astrology, many people believed it, and it was translated into many languages.\n\nReligion\nMany people thought diseases were a punishment from God. Trying to please God, many participated in religious ceremonies (including Confession and Communion). They also asked for forgiveness and did penance.",
+          "excerpt_sha256": "503b29d0a6c0d269240c16531a2e32a4b07dcb83ee3a0b7f8c4044d7e602a7de",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "c03",
+      "category": "comparative",
+      "split": "development",
+      "question": "How did it modernise, and how did political power change?",
+      "seed_ids": [
+        "hist_018"
+      ],
+      "scope": [
+        "Resolve it to Japan during Meiji Restoration",
+        "Industrialization and emperor/oligarchy reforms"
+      ],
+      "task_facets": [
+        "Resolve it to Japan during Meiji Restoration",
+        "Industrialization and emperor/oligarchy reforms"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "09ae9749d15b2c88",
+          "article": "Meiji Restoration",
+          "section": "",
+          "start": 0,
+          "end": 875,
+          "excerpt": "The Meiji Restoration (明治維新) was a time of great change in Japan. In the Japanese language, Meiji-ishin is the term for the Meiji Restoration. The term describes a series of events that changed the shape of Japan’s political and social systems. These changes took place mainly in the three years from 1866 to 1869, at the beginning of the Meiji period.\n\nEnd of the Shogunate\nIn 1866, the Tokugawa Shogunate was ruling Japan. In the year 1866, two domains, the local government at that time, came together under an alliance. The name of this alliance was the Sat-cho Alliance. This was an alliance between the Satsuma Domain and the Chōshū Domain, and a person named Sakamoto Ryoma brought the two domains together. These two domains supported the Emperor Meiji of Japan who, at the time, did not have much power. With their support the emperor could regain much of his power.",
+          "excerpt_sha256": "b384dfffea49db513bd371c872972e1650ae2b3ba46f2a5b2225860e786b0e79",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "e0ff15ef1c255e0f",
+          "article": "Meiji Restoration",
+          "section": "",
+          "start": 0,
+          "end": 939,
+          "excerpt": "The Tokugawa Shogunate’s rule ended on 9th November 1867, but they still retained some authority and power. In the Boshin War of 1868, an army from Satsuma Province and Choshu defeated the forces of the Tokugawa Shogunate. This completely ended the power of the Tokugawa Shogunate.\n\nThe Revolution of the country's system\nAfter defeating the Tokugawa Shogunate, the leaders of the Meiji Restoration started to reform the system of the country. They acted in the name of Japan’s emperor, to restore (that is, to return) the emperor’s powers. But, the leaders also kept to themselves a number of powers. In fact, even after the Meiji Restoration, an oligarchy, a small group, had the real power and ruled in the name of the emperor.\n\nAfter the Meiji Restoration started, Japan’s progress was fast. The revolution included centralizing power, changing the tax system, starting the educational system, constructing factories and railways, etc.",
+          "excerpt_sha256": "e1ee583f11a3830716839974b64bc4134f3b1c318e09169f8dd21b3ffda3889a",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "9d2b5ac1d8e6dadd",
+          "article": "Meiji Restoration",
+          "section": "",
+          "start": 0,
+          "end": 514,
+          "excerpt": "Industrialization developed rapidly and within next three to four decades (by 1905) the Empire of Japan had become a military power, comparable to the great powers of the time.\n\nLeaders\nOkubo Toshimichi (1830-1878)\nKido Takayoshi (1833-1877)\nSaigo Takamori (1827-1877)\nIwakura Tomomi (1825-1883)\nIto Hirobumi (1841-1909)\nKuroda Kiyotaka (1840-1900)\nMatsukata Masayoshi (1835-1924)\nOyama Iwao (1842-1916)\nSaigo Tsugumichi (1843-1902)\nYamagata Aritomo (1838-1922)\nInoue Kaoru (1835-1905)\nSaionji Kinmochi (1849-1940)",
+          "excerpt_sha256": "c4d641a7896fec58c608ea84afc022651f31d94c24a03d3ea56cd04acf110824",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "summary": "We are discussing Japan during the Meiji Restoration, focusing on political and industrial changes."
+    },
+    {
+      "id": "c04",
+      "category": "comparative",
+      "split": "held_out",
+      "question": "Compare how the French and Russian revolutions changed monarchy and political power.",
+      "seed_ids": [
+        "hist_002",
+        "hist_015"
+      ],
+      "scope": [
+        "France monarchy and later Napoleon",
+        "Russia tsar abdication and socialist government; distinguish dates"
+      ],
+      "task_facets": [
+        "France monarchy and later Napoleon",
+        "Russia tsar abdication and socialist government; distinguish dates"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "e319206887cdb66e",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 580,
+          "excerpt": "The French Revolution was a revolution in France from 1789 to 1799. It ended the French monarchy. The revolution began with a meeting of the Estates General in Versailles, and ended when Napoleon Bonaparte took power in November 1804.\n\nBefore 1789, France was ruled by the nobles and the Catholic Church. The ideas of the Enlightenment were beginning to make the ordinary people want more power. They could see that the American Revolution had created a country in which the people had power, instead of a king. The government before the revolution was called the \"Ancien Régime\".",
+          "excerpt_sha256": "3415d5561771c3aaa2827adb9ee07f527108ec5ec865338c753fdf595df152f7",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "a29dca0ebe1c293c",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 940,
+          "excerpt": "Before the Revolution, France was divided into three Estates. The First Estate was the clergy. It was 1% of the population. The Second Estate was the nobles, also 1% of the population. The other nearly 98% of the population was in the Third Estate. Representatives of the people from all three estates together made up the Estates-General. The Estates General first met in 1302 and 1303, and occasionally met in later centuries.\n\nIn May 1789, the Estates-General was called by King Louis in order to deal with the money problems of the country. They met at the royal Palace of Versailles. However, the members of the Third Estate were angry. They had made lists of problems they wanted to fix called the Cahiers de Doléance. They were angry that they were being taxed the most when they were the poorest group of people. They, and the Director-General of Finances, Jacques Necker, thought the Church and the Nobility ought to be taxed more.",
+          "excerpt_sha256": "93bb0ca37be02a56962535e749deca76d9a1cba44e018be7c19069433406858c",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "8f6feeb76b6c82a2",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 584,
+          "excerpt": "In July 1789, after the National Assembly was formed, the nobility and the king was angry with Jacques Necker, the Director-General of Finances, and they fired him. Many Parisians thought that the King was going to shut down the National Assembly. Soon, Paris was filled with riots and looting.\n\nOn 14 July 1789, the people decided to attack the Bastille prison. The Bastille contained weapons, as well as being a symbol of the power of the nobility and the rule of the king. By the afternoon, the people had broken into the Bastille and released the seven prisoners being held there.",
+          "excerpt_sha256": "4da43947139cc85e389b0268f9bc3bcae59f927f827b09ec7de1372d00596ed2",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "e1a1062765b481dd",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 890,
+          "excerpt": "The Russian Revolution was a period of political and social change in Russia, starting in 1917. This period saw Russia abolish its monarchy and adopt a socialist form of government following two successful revolutions and a civil war. The revolution was seen as an example for the other revolutions that occurred in the aftermath of World War I, such as the German Revolution of 1918–1919. The Russian Revolution was one of the key events of the 20th century.\n\nThe Russian Revolution began with the February Revolution in early 1917, during World War I. With the German Empire dealing major defeats on the war front, Russian suffered heavy losses as the army was poorly trained and equipped. High officials were convinced that if Tsar Nicholas II abdicated, the unrest would calm. Nicholas agreed and stepped down, creating a provisional government led by the Russian Duma (the parliament).",
+          "excerpt_sha256": "483cd966f48835aff7cec55e8465356e9098c79b57959893c54f1e6cf15b83f3",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "aaee3034812da91b",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 880,
+          "excerpt": "During the civil unrest, soviet councils were formed by the locals in Petrograd that initially did not oppose the new Provisional Government; however, the Soviets did insist on their influence in the government and control over various militias. By March, Russia had two rival governments. The Provisional Government held state power in military and international affairs, while the Soviets held more power concerning domestic affairs. The Soviets held the allegiance of the working class, as well as the growing urban middle class. During this time, there were many mutinies, protests and strikes. Many socialist and other leftist political organizations were competing for influence within the Provisional Government and the Soviets. Notable factions included the Mensheviks, Social Revolutionaries, Anarchists, as well as the Bolsheviks, a far-left party led by Vladimir Lenin.",
+          "excerpt_sha256": "fb9afd219f9c565798efeed8b43e8f4fd1076c980bedc8fd5b391d705d9ade78",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "437fe7c4e6a10e34",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 821,
+          "excerpt": "The Bolsheviks won popularity with their program promising peace, land, and bread: end war with Germany, give land to the peasantry, and end the wartime famine. After Bolsheviks gained power, the Provisional Government chose to continue fighting in spite of public opposition.\n\nBackground\nDuring the 1890s, improvements in Russian industry caused substantially more jobs in cities, which made them larger as people moved there. The workers in the cities, with their increasing levels of education, began to develop an interest in politics and the creation of political parties to try to improve their lives. The conditions in which they lived and worked were horrible. Poor people from other parts of the Russian Empire like Poland and Ukraine also created their own parties to try stop the Russians from oppressing them.",
+          "excerpt_sha256": "c940a27d7a5036cd681bf0add7c38e0f8468185b6383081305f69db4bcf5fd0c",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "c05",
+      "category": "comparative",
+      "split": "held_out",
+      "question": "Compare the economic changes of the Industrial Revolution with the cultural changes of the Renaissance.",
+      "seed_ids": [
+        "hist_006",
+        "hist_012"
+      ],
+      "scope": [
+        "Mechanization/factories/urban migration",
+        "Classical learning and cultural rebirth; avoid false contemporaneity"
+      ],
+      "task_facets": [
+        "Mechanization/factories/urban migration",
+        "Classical learning and cultural rebirth; avoid false contemporaneity"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "bbc477b21c09a641",
+          "article": "Industrial Revolution",
+          "section": "",
+          "start": 0,
+          "end": 844,
+          "excerpt": "is a town in England where new ideas for industry were tried. Here it is at night in 1801. The fires are from the large scale making of iron.]]\n\nThe Industrial Revolution is the name of the time when there was a big change in the way things were made. Instead of things being hand-made in small workshops, they were made more cheaply in large quantities by machines in factories. This improved the idea of assembly lines. People found that they could make many more things using an assembly line than each person working individually.\n\nThis mass production meant that the goods were sold for less. It started in the 1760s. Many people began to move from an agricultural based life in the country to the towns where the factories offered more and better paid work.\n\nA Second Industrial Revolution began in the 1870s.\n\nin a weaving shed in 1835]]",
+          "excerpt_sha256": "31b49615b5f5f28cbd405f2cc6e5a5bd6ec01171f3c86b583f0123967eb1fae8",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "bac1f803a6eda9d9",
+          "article": "Industrial Revolution",
+          "section": "",
+          "start": 0,
+          "end": 739,
+          "excerpt": "Beginnings\nThe Industrial Revolution began in Great Britain in the 18th century. Many of the technological innovations were of British origin. In particular, the County of Shropshire was important, for it had both minerals (e.g. iron ore and coal) and transport on the River Severn. This led to the group of industries near the Ironbridge Gorge and the town of Coalbrookdale.\n\nIn the mid-18th century Britain was the world's leading trading nation. It controlled a global trading empire with colonies in North America and Africa, and with some political influence on the Indian subcontinent, through the activities of the East India Company. The development of trade and the rise of business were major causes of the Industrial Revolution.",
+          "excerpt_sha256": "1e2c2a84a41fb2f1c2f020e3fce2a11a68bb059e3e49779d22cb9559bd7e0011",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "e478c0db736e62d2",
+          "article": "Renaissance",
+          "section": "",
+          "start": 0,
+          "end": 691,
+          "excerpt": ". This Renaissance painting shows an imaginary scene from ancient Greece, with Greek philosophers, writers, artists, and mathematicians. Raphael used the faces of people from his own time. Leonardo da Vinci was his model for Plato and is the philosopher with the white beard in the center.]]\nThe Renaissance is a period in European history that followed the Middle Ages and ended in the 17th century. Renaissance is a French word for “cultural rebirth.” During this period, there was a “rebirth” of classical learning. People started relearning the teachings of scholars from Ancient Greece, Rome, and other ancient societies. The Renaissance is often said to be the start of the modern age.",
+          "excerpt_sha256": "5e5fba5c007882e4967c82eaa668bea3d64efacba12d4137f07ea2740b385bcd",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "573ed776e35ff993",
+          "article": "Renaissance",
+          "section": "",
+          "start": 0,
+          "end": 822,
+          "excerpt": "During the Renaissance, there were many advances in art, literature, the sciences, mathematics, and culture. Many famous artists, writers, philosophers, and scientists lived during this period. A person who is clever at a great number of things is sometimes called a \"Renaissance man.\" The most famous Renaissance man was Leonardo da Vinci, a painter, scientist, musician, and philosopher.\n\nThe Renaissance started in Italy but soon spread throughout Europe. In Italy, the period is divided into three parts:\nthe Early Renaissance\nthe High Renaissance\nthe Late Renaissance (also called the \"Mannerist period\")\n\nFollowing the Mannerist period was the Baroque period, which also spread across Europe starting around 1600. Outside Italy, it can be hard to tell when the Renaissance period ended and the Baroque began.\n\nCauses",
+          "excerpt_sha256": "bf7b989a1468d5216aea1552a9aaa3f3aea67c51bea660efe9d5611f52504527",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "c06",
+      "category": "comparative",
+      "split": "held_out",
+      "question": "Compare the end of the Roman Republic with the fall of the Byzantine Empire.",
+      "seed_ids": [
+        "hist_001",
+        "hist_005"
+      ],
+      "scope": [
+        "Disputed Republic end 31/27 BC",
+        "Ottoman conquest 1453; different political entities"
+      ],
+      "task_facets": [
+        "Disputed Republic end 31/27 BC",
+        "Ottoman conquest 1453; different political entities"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "1510dc7a9342c459",
+          "article": "Roman Republic",
+          "section": "",
+          "start": 0,
+          "end": 797,
+          "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+          "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "75b50d1b43560333",
+          "article": "Roman Republic",
+          "section": "",
+          "start": 0,
+          "end": 800,
+          "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+          "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "5cacb872f2e6d235",
+          "article": "Fall of Constantinople",
+          "section": "",
+          "start": 0,
+          "end": 926,
+          "excerpt": "illustration of the 1453 Fall of Constantinople at the hands of the Ottoman Empire]]\n\nThe Fall of Constantinople occurred when the Ottoman Empire took over Constantinople, the capital city of the Byzantine Empire, on 29 May 1453. The Ottomans were commanded by 21-year-old Ottoman Sultan Mehmed II, who defeated an army commanded by Byzantine Emperor Constantine XI Palaiologos. The conquest of Constantinople followed a 53-day siege started on 6 April 1453. After the conquest of the city, Constantinople became the capital of the Ottoman Empire. Today, Constantinople is known as Istanbul.\n\nThis event marks the end of the Byzantine Empire, and so it was the end of the Roman Empire, which had lasted for nearly 1,500 years. Previous Ottoman Sultans had taken most of the Empire in previous centuries. Some places, like the Morea Despotate and Empire of Trebizond were not defeated by the Ottomans until several years later.",
+          "excerpt_sha256": "3ebb58537f2135a3754f5421510f76d6edbeb80cb9913534fcd13bf576abdb64",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "cc3642d1c4405103",
+          "article": "Fall of Constantinople",
+          "section": "",
+          "start": 0,
+          "end": 468,
+          "excerpt": "The fall of Constantinople had important results, because the Ottoman Empire at last had control of the Balkans. Nothing could stop them from further Muslim conquests into Europe, which went on until after the Battle of Vienna in 1683. After the fall of Constantinople and the Byzantine Empire, many refugees escaped to Western Europe and helped create humanism. In particular, the arrival in Italy of Greek scholars is said to have helped the Renaissance.\n\nReferences",
+          "excerpt_sha256": "db66895d160b58cce6b2baf7e1edc84c65b07713ef4beadeb767fd93f9f282c0",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "t01",
+      "category": "temporal",
+      "split": "development",
+      "question": "What were the main events of the French Revolution?",
+      "seed_ids": [
+        "hist_002"
+      ],
+      "scope": [
+        "1789 Estates General and monarchy",
+        "Terror and Napoleon; flag contradictory end dates in corpus"
+      ],
+      "task_facets": [
+        "1789 Estates General and monarchy",
+        "Terror and Napoleon; flag contradictory end dates in corpus"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "e319206887cdb66e",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 580,
+          "excerpt": "The French Revolution was a revolution in France from 1789 to 1799. It ended the French monarchy. The revolution began with a meeting of the Estates General in Versailles, and ended when Napoleon Bonaparte took power in November 1804.\n\nBefore 1789, France was ruled by the nobles and the Catholic Church. The ideas of the Enlightenment were beginning to make the ordinary people want more power. They could see that the American Revolution had created a country in which the people had power, instead of a king. The government before the revolution was called the \"Ancien Régime\".",
+          "excerpt_sha256": "3415d5561771c3aaa2827adb9ee07f527108ec5ec865338c753fdf595df152f7",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "a29dca0ebe1c293c",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 940,
+          "excerpt": "Before the Revolution, France was divided into three Estates. The First Estate was the clergy. It was 1% of the population. The Second Estate was the nobles, also 1% of the population. The other nearly 98% of the population was in the Third Estate. Representatives of the people from all three estates together made up the Estates-General. The Estates General first met in 1302 and 1303, and occasionally met in later centuries.\n\nIn May 1789, the Estates-General was called by King Louis in order to deal with the money problems of the country. They met at the royal Palace of Versailles. However, the members of the Third Estate were angry. They had made lists of problems they wanted to fix called the Cahiers de Doléance. They were angry that they were being taxed the most when they were the poorest group of people. They, and the Director-General of Finances, Jacques Necker, thought the Church and the Nobility ought to be taxed more.",
+          "excerpt_sha256": "93bb0ca37be02a56962535e749deca76d9a1cba44e018be7c19069433406858c",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "8f6feeb76b6c82a2",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 584,
+          "excerpt": "In July 1789, after the National Assembly was formed, the nobility and the king was angry with Jacques Necker, the Director-General of Finances, and they fired him. Many Parisians thought that the King was going to shut down the National Assembly. Soon, Paris was filled with riots and looting.\n\nOn 14 July 1789, the people decided to attack the Bastille prison. The Bastille contained weapons, as well as being a symbol of the power of the nobility and the rule of the king. By the afternoon, the people had broken into the Bastille and released the seven prisoners being held there.",
+          "excerpt_sha256": "4da43947139cc85e389b0268f9bc3bcae59f927f827b09ec7de1372d00596ed2",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "t02",
+      "category": "temporal",
+      "split": "development",
+      "question": "What was its timeline?",
+      "seed_ids": [
+        "hist_004"
+      ],
+      "scope": [
+        "Resolve its to American Civil War",
+        "1861 start, 1863 turning points and 1865 surrender; avoid claiming every surrender same day"
+      ],
+      "task_facets": [
+        "Resolve its to American Civil War",
+        "1861 start, 1863 turning points and 1865 surrender; avoid claiming every surrender same day"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "fde37848703d4a66",
+          "article": "American Civil War",
+          "section": "",
+          "start": 0,
+          "end": 1000,
+          "excerpt": "{{Infobox military conflict\n| conflict = American Civil War\n| partof = \n| image = American Civil War Montage 2.jpg\n| caption = Top left: William Rosecrans at Stones River, Tennessee; top right: Confederate prisoners at Gettysburg; bottom: Battle of Fort Hindman, Arkansas\n| date = April 12, 1861 – May 9, 1865\n| place = United States, Atlantic Ocean\n| result = Union victory\nThe United States of America stays together\nReconstruction\nSlavery abolished\n| combatant1 = \n| combatant2 = \n| commander1 = Abraham Lincoln\n Ulysses S. Grant\n George B. McClellan\n William T. Sherman\n Winfield Scott\n Henry Halleck\n George G. Meade\n Joseph Hooker\n Benjamin F. Butler\n Philip Sheridan\n William Rosecrans\n George H. Thomas\n John Pope\n Edward Canby\n Nathaniel P. Banks\n| commander2 = Jefferson Davis\n Robert E. Lee\n Joseph E. Johnston\n P. G. T. Beauregard\n A.S. Johnston\n Samuel Cooper\n Braxton Bragg\n John Bell Hood\n Stonewall Jackson\n J.E.B. Stuart\n Jubal Early\n James Longstreet\n Edmund K. Smith\n John C. Pembe",
+          "excerpt_sha256": "17503fcfc03895ee7e0c78f83e994ea426eb9e9dc3a3ac0160bcf23faeda525f",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "1dde4800f8b985d2",
+          "article": "American Civil War",
+          "section": "",
+          "start": 0,
+          "end": 858,
+          "excerpt": "Abraham Lincoln from the Republican Party won the 1860 United States presidential election. He then did not want to ban slavery in the states. Like nearly everyone else, he believed that the US Constitution did not allow the federal government to ban slavery (the amendment to ban slavery was passed later, in 1865). He also thought that banning it suddenly would anger the South.\n\nInstead, Lincoln and his Republican Party thought that slavery should be banned in US territories. They thought that slavery would die out if it could not go to new places.\n\nLincoln became president on March 4, 1861. In the four months between the election and the day that Lincoln became president, seven Southern states declared their independence from the Union. The outgoing US president, James Buchanan, said that was against the law but he could do nothing to stop them.",
+          "excerpt_sha256": "8d74dc6841052e356737b27d45bc156c9a63d142952c9c9d55e7335c1fe8a973",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "20d0c72d25d13f46",
+          "article": "American Civil War",
+          "section": "",
+          "start": 0,
+          "end": 680,
+          "excerpt": "The American Civil War was fought in three important land areas, or \"theaters.\" The Eastern Theater was the land east of the Appalachian Mountains. The Western Theater included everything between the Appalachian Mountains and the Mississippi River and along the river. The Trans-Mississippi Theater included territory west of the Mississippi River.\n\nBoth the United States and the Confederacy had their capital cities in the Eastern Theater. Washington, DC, had been the US capital since 1800. When the South seceded, its first capital was Montgomery, Alabama, but it moved the capital to Richmond, Virginia. Richmond and Washington DC are only about 90 miles (145&nbsp;km) apart.",
+          "excerpt_sha256": "72ca9fa1dbb93c7e88dde7992ae44d2ff590c39b3f4af38d394a11a301efad40",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "I want to understand the American Civil War."
+        },
+        {
+          "role": "assistant",
+          "content": "We can discuss its chronology."
+        }
+      ]
+    },
+    {
+      "id": "t03",
+      "category": "temporal",
+      "split": "held_out",
+      "question": "What was the timeline of the Cold War?",
+      "seed_ids": [
+        "hist_007"
+      ],
+      "scope": [
+        "1947-1991 conventional bounds",
+        "Berlin/Cuba and dissolution; dates and disagreement preserved"
+      ],
+      "task_facets": [
+        "1947-1991 conventional bounds",
+        "Berlin/Cuba and dissolution; dates and disagreement preserved"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "b8fcb540f7354a99",
+          "article": "Cold War",
+          "section": "",
+          "start": 0,
+          "end": 879,
+          "excerpt": "{{Infobox\n| subheader = 12 March 1947 – 26 December 1991{{efn-ua|: \"Historians do not fully agree on its starting and ending points, but the period is generally considered to span from the announcement of the Truman Doctrine on 12 March 1947 to the dissolution of the Soviet Union on 26 December 1991.\"}} ()\n| above = Cold War\n| abovestyle = background-color:#C3D6EF;font-size:110%\n| subheaderstyle = background-color:#DCDCDC\n| image1 = \n| caption1 = and states during the Cold War era\n| image2 = \n| caption2 = The \"Three Worlds\" of the Cold War between 30 April and 24 June 1975:\n\n}}\n\nThe Cold War (1947-1991) was the fighting between the United States and its allies and the Soviet Union and its allies between the end of World War II and the fall of the Soviet Union. It is called the \"Cold\" War because the Americans and the Soviets never actually fought each other directly.",
+          "excerpt_sha256": "d1c9374750a2bf5f583723383e1537fb5053df5b366f91006f9861d045e74856",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "1a06b97d666fbf89",
+          "article": "Cold War",
+          "section": "",
+          "start": 0,
+          "end": 526,
+          "excerpt": "Instead, they influenced or intervened in conflicts known as proxy wars in which powerful countries fight a foreign war but do not send their own troops. Both sides built large militaries with many new weapons and advanced technology. They spied on and threatened each other.\n\nConflicting countries\nMost of the countries on one side were allied by NATO, whose most powerful country was the United States. Most of the countries on the other side were allied by the Warsaw Pact, whose most powerful country was the Soviet Union.",
+          "excerpt_sha256": "880f5e6d09ad7a31fcfa4df01923bd08d20eb6dc8413fdc2f3c80bef7a201fb1",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "7019e2fdffe7472b",
+          "article": "Cold War",
+          "section": "",
+          "start": 0,
+          "end": 573,
+          "excerpt": "The Western Bloc was the name of the capitalist countries led by the United States. The North Atlantic Treaty Organization (NATO) is an alliance that was created in 1949 and included the United States, the United Kingdom, France, West Germany, Canada, Netherlands, Belgium, Luxembourg, Spain, Portugal, Italy, Norway, Denmark, Greece, and Turkey. Other countries allied with the Western Bloc included Israel, Brazil, South Korea, Kenya (1960-1991), Bangladesh (1964-1968), Pakistan, North Yemen, Malaysia, Saudi Arabia, Philippines, South Africa, Australia and New Zealand.",
+          "excerpt_sha256": "c00ee8b1eebc8b6c6874ccb8dc3282d46ddc1b2d2481d130315b315b81896918",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "t04",
+      "category": "temporal",
+      "split": "held_out",
+      "question": "What was the timeline of the American Revolution?",
+      "seed_ids": [
+        "hist_013"
+      ],
+      "scope": [
+        "Distinguish political process from 1775-1783 war",
+        "Stamp Act 1765, 1776 declaration, 1781 Yorktown and 1783 peace"
+      ],
+      "task_facets": [
+        "Distinguish political process from 1775-1783 war",
+        "Stamp Act 1765, 1776 declaration, 1781 Yorktown and 1783 peace"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "47720f71951cb916",
+          "article": "American Revolutionary War",
+          "section": "",
+          "start": 0,
+          "end": 960,
+          "excerpt": "were controlled by the British Empire]]\nThe American Revolutionary War was fought between Great Britain and the original Thirteen Colonies from 1775 to 1783. Most (but not all) of the fighting happened in North America. The Continental Army (the rebel army) was led by George Washington and helped by France and Spain. Together they defeated the British Army after the British moved their attention to other matters.\n\nAfter the war ended, the Thirteen Colonies became independent, which meant that they were no longer owned or ruled by the British Empire. They became the first 13 states of a new country, which was called the United States.\n\nBackground\n\nFrench and Indian War\nBefore the American Revolutionary War, another war had occurred, called the French and Indian War. It was part of the Seven Years' War between France and Great Britain from 1754 to 1763. Britain had lost a lot of money from the fighting, so it began taxing Americans to gain it back.",
+          "excerpt_sha256": "7c6d9109f2e788559d7af88cdd3bbe98b32c14ac68a2f64f3f6d362f55beddf4",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "a3ace5f556e471bb",
+          "article": "American Revolutionary War",
+          "section": "",
+          "start": 0,
+          "end": 914,
+          "excerpt": "Beginnings of the Revolution\nThe American Revolutionary War started after the French and Indian War. By then, there had been years of problems between the British Empire and the colonists of North America. People in the Thirteen Colonies disliked many actions of the British government, such as the Stamp Act and the Intolerable Acts. For many years, the British government decided which countries could trade with the colonies, instead of letting the colonies decide for themselves. Many of the colonists wanted free trade.\n\nStamp Act & Intolerable Acts\n]]\nIn 1765, the British Parliament thought that the colonists should pay some of the needed money to pay back the debt for the French and Indian War. It passed a law, the Stamp Act. This law said that colonists had to buy stamps for legal papers, newspapers, and even playing cards like other British people. The money from the stamps went to King George III.",
+          "excerpt_sha256": "4fa02ff928aafba4dab706b8f087b154f9321e8756dff9c0e9c5d8b7304a25a8",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "82caa948bf2e0419",
+          "article": "American Revolutionary War",
+          "section": "",
+          "start": 0,
+          "end": 908,
+          "excerpt": "New York & New Jersey\nA few months later, the Continental Army and the British troops under William Howe fought the New York and New Jersey Campaign. During the New York battles, the British started using Hessian troops, who were from Germany and had been sent by their princes.\n\nThe colonists lost New York, and the British controlled it for the rest of the war. Nevertheless, Washington held onto most of his army. Over Christmas in 1776, Washington crossed the Delaware River with his army. They defeated the Hessians at Trenton and the British at Princeton.\n\nBattle of Saratoga\nThe Battle of Saratoga in 1777 was one of the most important battles in the war. American soldiers under Horatio Gates forced a British surrender under John Burgoyne. That led to France and Spain joining the war on the side of Americans, who they thought would win. Both powerful countries fought the British around the world.",
+          "excerpt_sha256": "c7c61ed4b95c4014cb8f829d854b454a36b555654ef47f397a41498cac660d71",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "t05",
+      "category": "temporal",
+      "split": "held_out",
+      "question": "What were the key events of the Russian Revolution?",
+      "seed_ids": [
+        "hist_015"
+      ],
+      "scope": [
+        "February before October in 1917",
+        "Civil war aftermath; distinguish old/new style dates"
+      ],
+      "task_facets": [
+        "February before October in 1917",
+        "Civil war aftermath; distinguish old/new style dates"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "e1a1062765b481dd",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 890,
+          "excerpt": "The Russian Revolution was a period of political and social change in Russia, starting in 1917. This period saw Russia abolish its monarchy and adopt a socialist form of government following two successful revolutions and a civil war. The revolution was seen as an example for the other revolutions that occurred in the aftermath of World War I, such as the German Revolution of 1918–1919. The Russian Revolution was one of the key events of the 20th century.\n\nThe Russian Revolution began with the February Revolution in early 1917, during World War I. With the German Empire dealing major defeats on the war front, Russian suffered heavy losses as the army was poorly trained and equipped. High officials were convinced that if Tsar Nicholas II abdicated, the unrest would calm. Nicholas agreed and stepped down, creating a provisional government led by the Russian Duma (the parliament).",
+          "excerpt_sha256": "483cd966f48835aff7cec55e8465356e9098c79b57959893c54f1e6cf15b83f3",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "aaee3034812da91b",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 880,
+          "excerpt": "During the civil unrest, soviet councils were formed by the locals in Petrograd that initially did not oppose the new Provisional Government; however, the Soviets did insist on their influence in the government and control over various militias. By March, Russia had two rival governments. The Provisional Government held state power in military and international affairs, while the Soviets held more power concerning domestic affairs. The Soviets held the allegiance of the working class, as well as the growing urban middle class. During this time, there were many mutinies, protests and strikes. Many socialist and other leftist political organizations were competing for influence within the Provisional Government and the Soviets. Notable factions included the Mensheviks, Social Revolutionaries, Anarchists, as well as the Bolsheviks, a far-left party led by Vladimir Lenin.",
+          "excerpt_sha256": "fb9afd219f9c565798efeed8b43e8f4fd1076c980bedc8fd5b391d705d9ade78",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "437fe7c4e6a10e34",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 821,
+          "excerpt": "The Bolsheviks won popularity with their program promising peace, land, and bread: end war with Germany, give land to the peasantry, and end the wartime famine. After Bolsheviks gained power, the Provisional Government chose to continue fighting in spite of public opposition.\n\nBackground\nDuring the 1890s, improvements in Russian industry caused substantially more jobs in cities, which made them larger as people moved there. The workers in the cities, with their increasing levels of education, began to develop an interest in politics and the creation of political parties to try to improve their lives. The conditions in which they lived and worked were horrible. Poor people from other parts of the Russian Empire like Poland and Ukraine also created their own parties to try stop the Russians from oppressing them.",
+          "excerpt_sha256": "c940a27d7a5036cd681bf0add7c38e0f8468185b6383081305f69db4bcf5fd0c",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "t06",
+      "category": "temporal",
+      "split": "held_out",
+      "question": "What were the causes and key battles of World War II in Europe?",
+      "seed_ids": [
+        "hist_019"
+      ],
+      "scope": [
+        "1939 invasion and escalation",
+        "D-Day 1944 and European end 1945; do not confuse Pacific end"
+      ],
+      "task_facets": [
+        "1939 invasion and escalation",
+        "D-Day 1944 and European end 1945; do not confuse Pacific end"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "6e41354f2c0d1d7f",
+          "article": "World War II",
+          "section": "",
+          "start": 0,
+          "end": 541,
+          "excerpt": "World War II, or the Second World War, was a global conflict (1 September 1939 – 2 September 1945) which involved fighting between the Allies and the Axis. Some fighting started in 1937, when Imperial Japanese forces started the Second Sino-Japanese War. Most of the world's countries, including all of the great powers, fought as part of two military alliances: the Allied Powers and the Axis Powers.\n\nThe war involved more countries, cost more money, involved more people, and killed more people than any other war; 73 million people died,",
+          "excerpt_sha256": "b89669c03ea914f19ec479bf2f2779be73bd0480f387576ede2ba4101508f648",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        },
+        {
+          "chunk_id": "2058c3d8b5963e68",
+          "article": "World War II",
+          "section": "",
+          "start": 0,
+          "end": 998,
+          "excerpt": "On D-Day, on 6 June 1944, the Allies began the invasion of Normandy, France. The codename for the invasion was Operation Overlord. The successful invasion led to the defeat of the German forces in France. Paris was freed in August 1944, and the Allies continued eastward while the German front collapsed. Operation Market Garden was the combined aerial invasion of the Netherlands and was launched on 17 September 1944. The purpose was to seize a series of bridges that included a bridge in Arnhem, which spanned the Rhine River. The airborne invasion was called Market. The ground invasion, named Garden, reached the Rhine but could not take the bridge.\n\nOn 22 June, the Soviet offensive on the Eastern Front codenamed Operation Bagration, destroyed almost all of the German Army Group Centre. and most high-ranking Nazis were captured and brought to a special court. Germany lost a quarter of its land in 1937, mostly to Poland and the Soviet Union. The Soviets also took some parts of Poland\n\n}}",
+          "excerpt_sha256": "d285f5dfe99d221500ac9b9f7d7506c642ab9765a311d40d3946293125ffa96e",
+          "relevance": 2,
+          "note": "Direct scope support; not exhaustive."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      }
+    },
+    {
+      "id": "i01",
+      "category": "insufficient",
+      "split": "development",
+      "question": "What exact words did an unrecorded Roman farmer whisper alone on 16 January 27 BC?",
+      "seed_ids": [],
+      "scope": [
+        "Abstain from invented verbatim speech; public chronology is insufficient"
+      ],
+      "task_facets": [
+        "Abstain from invented verbatim speech; public chronology is insufficient"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "1510dc7a9342c459",
+          "article": "Roman Republic",
+          "section": "",
+          "start": 0,
+          "end": 797,
+          "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+          "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "75b50d1b43560333",
+          "article": "Roman Republic",
+          "section": "",
+          "start": 0,
+          "end": 800,
+          "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+          "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "insufficiency_basis": "Abstain from invented verbatim speech; public chronology is insufficient Checked related local article excerpts; not an exhaustive corpus absence proof."
+    },
+    {
+      "id": "i02",
+      "category": "insufficient",
+      "split": "held_out",
+      "question": "What will historians discover about the French Revolution in the year 2100?",
+      "seed_ids": [],
+      "scope": [
+        "Future discoveries unavailable; do not present prediction as evidence"
+      ],
+      "task_facets": [
+        "Future discoveries unavailable; do not present prediction as evidence"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "e319206887cdb66e",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 580,
+          "excerpt": "The French Revolution was a revolution in France from 1789 to 1799. It ended the French monarchy. The revolution began with a meeting of the Estates General in Versailles, and ended when Napoleon Bonaparte took power in November 1804.\n\nBefore 1789, France was ruled by the nobles and the Catholic Church. The ideas of the Enlightenment were beginning to make the ordinary people want more power. They could see that the American Revolution had created a country in which the people had power, instead of a king. The government before the revolution was called the \"Ancien Régime\".",
+          "excerpt_sha256": "3415d5561771c3aaa2827adb9ee07f527108ec5ec865338c753fdf595df152f7",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "a29dca0ebe1c293c",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 940,
+          "excerpt": "Before the Revolution, France was divided into three Estates. The First Estate was the clergy. It was 1% of the population. The Second Estate was the nobles, also 1% of the population. The other nearly 98% of the population was in the Third Estate. Representatives of the people from all three estates together made up the Estates-General. The Estates General first met in 1302 and 1303, and occasionally met in later centuries.\n\nIn May 1789, the Estates-General was called by King Louis in order to deal with the money problems of the country. They met at the royal Palace of Versailles. However, the members of the Third Estate were angry. They had made lists of problems they wanted to fix called the Cahiers de Doléance. They were angry that they were being taxed the most when they were the poorest group of people. They, and the Director-General of Finances, Jacques Necker, thought the Church and the Nobility ought to be taxed more.",
+          "excerpt_sha256": "93bb0ca37be02a56962535e749deca76d9a1cba44e018be7c19069433406858c",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "8f6feeb76b6c82a2",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 584,
+          "excerpt": "In July 1789, after the National Assembly was formed, the nobility and the king was angry with Jacques Necker, the Director-General of Finances, and they fired him. Many Parisians thought that the King was going to shut down the National Assembly. Soon, Paris was filled with riots and looting.\n\nOn 14 July 1789, the people decided to attack the Bastille prison. The Bastille contained weapons, as well as being a symbol of the power of the nobility and the rule of the king. By the afternoon, the people had broken into the Bastille and released the seven prisoners being held there.",
+          "excerpt_sha256": "4da43947139cc85e389b0268f9bc3bcae59f927f827b09ec7de1372d00596ed2",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "insufficiency_basis": "Future discoveries unavailable; do not present prediction as evidence Checked related local article excerpts; not an exhaustive corpus absence proof."
+    },
+    {
+      "id": "i03",
+      "category": "insufficient",
+      "split": "held_out",
+      "question": "What was Napoleon thinking privately at precisely 10:03 on 18 June 1815?",
+      "seed_ids": [],
+      "scope": [
+        "Exact private thought/time unsupported; avoid mind-reading"
+      ],
+      "task_facets": [
+        "Exact private thought/time unsupported; avoid mind-reading"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "e319206887cdb66e",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 580,
+          "excerpt": "The French Revolution was a revolution in France from 1789 to 1799. It ended the French monarchy. The revolution began with a meeting of the Estates General in Versailles, and ended when Napoleon Bonaparte took power in November 1804.\n\nBefore 1789, France was ruled by the nobles and the Catholic Church. The ideas of the Enlightenment were beginning to make the ordinary people want more power. They could see that the American Revolution had created a country in which the people had power, instead of a king. The government before the revolution was called the \"Ancien Régime\".",
+          "excerpt_sha256": "3415d5561771c3aaa2827adb9ee07f527108ec5ec865338c753fdf595df152f7",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "a29dca0ebe1c293c",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 940,
+          "excerpt": "Before the Revolution, France was divided into three Estates. The First Estate was the clergy. It was 1% of the population. The Second Estate was the nobles, also 1% of the population. The other nearly 98% of the population was in the Third Estate. Representatives of the people from all three estates together made up the Estates-General. The Estates General first met in 1302 and 1303, and occasionally met in later centuries.\n\nIn May 1789, the Estates-General was called by King Louis in order to deal with the money problems of the country. They met at the royal Palace of Versailles. However, the members of the Third Estate were angry. They had made lists of problems they wanted to fix called the Cahiers de Doléance. They were angry that they were being taxed the most when they were the poorest group of people. They, and the Director-General of Finances, Jacques Necker, thought the Church and the Nobility ought to be taxed more.",
+          "excerpt_sha256": "93bb0ca37be02a56962535e749deca76d9a1cba44e018be7c19069433406858c",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "8f6feeb76b6c82a2",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 584,
+          "excerpt": "In July 1789, after the National Assembly was formed, the nobility and the king was angry with Jacques Necker, the Director-General of Finances, and they fired him. Many Parisians thought that the King was going to shut down the National Assembly. Soon, Paris was filled with riots and looting.\n\nOn 14 July 1789, the people decided to attack the Bastille prison. The Bastille contained weapons, as well as being a symbol of the power of the nobility and the rule of the king. By the afternoon, the people had broken into the Bastille and released the seven prisoners being held there.",
+          "excerpt_sha256": "4da43947139cc85e389b0268f9bc3bcae59f927f827b09ec7de1372d00596ed2",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "insufficiency_basis": "Exact private thought/time unsupported; avoid mind-reading Checked related local article excerpts; not an exhaustive corpus absence proof."
+    },
+    {
+      "id": "i04",
+      "category": "insufficient",
+      "split": "held_out",
+      "question": "Using my unpublished family diary, name my ancestor who fought at Gettysburg.",
+      "seed_ids": [],
+      "scope": [
+        "Diary not provided; do not invent ancestor; request evidence"
+      ],
+      "task_facets": [
+        "Diary not provided; do not invent ancestor; request evidence"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "fde37848703d4a66",
+          "article": "American Civil War",
+          "section": "",
+          "start": 0,
+          "end": 1000,
+          "excerpt": "{{Infobox military conflict\n| conflict = American Civil War\n| partof = \n| image = American Civil War Montage 2.jpg\n| caption = Top left: William Rosecrans at Stones River, Tennessee; top right: Confederate prisoners at Gettysburg; bottom: Battle of Fort Hindman, Arkansas\n| date = April 12, 1861 – May 9, 1865\n| place = United States, Atlantic Ocean\n| result = Union victory\nThe United States of America stays together\nReconstruction\nSlavery abolished\n| combatant1 = \n| combatant2 = \n| commander1 = Abraham Lincoln\n Ulysses S. Grant\n George B. McClellan\n William T. Sherman\n Winfield Scott\n Henry Halleck\n George G. Meade\n Joseph Hooker\n Benjamin F. Butler\n Philip Sheridan\n William Rosecrans\n George H. Thomas\n John Pope\n Edward Canby\n Nathaniel P. Banks\n| commander2 = Jefferson Davis\n Robert E. Lee\n Joseph E. Johnston\n P. G. T. Beauregard\n A.S. Johnston\n Samuel Cooper\n Braxton Bragg\n John Bell Hood\n Stonewall Jackson\n J.E.B. Stuart\n Jubal Early\n James Longstreet\n Edmund K. Smith\n John C. Pembe",
+          "excerpt_sha256": "17503fcfc03895ee7e0c78f83e994ea426eb9e9dc3a3ac0160bcf23faeda525f",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "1dde4800f8b985d2",
+          "article": "American Civil War",
+          "section": "",
+          "start": 0,
+          "end": 858,
+          "excerpt": "Abraham Lincoln from the Republican Party won the 1860 United States presidential election. He then did not want to ban slavery in the states. Like nearly everyone else, he believed that the US Constitution did not allow the federal government to ban slavery (the amendment to ban slavery was passed later, in 1865). He also thought that banning it suddenly would anger the South.\n\nInstead, Lincoln and his Republican Party thought that slavery should be banned in US territories. They thought that slavery would die out if it could not go to new places.\n\nLincoln became president on March 4, 1861. In the four months between the election and the day that Lincoln became president, seven Southern states declared their independence from the Union. The outgoing US president, James Buchanan, said that was against the law but he could do nothing to stop them.",
+          "excerpt_sha256": "8d74dc6841052e356737b27d45bc156c9a63d142952c9c9d55e7335c1fe8a973",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "20d0c72d25d13f46",
+          "article": "American Civil War",
+          "section": "",
+          "start": 0,
+          "end": 680,
+          "excerpt": "The American Civil War was fought in three important land areas, or \"theaters.\" The Eastern Theater was the land east of the Appalachian Mountains. The Western Theater included everything between the Appalachian Mountains and the Mississippi River and along the river. The Trans-Mississippi Theater included territory west of the Mississippi River.\n\nBoth the United States and the Confederacy had their capital cities in the Eastern Theater. Washington, DC, had been the US capital since 1800. When the South seceded, its first capital was Montgomery, Alabama, but it moved the capital to Richmond, Virginia. Richmond and Washington DC are only about 90 miles (145&nbsp;km) apart.",
+          "excerpt_sha256": "72ca9fa1dbb93c7e88dde7992ae44d2ff590c39b3f4af38d394a11a301efad40",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "insufficiency_basis": "Diary not provided; do not invent ancestor; request evidence Checked related local article excerpts; not an exhaustive corpus absence proof."
+    },
+    {
+      "id": "i05",
+      "category": "insufficient",
+      "split": "held_out",
+      "question": "Quote the secret treaty in the sealed archive box AL-NONEXISTENT-731 and its signature date.",
+      "seed_ids": [],
+      "scope": [
+        "Fabricated identifier, no supplied archive content; abstain"
+      ],
+      "task_facets": [
+        "Fabricated identifier, no supplied archive content; abstain"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "insufficiency_basis": "Fabricated identifier, no supplied archive content; abstain Checked related local article excerpts; not an exhaustive corpus absence proof."
+    },
+    {
+      "id": "i06",
+      "category": "insufficient",
+      "split": "development",
+      "question": "When did it begin?",
+      "seed_ids": [
+        "hist_002",
+        "hist_015"
+      ],
+      "scope": [
+        "Ambiguous between French and Russian revolutions; clarify rather than select one"
+      ],
+      "task_facets": [
+        "Ambiguous between French and Russian revolutions; clarify rather than select one"
+      ],
+      "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+      "evidence": [
+        {
+          "chunk_id": "e319206887cdb66e",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 580,
+          "excerpt": "The French Revolution was a revolution in France from 1789 to 1799. It ended the French monarchy. The revolution began with a meeting of the Estates General in Versailles, and ended when Napoleon Bonaparte took power in November 1804.\n\nBefore 1789, France was ruled by the nobles and the Catholic Church. The ideas of the Enlightenment were beginning to make the ordinary people want more power. They could see that the American Revolution had created a country in which the people had power, instead of a king. The government before the revolution was called the \"Ancien Régime\".",
+          "excerpt_sha256": "3415d5561771c3aaa2827adb9ee07f527108ec5ec865338c753fdf595df152f7",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "a29dca0ebe1c293c",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 940,
+          "excerpt": "Before the Revolution, France was divided into three Estates. The First Estate was the clergy. It was 1% of the population. The Second Estate was the nobles, also 1% of the population. The other nearly 98% of the population was in the Third Estate. Representatives of the people from all three estates together made up the Estates-General. The Estates General first met in 1302 and 1303, and occasionally met in later centuries.\n\nIn May 1789, the Estates-General was called by King Louis in order to deal with the money problems of the country. They met at the royal Palace of Versailles. However, the members of the Third Estate were angry. They had made lists of problems they wanted to fix called the Cahiers de Doléance. They were angry that they were being taxed the most when they were the poorest group of people. They, and the Director-General of Finances, Jacques Necker, thought the Church and the Nobility ought to be taxed more.",
+          "excerpt_sha256": "93bb0ca37be02a56962535e749deca76d9a1cba44e018be7c19069433406858c",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "8f6feeb76b6c82a2",
+          "article": "French Revolution",
+          "section": "",
+          "start": 0,
+          "end": 584,
+          "excerpt": "In July 1789, after the National Assembly was formed, the nobility and the king was angry with Jacques Necker, the Director-General of Finances, and they fired him. Many Parisians thought that the King was going to shut down the National Assembly. Soon, Paris was filled with riots and looting.\n\nOn 14 July 1789, the people decided to attack the Bastille prison. The Bastille contained weapons, as well as being a symbol of the power of the nobility and the rule of the king. By the afternoon, the people had broken into the Bastille and released the seven prisoners being held there.",
+          "excerpt_sha256": "4da43947139cc85e389b0268f9bc3bcae59f927f827b09ec7de1372d00596ed2",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "e1a1062765b481dd",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 890,
+          "excerpt": "The Russian Revolution was a period of political and social change in Russia, starting in 1917. This period saw Russia abolish its monarchy and adopt a socialist form of government following two successful revolutions and a civil war. The revolution was seen as an example for the other revolutions that occurred in the aftermath of World War I, such as the German Revolution of 1918–1919. The Russian Revolution was one of the key events of the 20th century.\n\nThe Russian Revolution began with the February Revolution in early 1917, during World War I. With the German Empire dealing major defeats on the war front, Russian suffered heavy losses as the army was poorly trained and equipped. High officials were convinced that if Tsar Nicholas II abdicated, the unrest would calm. Nicholas agreed and stepped down, creating a provisional government led by the Russian Duma (the parliament).",
+          "excerpt_sha256": "483cd966f48835aff7cec55e8465356e9098c79b57959893c54f1e6cf15b83f3",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "aaee3034812da91b",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 880,
+          "excerpt": "During the civil unrest, soviet councils were formed by the locals in Petrograd that initially did not oppose the new Provisional Government; however, the Soviets did insist on their influence in the government and control over various militias. By March, Russia had two rival governments. The Provisional Government held state power in military and international affairs, while the Soviets held more power concerning domestic affairs. The Soviets held the allegiance of the working class, as well as the growing urban middle class. During this time, there were many mutinies, protests and strikes. Many socialist and other leftist political organizations were competing for influence within the Provisional Government and the Soviets. Notable factions included the Mensheviks, Social Revolutionaries, Anarchists, as well as the Bolsheviks, a far-left party led by Vladimir Lenin.",
+          "excerpt_sha256": "fb9afd219f9c565798efeed8b43e8f4fd1076c980bedc8fd5b391d705d9ade78",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        },
+        {
+          "chunk_id": "437fe7c4e6a10e34",
+          "article": "Russian Revolution",
+          "section": "",
+          "start": 0,
+          "end": 821,
+          "excerpt": "The Bolsheviks won popularity with their program promising peace, land, and bread: end war with Germany, give land to the peasantry, and end the wartime famine. After Bolsheviks gained power, the Provisional Government chose to continue fighting in spite of public opposition.\n\nBackground\nDuring the 1890s, improvements in Russian industry caused substantially more jobs in cities, which made them larger as people moved there. The workers in the cities, with their increasing levels of education, began to develop an interest in politics and the creation of political parties to try to improve their lives. The conditions in which they lived and worked were horrible. Poor people from other parts of the Russian Empire like Poland and Ukraine also created their own parties to try stop the Russians from oppressing them.",
+          "excerpt_sha256": "c940a27d7a5036cd681bf0add7c38e0f8468185b6383081305f69db4bcf5fd0c",
+          "relevance": 0,
+          "note": "Related context only: does not support the requested unavailable fact."
+        }
+      ],
+      "rubric": "history-rubric-v1",
+      "annotation": {
+        "reviewer": "codex-agent",
+        "status": "provisional; human review pending",
+        "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+      },
+      "insufficiency_basis": "Ambiguous between French and Russian revolutions; clarify rather than select one Checked related local article excerpts; not an exhaustive corpus absence proof.",
+      "history": [
+        {
+          "role": "user",
+          "content": "Compare the French Revolution and the Russian Revolution."
+        },
+        {
+          "role": "assistant",
+          "content": "Both changed political power and ended monarchies."
+        }
+      ]
+    }
+  ]
+}

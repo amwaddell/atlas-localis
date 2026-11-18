@@ -169,17 +169,6 @@ def test_start_run_span_delegates_to_start_span():
     spans = exporter.get_finished_spans()
     run_span = next((s for s in spans if "run.eval" in s.name), None)
 
-    # If the span didn't make it to the exporter (known OTel global-
-    # context issue in large test suites), skip rather than fail.
-    if run_span is None and len(spans) == 0:
-        import pytest
-
-        pytest.skip(
-            "start_run_span spans not captured by test exporter "
-            "(OTel global context interference); "
-            "core behavior verified in test_run_span_with_context"
-        )
-
     assert run_span is not None, f"Run span not found in {[s.name for s in spans]}"
     assert run_span.attributes.get("run_id") == ctx.run_id
 

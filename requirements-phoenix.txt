@@ -1,8 +1,1 @@
-# Optional dependencies for Phoenix trace viewer
-# Install with: pip install -r requirements-phoenix.txt
-
-arize-phoenix>=4.0.0
-arize-phoenix-otel>=0.1.0
-
-# Auto-instrumentation for LangChain/LangGraph traces in Phoenix
-openinference-instrumentation-langchain>=0.1.0
+-e .[phoenix]

@@ -20,11 +20,14 @@ Usage:
 from __future__ import annotations
 
 import time
+from collections import OrderedDict
 from pathlib import Path
+from threading import RLock
 from typing import Any
 
 import lancedb
 
+from workbench.core.offline import local_path
 from workbench.core.types import Chunk
 from workbench.observability.tracing import add_span_attributes, start_span
 
@@ -33,9 +36,8 @@ class ChunkStore:
     """
     Read-only store backed by a LanceDB chunks table.
 
-    Loads the full table into an in-memory dict on first access (lazy)
-    for O(1) lookups.  This is fine for datasets that fit in memory
-    (up to a few million chunks).
+    Fetches bounded metadata/text batches, never vector columns. A 256-record
+    LRU retains recently opened evidence without copying the full corpus.
 
     Args:
         db_path: Path to the LanceDB database directory.
@@ -47,14 +49,16 @@ class ChunkStore:
         db_path: Path,
         table_name: str = "chunks",
     ) -> None:
+        db_path = local_path(db_path)
         self.db_path = db_path
         self.table_name = table_name
 
         self._db = lancedb.connect(str(db_path))
         self._table = self._db.open_table(table_name)
 
-        # Lazy-loaded lookup: chunk_id → row dict
-        self._lookup: dict[str, dict[str, Any]] | None = None
+        self._lookup: OrderedDict[str, dict[str, Any]] = OrderedDict()
+        self._lock = RLock()
+        self._accessed = False
 
     # ------------------------------------------------------------------
     # Public API
@@ -70,11 +74,8 @@ class ChunkStore:
         Returns:
             A ``Chunk`` object, or ``None`` if the ID is not found.
         """
-        self._ensure_lookup()
-        row = self._lookup.get(chunk_id)  # type: ignore[union-attr]
-        if row is None:
-            return None
-        return self._row_to_chunk(row)
+        chunks = self.get_many([chunk_id])
+        return chunks[0] if chunks else None
 
     def get_many(self, chunk_ids: list[str]) -> list[Chunk]:
         """
@@ -96,13 +97,39 @@ class ChunkStore:
             attributes={"requested_count": len(chunk_ids)},
         ):
             t0 = time.time()
-            self._ensure_lookup()
-
-            chunks: list[Chunk] = []
-            for cid in chunk_ids:
-                row = self._lookup.get(cid)  # type: ignore[union-attr]
-                if row is not None:
-                    chunks.append(self._row_to_chunk(row))
+            with self._lock:
+                self._accessed = True
+                found = {
+                    cid: self._lookup[cid] for cid in chunk_ids if cid in self._lookup
+                }
+                missing = list(
+                    dict.fromkeys(cid for cid in chunk_ids if cid not in found)
+                )
+                columns = [
+                    name for name in self._table.schema.names if name != "vector"
+                ]
+                for offset in range(0, len(missing), 64):
+                    batch = missing[offset : offset + 64]
+                    literals = ",".join(
+                        "'" + cid.replace("'", "''") + "'" for cid in batch
+                    )
+                    rows = (
+                        self._table.search()
+                        .where(f"chunk_id IN ({literals})", prefilter=True)
+                        .select(columns)
+                        .limit(len(batch))
+                        .to_list()
+                    )
+                    found.update((row["chunk_id"], row) for row in rows)
+                for cid in chunk_ids:
+                    if cid in found:
+                        self._lookup[cid] = found[cid]
+                        self._lookup.move_to_end(cid)
+                while len(self._lookup) > 256:
+                    self._lookup.popitem(last=False)
+                chunks = [
+                    self._row_to_chunk(found[cid]) for cid in chunk_ids if cid in found
+                ]
 
             duration_ms = (time.time() - t0) * 1000
             add_span_attributes(
@@ -115,37 +142,11 @@ class ChunkStore:
 
     def contains(self, chunk_id: str) -> bool:
         """Check whether a chunk ID exists in the store."""
-        self._ensure_lookup()
-        return chunk_id in self._lookup  # type: ignore[operator]
+        return self.get(chunk_id) is not None
 
     def count(self) -> int:
-        """Return the total number of chunks in the store."""
-        self._ensure_lookup()
-        return len(self._lookup)  # type: ignore[arg-type]
-
-    # ------------------------------------------------------------------
-    # Internal helpers
-    # ------------------------------------------------------------------
-
-    def _ensure_lookup(self) -> None:
-        """Load the full table into memory on first access."""
-        if self._lookup is not None:
-            return
-
-        with start_span("chunk_store.load_index"):
-            t0 = time.time()
-            df = self._table.to_pandas()
-
-            self._lookup = {}
-            for _, row in df.iterrows():
-                self._lookup[row["chunk_id"]] = row.to_dict()
-
-            add_span_attributes(
-                {
-                    "total_chunks": len(self._lookup),
-                    "load_ms": round((time.time() - t0) * 1000, 1),
-                }
-            )
+        """Count rows without loading text or vectors into Python."""
+        return self._table.count_rows()
 
     @staticmethod
     def _row_to_chunk(row: dict[str, Any]) -> Chunk:
@@ -155,15 +156,16 @@ class ChunkStore:
             chunk_id=row["chunk_id"],
             document_id=row.get("document_id", ""),
             title=row.get("title", ""),
-            section=row.get("section", None),
+            section=row.get("section") or None,
             text=text,
             start_offset=row.get("start_char", 0),
             end_offset=row.get("end_char", 0),
             token_count=row.get("token_count", len(text) // 4),
+            metadata={"url": row.get("url", "")},
         )
 
     def __repr__(self) -> str:
-        loaded = len(self._lookup) if self._lookup is not None else "not loaded"
+        loaded = self.count() if self._accessed else "not loaded"
         return (
             f"ChunkStore(db={self.db_path}, table={self.table_name!r}, chunks={loaded})"
         )

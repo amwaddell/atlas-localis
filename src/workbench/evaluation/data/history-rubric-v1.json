@@ -1,0 +1,43 @@
+{
+  "version": "history-rubric-v1",
+  "frozen_before_runs": true,
+  "reviewer_policy": "No cloud judge. Agent annotations are provisional, never counted as independent human judgments.",
+  "hard_gates": [
+    "Reproducible identity and recorded operational errors",
+    "All displayed references resolve to exact presented snapshot excerpts",
+    "No invalid draft exposed; technical failure distinct from insufficient evidence"
+  ],
+  "labels": {
+    "rewrite": [
+      "preserved",
+      "drift",
+      "unresolved_appropriate",
+      "unresolved_incorrect"
+    ],
+    "support": [
+      "supported",
+      "partial",
+      "unsupported"
+    ],
+    "utility": {
+      "0": "Wrong, absent or materially misleading",
+      "1": "Partly correct/useful, scope gaps or uncertainty problems",
+      "2": "Correct, covers requested scope, coherent dates and honest uncertainty"
+    }
+  },
+  "dimensions": [
+    "factual_correctness",
+    "completeness",
+    "temporal_coherence",
+    "uncertainty"
+  ],
+  "review_units": [
+    "rewrite vs original conversation",
+    "planner facets, redundancy and unnecessary split",
+    "worker finding vs cited excerpt(s)",
+    "final unit vs cited finding(s)",
+    "uncited material clauses"
+  ],
+  "retrieval": "Recall@10 and nDCG@10 only against explicitly graded pool; unknown is unjudged, never silently irrelevant. Exclude no-positive/insufficient cases from recall denominator. Report pool coverage.",
+  "acceptance": "Operational gates fixed before held-out generation; no post-hoc accuracy threshold or tuning on held-out cases."
+}

@@ -183,7 +183,7 @@ def test_global_registry():
 def test_register_component_decorator():
     """Test the decorator for registering components."""
     # Create a fresh registry for this test
-    test_registry = ComponentRegistry()
+    ComponentRegistry()
 
     # We'll manually register using the pattern the decorator uses
     @register_component("decorated_model", component_type="language_model")

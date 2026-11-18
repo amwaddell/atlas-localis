@@ -1,7 +1,7 @@
 """
 Tests for citation numberization.
 
-Covers ``numberize_citations()`` and ``numberize_result()`` which
+Covers ``numberize_citations()`` which
 replace raw ``[chunk_id_hash]`` references with sequential ``[1]``,
 ``[2]``, etc., ordered by first appearance in the answer text.
 """
@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from workbench.prompting.citations import (
     numberize_citations,
-    numberize_result,
 )
 
 # ------------------------------------------------------------------ #
@@ -231,84 +230,6 @@ class TestNumberizeCitations:
 
 
 # ------------------------------------------------------------------ #
-#  numberize_result — convenience wrapper                              #
-# ------------------------------------------------------------------ #
-
-
-class TestNumberizeResult:
-    """Test the result-dict wrapper."""
-
-    def test_mutates_answer_text_and_adds_citation_map(self):
-        """Should rewrite answer_text and add citation_map key."""
-        result = {
-            "answer_text": "Fact [abc123].",
-            "opened": [_make_chunk("abc123", "Rome")],
-            "citations": ["abc123"],
-        }
-
-        returned = numberize_result(result)
-
-        # Returns the same dict
-        assert returned is result
-        # answer_text rewritten
-        assert "[1]" in result["answer_text"]
-        assert "[abc123]" not in result["answer_text"]
-        # citation_map added
-        assert len(result["citation_map"]) == 1
-        assert result["citation_map"][0]["title"] == "Rome"
-        # original citations list preserved
-        assert result["citations"] == ["abc123"]
-
-    def test_no_answer_text(self):
-        """Empty answer_text → empty citation_map, no crash."""
-        result = {
-            "answer_text": "",
-            "opened": [_make_chunk("abc123")],
-        }
-
-        numberize_result(result)
-
-        assert result["citation_map"] == []
-
-    def test_no_opened_chunks(self):
-        """No opened chunks → nothing to numberize."""
-        result = {
-            "answer_text": "Some text [abc123].",
-            "opened": [],
-        }
-
-        numberize_result(result)
-
-        assert result["citation_map"] == []
-        # answer_text unchanged since no chunks to match
-        assert "[abc123]" in result["answer_text"]
-
-    def test_missing_keys_handled(self):
-        """Result dict missing answer_text or opened → no crash."""
-        result = {}
-        numberize_result(result)
-        assert result["citation_map"] == []
-
-    def test_preserves_other_result_keys(self):
-        """Other keys in the result dict are not disturbed."""
-        result = {
-            "answer_text": "Fact [abc123].",
-            "opened": [_make_chunk("abc123")],
-            "tokens_in": 100,
-            "tokens_out": 50,
-            "web_citations": ["https://example.com"],
-            "error": None,
-        }
-
-        numberize_result(result)
-
-        assert result["tokens_in"] == 100
-        assert result["tokens_out"] == 50
-        assert result["web_citations"] == ["https://example.com"]
-        assert result["error"] is None
-
-
-# ------------------------------------------------------------------ #
 #  Backward compatibility with existing extract/validate               #
 # ------------------------------------------------------------------ #
 
@@ -383,20 +304,3 @@ class TestLLMSelfNumbering:
         assert cmap == []
         # Text is unchanged (no matches to replace)
         assert numbered == text
-
-    def test_numberize_result_empty_map_preserves_opened(self):
-        """When citation_map is empty, opened chunks are still in result."""
-        result = {
-            "answer_text": "Fact [1]. Fact [2].",
-            "opened": [
-                _make_chunk("abc123", "Article A"),
-                _make_chunk("def456", "Article B"),
-            ],
-        }
-
-        numberize_result(result)
-
-        # citation_map empty because [1], [2] don't match chunk IDs
-        assert result["citation_map"] == []
-        # But opened chunks are still there for the renderer to use
-        assert len(result["opened"]) == 2

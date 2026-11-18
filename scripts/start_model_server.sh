@@ -9,6 +9,8 @@
 # To swap models, change MODEL_FILE below (everything else stays the same).
 
 set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/runtime_env.sh"
+cd "$ATLAS_ROOT"
 
 # ── Model selection (change ONLY this line to swap models) ──────────────
 MODEL_FILE="Ministral-3-8B-Instruct-2512-Q4_K_M.gguf"
@@ -19,16 +21,18 @@ MODEL_FILE="Ministral-3-8B-Instruct-2512-Q4_K_M.gguf"
 # ────────────────────────────────────────────────────────────────────────
 
 # ── Server settings ─────────────────────────────────────────────────────
-MODEL_DIR="data/models"
+MODEL_DIR="${ATLAS_ROOT}/data/models"
 MODEL_PATH="${MODEL_DIR}/${MODEL_FILE}"
 HOST="127.0.0.1"
-PORT="8080"
+PORT="${LLM_PORT:-8080}"
+"$ATLAS_PYTHON" -B "$ATLAS_ROOT/scripts/runtime_guard.py" --host "$HOST" --port "$PORT" --free-port
 
 # ── Performance tuning (Metal / Apple Silicon) ──────────────────────────
 N_GPU_LAYERS=-1       # -1 = offload every layer to Metal GPU
 CONTEXT_SIZE=8192     # 8k is snappy; raise to 16384 if you need longer context
 # ────────────────────────────────────────────────────────────────────────
 
+llama-server --version
 echo "Starting llama.cpp server..."
 echo "  Model : ${MODEL_FILE}"
 echo "  Path  : ${MODEL_PATH}"
@@ -41,13 +45,7 @@ echo ""
 if [ ! -f "$MODEL_PATH" ]; then
     echo "❌  Model file not found: $MODEL_PATH"
     echo ""
-    echo "Download it with:"
-    echo "  curl -L -o ${MODEL_PATH} \\"
-    echo "    https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/resolve/main/${MODEL_FILE}"
-    echo ""
-    echo "Or via huggingface-cli:"
-    echo "  huggingface-cli download mistralai/Ministral-3-8B-Instruct-2512-GGUF ${MODEL_FILE} \\"
-    echo "    --local-dir ${MODEL_DIR} --local-dir-use-symlinks False"
+    echo "Provision the GGUF during explicit online setup; see docs/dev/setup.md."
     exit 1
 fi
 
@@ -63,8 +61,10 @@ fi
 echo "Press Ctrl+C to stop"
 echo ""
 
-llama-server \
+exec llama-server \
     --model "$MODEL_PATH" \
+    --alias ministral-3-8b-instruct \
+    --parallel 1 \
     --host "$HOST" \
     --port "$PORT" \
     --n-gpu-layers "$N_GPU_LAYERS" \

@@ -1,53 +1,7 @@
-"""
-Supervisor graph: hierarchical / multi-agent routing structure.
+"""Compose the private graph for the single research application.
 
-Routes incoming questions to the best specialist subgraph:
-
-- **local_rag** — Wikipedia RAG (search → open → answer)
-- **web_research** — web search-first path
-- **timeline_research** — researcher graph with timeline + citation validation
-- **math** — calculator tool for arithmetic questions
-
-**Day 11 addition**: task decomposition.  When ``decomposer.enabled``
-is ``True`` in config, the graph inserts a decompose-check node
-before routing.  Multi-part questions are split into sub-questions
-that run through the RAG pipeline in parallel, then synthesised.
-
-Routing logic lives in ``workbench.graphs.routing`` (heuristic rules
-+ LLM fallback).  Decomposition logic lives in
-``workbench.graphs.decomposer``.  This module contains only the
-LangGraph node factories, the graph builder, and the observability runner.
-
-Topology (simple question — unchanged)::
-
-    rewrite_query → decompose_check ──[simple]──→ route_question ──→ [subgraph] → merge → END
-
-Topology (multi-part question)::
-
-    rewrite_query → decompose_check ──[decomposed]──→ parallel_retrieve → synthesise → merge → END
-
-Usage::
-
-    graph = build_supervisor_graph(
-        search_tool=search_tool,
-        open_chunk_tool=open_chunk_tool,
-        model=llm,
-        web_search_tool=web_search_tool,
-        calculator_tool=calculator_tool,
-        decomposer_enabled=True,
-    )
-    result = graph.invoke({"question": "When did WW1 start and end?"})
-
-Usage (multi-turn chat)::
-
-    result = graph.invoke({
-        "question": "What about that war — when did it start and end?",
-        "chat_history": [
-            {"role": "user", "content": "Tell me about WW1"},
-            {"role": "assistant", "content": "World War I was ..."},
-        ],
-        "conversation_summary": "Discussing World War I.",
-    })
+Supervisor is the orchestration role, not a persona. Scheduler slots do not
+control inference: independent shared gates admit one worker/model/accelerator.
 """
 
 from __future__ import annotations
@@ -55,958 +9,286 @@ from __future__ import annotations
 import time
 from typing import Any
 
+from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, StateGraph
+from langgraph.types import Send
 
-from workbench.graphs.base_state import SupervisorState
-from workbench.graphs.decomposer import (  # ← NEW (Day 11)
-    decompose_dispatcher,
-    make_decompose_node,
-    make_parallel_retrieve_node,
-    make_synthesise_node,
+from workbench.core.offline import validate_environment
+from workbench.graphs.base_state import (
+    ApplicationInput,
+    ApplicationOutput,
+    ApplicationState,
+    application_state,
 )
-from workbench.graphs.routing import (
-    DEFAULT_ROUTE,
-    ROUTE_AMBIGUOUS,
-    ROUTE_LOCAL_RAG,
-    ROUTE_MATH,
-    ROUTE_TIMELINE,
-    ROUTE_WEB_RESEARCH,
-    heuristic_route,
-    llm_route,
+from workbench.graphs.execution import (
+    _WORKER,
+    AdmittedModel,
+    AdmittedRetriever,
+    TaskContext,
 )
-from workbench.observability.tracing import add_span_attributes, start_span
+from workbench.graphs.planning import normalize, plan
+from workbench.graphs.research_models import (
+    ApplicationResult,
+    Limits,
+    Notice,
+    ResearchPlan,
+    ResearchResult,
+    ResearchTask,
+    StageError,
+    ValidationReport,
+    WorkerInput,
+)
+from workbench.graphs.researcher_graph import build_evidence_worker
+from workbench.graphs.synthesis import aggregate, finalize, synthesize, validate_draft
+from workbench.observability.tracing import add_span_event, start_span
 
-# ------------------------------------------------------------------ #
-#  Node factories                                                     #
-# ------------------------------------------------------------------ #
+
+def _execution(config):
+    return config["configurable"]["atlas_execution"]
 
 
-def _make_rewrite_query_node(
-    model: Any,
-    prompt_builder: Any | None,
-    generation_settings: dict[str, Any] | None,
-) -> Any:
-    """
-    Create the query rewrite node for multi-turn conversations.  ← NEW (Day 11)
-
-    Runs BEFORE decompose_check so the decomposer sees a resolved
-    standalone query (not a pronoun-heavy follow-up).
-
-    Re-uses the same logic as ``rag_graph._make_rewrite_query_node``
-    but placed at the supervisor level so it happens exactly once.
-    """
-    from workbench.prompting.prompt_builder import format_conversation_context
-
-    gen_settings = {
-        **(generation_settings or {}),
-        "temperature": 0.1,
-        "max_tokens": 100,
-    }
-
-    _FALLBACK_REWRITE = (
-        "Rewrite the following question as a standalone search query, "
-        "resolving any pronouns or references using the conversation context. "
-        "Output ONLY the rewritten query.\n\n"
-        "{conversation_context}\n"
-        "Latest question: {question}\n\n"
-        "Standalone query:"
+def _message(execution, outcome, code, text):
+    return ApplicationResult(
+        run_id=execution.run_id,
+        outcome=outcome,
+        delivery="message",
+        answer_text=text,
+        warnings=(Notice(code=code, message=text),),
+        error=StageError(stage="application", code=code, message=text)
+        if outcome == "failed"
+        else None,
     )
-
-    def rewrite_query_node(state: SupervisorState) -> dict[str, Any]:
-        chat_history = state.get("chat_history") or []
-        conversation_summary = state.get("conversation_summary", "")
-        question = state["question"]
-
-        # No history → skip rewrite
-        if not chat_history:
-            return {"rewritten_query": question}
-
-        with start_span(
-            "graph.supervisor.rewrite_query",
-            attributes={
-                "question": question[:200],
-                "chat_turns": len(chat_history),
-            },
-        ):
-            try:
-                conversation_context = format_conversation_context(
-                    chat_history=chat_history,
-                    conversation_summary=conversation_summary,
-                )
-
-                if prompt_builder is not None:
-                    try:
-                        user_prompt = prompt_builder.render(
-                            "chat_query_rewrite",
-                            question=question,
-                            conversation_context=conversation_context,
-                        )
-                    except FileNotFoundError:
-                        user_prompt = _FALLBACK_REWRITE.format(
-                            question=question,
-                            conversation_context=conversation_context,
-                        )
-                else:
-                    user_prompt = _FALLBACK_REWRITE.format(
-                        question=question,
-                        conversation_context=conversation_context,
-                    )
-
-                messages = [{"role": "user", "content": user_prompt}]
-                response = model.generate(messages, **gen_settings)
-
-                rewritten = response.text.strip()
-                if not rewritten or len(rewritten) > 300:
-                    rewritten = question
-
-                add_span_attributes(
-                    {
-                        "rewritten_query": rewritten[:200],
-                        "original_question": question[:200],
-                    }
-                )
-                return {"rewritten_query": rewritten}
-
-            except Exception:
-                return {"rewritten_query": question}
-
-    return rewrite_query_node
-
-
-def _make_route_node(
-    model: Any | None,
-    routing_mode: str = "hybrid",
-    generation_settings: dict[str, Any] | None = None,
-) -> Any:
-    """
-    Create the routing node.
-
-    Classifies the question and writes the route + metadata into state.
-    Delegates to ``heuristic_route`` and ``llm_route`` from the
-    ``routing`` subpackage.
-
-    CHANGED (Day 11): Uses ``rewritten_query`` when available so routing
-    works correctly with chat context.
-    """
-
-    def route_node(state: SupervisorState) -> dict[str, Any]:
-        # ← CHANGED: prefer rewritten query for routing accuracy
-        question = state.get("rewritten_query") or state["question"]
-
-        with start_span(
-            "graph.supervisor.route",
-            attributes={"question": question[:200], "routing_mode": routing_mode},
-        ):
-            t0 = time.time()
-
-            if routing_mode == "llm_only" and model is not None:
-                route, confidence = llm_route(question, model, generation_settings)
-                method = "llm"
-                rationale = f"LLM-only mode selected route={route}"
-
-            elif routing_mode == "heuristic_only":
-                route, confidence = heuristic_route(question)
-                method = "heuristic"
-                if route == ROUTE_AMBIGUOUS:
-                    route = DEFAULT_ROUTE
-                    confidence = 0.3
-                rationale = f"Heuristic selected route={route}"
-
-            else:
-                # --- Hybrid: heuristic first, LLM fallback ---------------
-                route, confidence = heuristic_route(question)
-                method = "heuristic"
-                rationale = f"Heuristic selected route={route} (conf={confidence:.2f})"
-
-                if route == ROUTE_AMBIGUOUS and model is not None:
-                    route, confidence = llm_route(question, model, generation_settings)
-                    method = "llm"
-                    rationale = f"Heuristic was ambiguous; LLM selected route={route}"
-                elif route == ROUTE_AMBIGUOUS:
-                    route = DEFAULT_ROUTE
-                    confidence = 0.2
-                    rationale = "Heuristic ambiguous, no LLM available; defaulting"
-
-            latency_ms = (time.time() - t0) * 1000
-
-            add_span_attributes(
-                {
-                    "route": route,
-                    "router_method": method,
-                    "router_confidence": confidence,
-                    "router_latency_ms": latency_ms,
-                }
-            )
-
-            return {
-                "route": route,
-                "router_method": method,
-                "router_confidence": confidence,
-                "router_rationale": rationale,
-                "router_latency_ms": latency_ms,
-            }
-
-    return route_node
-
-
-def _route_dispatcher(state: SupervisorState) -> str:
-    """Read the route from state and return the matching node name."""
-    dispatch = {
-        ROUTE_LOCAL_RAG: "run_local_rag",
-        ROUTE_WEB_RESEARCH: "run_web_research",
-        ROUTE_TIMELINE: "run_timeline_research",
-        ROUTE_MATH: "run_math",
-    }
-    return dispatch.get(state.get("route", DEFAULT_ROUTE), "run_local_rag")
-
-
-# ------------------------------------------------------------------ #
-#  Subgraph nodes                                                     #
-# ------------------------------------------------------------------ #
-
-
-def _make_local_rag_node(rag_subgraph: Any) -> Any:
-    """Invoke the compiled rag_graph as a subgraph."""
-
-    def run_local_rag(state: SupervisorState) -> dict[str, Any]:
-        question = state["question"]
-
-        with start_span(
-            "graph.supervisor.local_rag",
-            attributes={"question": question[:200]},
-        ):
-            try:
-                # ← CHANGED (Day 11): pass rewritten_query so the
-                # rag_subgraph's rewrite_query node can skip redundant work
-                sub_input: dict[str, Any] = {
-                    "question": state.get("rewritten_query") or question,
-                }
-                if "search_top_k" in state:
-                    sub_input["search_top_k"] = state["search_top_k"]
-                if "open_top_n" in state:
-                    sub_input["open_top_n"] = state["open_top_n"]
-                # Pass chat context so rag_graph answer node can use it
-                if state.get("chat_history"):
-                    sub_input["chat_history"] = state["chat_history"]
-                if state.get("conversation_summary"):
-                    sub_input["conversation_summary"] = state["conversation_summary"]
-
-                result = rag_subgraph.invoke(sub_input)
-
-                return {
-                    "retrieved": result.get("retrieved") or [],
-                    "opened": result.get("opened") or [],
-                    "answer_text": result.get("answer_text") or "",
-                    "citations": result.get("citations") or [],
-                    "web_citations": result.get("web_citations") or [],
-                    "web_search_used": result.get("web_search_used", False),
-                    "web_results": result.get("web_results") or [],
-                    "tokens_in": result.get("tokens_in") or 0,
-                    "tokens_out": result.get("tokens_out") or 0,
-                    "model_latency_ms": result.get("model_latency_ms") or 0.0,
-                    "prompt_meta": result.get("prompt_meta") or {},
-                    "subgraph_used": "rag_graph",
-                    "error": result.get("error"),
-                }
-
-            except Exception as exc:
-                return {
-                    "answer_text": "",
-                    "subgraph_used": "rag_graph",
-                    "error": f"local_rag subgraph: {type(exc).__name__}: {exc}",
-                }
-
-    return run_local_rag
-
-
-def _make_web_research_node(
-    web_search_tool: Any,
-    model: Any,
-    prompt_builder: Any | None,
-    generation_settings: dict[str, Any] | None,
-) -> Any:
-    """Run a web search then generate an answer from web results only."""
-    from workbench.graphs.rag_graph import extract_web_citations
-
-    gen_settings = generation_settings or {}
-
-    fallback_system = (
-        "You are a helpful research assistant.  Answer the user's question "
-        "using ONLY the web search results provided below.  Cite each source "
-        "by writing the URL in parentheses after the relevant claim.\n\n"
-        "If the results do not contain enough information, say so honestly."
-    )
-
-    def run_web_research(state: SupervisorState) -> dict[str, Any]:
-        # ← CHANGED (Day 11): prefer rewritten query
-        question = state.get("rewritten_query") or state["question"]
-
-        with start_span(
-            "graph.supervisor.web_research",
-            attributes={"question": question[:200]},
-        ):
-            try:
-                search_result = web_search_tool.execute(
-                    query=question,
-                    max_results=5,
-                )
-                web_results = search_result.get("results") or []
-
-                if not web_results:
-                    return {
-                        "answer_text": "Web search returned no results for this query.",
-                        "web_results": [],
-                        "web_search_used": True,
-                        "citations": [],
-                        "web_citations": [],
-                        "subgraph_used": "web_research",
-                        "tokens_in": 0,
-                        "tokens_out": 0,
-                        "model_latency_ms": 0.0,
-                        "prompt_meta": {},
-                    }
-
-                from workbench.graphs.rag_graph import _format_web_results
-
-                web_block = _format_web_results(web_results)
-                user_message = (
-                    f"Web search results:\n{web_block}\n\n"
-                    f"Question: {question}\n\n"
-                    "Answer using the web results above.  "
-                    "Cite sources by writing the URL in parentheses."
-                )
-                messages = [
-                    {"role": "system", "content": fallback_system},
-                    {"role": "user", "content": user_message},
-                ]
-
-                response = model.generate(messages, **gen_settings)
-
-                known_urls = [r.get("url", "") for r in web_results]
-                web_cites = extract_web_citations(response.text, known_urls)
-
-                add_span_attributes(
-                    {
-                        "web_results_count": len(web_results),
-                        "answer_length": len(response.text),
-                        "web_citation_count": len(web_cites),
-                    }
-                )
-
-                return {
-                    "answer_text": response.text,
-                    "web_results": web_results,
-                    "web_search_used": True,
-                    "citations": [],
-                    "web_citations": web_cites,
-                    "tokens_in": response.tokens_in,
-                    "tokens_out": response.tokens_out,
-                    "model_latency_ms": response.latency_ms,
-                    "prompt_meta": {"variant": "web_research", "template": "inline"},
-                    "subgraph_used": "web_research",
-                }
-
-            except Exception as exc:
-                return {
-                    "answer_text": "",
-                    "web_search_used": True,
-                    "subgraph_used": "web_research",
-                    "error": f"web_research: {type(exc).__name__}: {exc}",
-                }
-
-    return run_web_research
-
-
-def _make_timeline_research_node(researcher_subgraph: Any) -> Any:
-    """Invoke the compiled researcher_graph and merge its full state."""
-
-    def run_timeline_research(state: SupervisorState) -> dict[str, Any]:
-        question = state["question"]
-
-        with start_span(
-            "graph.supervisor.timeline_research",
-            attributes={"question": question[:200]},
-        ):
-            try:
-                sub_input: dict[str, Any] = {"question": question}
-                if "search_top_k" in state:
-                    sub_input["search_top_k"] = state["search_top_k"]
-                if "open_top_n" in state:
-                    sub_input["open_top_n"] = state["open_top_n"]
-
-                result = researcher_subgraph.invoke(sub_input)
-
-                return {
-                    "retrieved": result.get("retrieved") or [],
-                    "opened": result.get("opened") or [],
-                    "answer_text": result.get("answer_text") or "",
-                    "citations": result.get("citations") or [],
-                    "web_citations": result.get("web_citations") or [],
-                    "timeline": result.get("timeline") or [],
-                    "timeline_raw": result.get("timeline_raw") or "",
-                    "citation_validation": result.get("citation_validation") or {},
-                    "repair_attempts": result.get("repair_attempts") or 0,
-                    "tokens_in": result.get("tokens_in") or 0,
-                    "tokens_out": result.get("tokens_out") or 0,
-                    "model_latency_ms": result.get("model_latency_ms") or 0.0,
-                    "prompt_meta": result.get("prompt_meta") or {},
-                    "subgraph_used": "researcher_graph",
-                    "error": result.get("error"),
-                }
-
-            except Exception as exc:
-                return {
-                    "answer_text": "",
-                    "subgraph_used": "researcher_graph",
-                    "error": f"timeline_research subgraph: {type(exc).__name__}: {exc}",
-                }
-
-    return run_timeline_research
-
-
-def _make_math_node(
-    calculator_tool: Any,
-    model: Any | None,
-    generation_settings: dict[str, Any] | None,
-) -> Any:
-    """
-    Calculator node.
-
-    Tries direct evaluation first; falls back to LLM expression
-    extraction for word problems.
-    """
-    gen_settings = generation_settings or {}
-
-    _EXTRACT_MATH_PROMPT = (
-        "Extract the mathematical expression from the following question.  "
-        "Respond with ONLY the expression (no words, no equals sign).  "
-        "Use Python syntax: +, -, *, /, **, sqrt(), etc.\n\n"
-        "Question: {question}\n\nExpression:"
-    )
-
-    def run_math(state: SupervisorState) -> dict[str, Any]:
-        question = state["question"]
-
-        with start_span(
-            "graph.supervisor.math",
-            attributes={"question": question[:200]},
-        ):
-            try:
-                # Try direct evaluation first
-                q_stripped = question.strip().rstrip("?").rstrip("=").strip()
-                direct_result = calculator_tool.execute(expression=q_stripped)
-
-                if direct_result.get("result") is not None:
-                    answer = (
-                        f"{direct_result['expression']} = {direct_result['result']}"
-                    )
-                    add_span_attributes(
-                        {
-                            "math_method": "direct",
-                            "result": str(direct_result["result"]),
-                        }
-                    )
-                    return {
-                        "answer_text": answer,
-                        "calculator_result": direct_result,
-                        "citations": [],
-                        "web_citations": [],
-                        "tokens_in": 0,
-                        "tokens_out": 0,
-                        "model_latency_ms": 0.0,
-                        "prompt_meta": {"variant": "math_direct"},
-                        "subgraph_used": "calculator",
-                    }
-
-                # Direct eval failed — try LLM extraction
-                if model is not None:
-                    messages = [
-                        {
-                            "role": "user",
-                            "content": _EXTRACT_MATH_PROMPT.format(question=question),
-                        },
-                    ]
-                    extract_settings = {
-                        **gen_settings,
-                        "temperature": 0.0,
-                        "max_tokens": 100,
-                    }
-                    response = model.generate(messages, **extract_settings)
-                    extracted_expr = response.text.strip()
-
-                    calc_result = calculator_tool.execute(expression=extracted_expr)
-
-                    if calc_result.get("result") is not None:
-                        answer = (
-                            f'The answer to "{question}" is: '
-                            f"{calc_result['expression']} = {calc_result['result']}"
-                        )
-                    else:
-                        answer = (
-                            f'I tried to evaluate "{extracted_expr}" but got an error: '
-                            f"{calc_result.get('error', 'unknown error')}"
-                        )
-
-                    add_span_attributes(
-                        {
-                            "math_method": "llm_extract",
-                            "extracted_expression": extracted_expr[:200],
-                        }
-                    )
-
-                    return {
-                        "answer_text": answer,
-                        "calculator_result": calc_result,
-                        "citations": [],
-                        "web_citations": [],
-                        "tokens_in": response.tokens_in,
-                        "tokens_out": response.tokens_out,
-                        "model_latency_ms": response.latency_ms,
-                        "prompt_meta": {"variant": "math_llm_extract"},
-                        "subgraph_used": "calculator",
-                    }
-
-                # No model, direct eval failed
-                return {
-                    "answer_text": (
-                        f"Could not evaluate: {direct_result.get('error', 'unknown')}"
-                    ),
-                    "calculator_result": direct_result,
-                    "subgraph_used": "calculator",
-                    "tokens_in": 0,
-                    "tokens_out": 0,
-                    "model_latency_ms": 0.0,
-                    "prompt_meta": {"variant": "math_failed"},
-                }
-
-            except Exception as exc:
-                return {
-                    "answer_text": f"Math evaluation failed: {exc}",
-                    "subgraph_used": "calculator",
-                    "error": f"math_node: {type(exc).__name__}: {exc}",
-                }
-
-    return run_math
-
-
-def _make_merge_node() -> Any:
-    """
-    Final merge point: normalizes state before it reaches the caller.
-
-    LangGraph sets TypedDict fields to ``None`` when no node writes
-    them.  On the decomposed path, fields like ``route``, ``timeline``,
-    ``calculator_result`` etc. are never set and remain ``None``.
-    The display layer / runner then crashes iterating over ``None``.
-
-    This node converts every ``None`` to the appropriate empty default
-    so downstream code never sees ``None`` for list/str/int/float fields.
-    """
-
-    # Fields and their safe empty defaults
-    _LIST_FIELDS = (
-        "retrieved",
-        "opened",
-        "citations",
-        "web_citations",
-        "web_results",
-        "sub_questions",
-        "sub_results",
-        "timeline",
-        "chat_history",
-    )
-    _STR_FIELDS = (
-        "answer_text",
-        "rewritten_query",
-        "route",
-        "router_method",
-        "router_rationale",
-        "subgraph_used",
-        "timeline_raw",
-        "conversation_summary",
-    )
-    _INT_FIELDS = ("tokens_in", "tokens_out", "repair_attempts")
-    _FLOAT_FIELDS = (
-        "model_latency_ms",
-        "router_latency_ms",
-        "router_confidence",
-        "decompose_latency_ms",
-    )
-    _DICT_FIELDS = ("prompt_meta", "citation_validation", "calculator_result")
-    _BOOL_FIELDS = ("is_decomposed", "web_search_used")
-
-    def merge_node(state: SupervisorState) -> dict[str, Any]:
-        with start_span(
-            "graph.supervisor.merge",
-            attributes={
-                "route": state.get("route") or "n/a",
-                "subgraph_used": state.get("subgraph_used") or "n/a",
-                "has_answer": bool(state.get("answer_text")),
-                "is_decomposed": state.get("is_decomposed", False),
-            },
-        ):
-            updates: dict[str, Any] = {}
-
-            for key in _LIST_FIELDS:
-                if state.get(key) is None:
-                    updates[key] = []
-            for key in _STR_FIELDS:
-                if state.get(key) is None:
-                    updates[key] = ""
-            for key in _INT_FIELDS:
-                if state.get(key) is None:
-                    updates[key] = 0
-            for key in _FLOAT_FIELDS:
-                if state.get(key) is None:
-                    updates[key] = 0.0
-            for key in _DICT_FIELDS:
-                if state.get(key) is None:
-                    updates[key] = {}
-            for key in _BOOL_FIELDS:
-                if state.get(key) is None:
-                    updates[key] = False
-
-            return updates
-
-    return merge_node
-
-
-# ------------------------------------------------------------------ #
-#  Graph builder                                                      #
-# ------------------------------------------------------------------ #
 
 
 def build_supervisor_graph(
-    search_tool: Any,
-    open_chunk_tool: Any,
-    model: Any,
-    prompt_builder: Any | None = None,
-    generation_settings: dict[str, Any] | None = None,
-    open_top_n: int = 3,
-    search_top_k: int = 5,
-    web_search_tool: Any | None = None,
-    confidence_threshold: int = 2,
-    timeline_tool: Any | None = None,
-    calculator_tool: Any | None = None,
-    routing_mode: str = "hybrid",
-    decomposer_enabled: bool = True,  # ← NEW (Day 11)
-    decomposer_max_workers: int = 4,  # ← NEW (Day 11)
-) -> Any:
-    """
-    Build and compile the supervisor (hierarchical) graph.
-
-    Routes that lack required tools gracefully fall back to ``local_rag``.
-
-    Day 11 additions:
-        When ``decomposer_enabled=True``, the graph inserts a
-        decompose-check node before routing.  Multi-part questions
-        are split and run through the RAG pipeline in parallel.
-
-    Args:
-        search_tool:  SearchWikipediaTool or equivalent.
-        open_chunk_tool:  OpenChunkTool or equivalent.
-        model:  LanguageModel.
-        prompt_builder:  Optional ``PromptBuilder``.
-        generation_settings:  Extra kwargs for ``model.generate()``.
-        open_top_n:  Default chunks to open.
-        search_top_k:  Default chunks to retrieve.
-        web_search_tool:  Optional ``WebSearchTool``.
-        confidence_threshold:  For the RAG subgraph's web fallback.
-        timeline_tool:  Optional ``TimelineTool``.
-        calculator_tool:  Optional ``CalculatorTool``.
-        routing_mode:  ``"hybrid"`` | ``"heuristic_only"`` | ``"llm_only"``.
-        decomposer_enabled:  Enable/disable task decomposition.
-        decomposer_max_workers:  Max parallel sub-question threads.
-
-    Returns:
-        Compiled LangGraph ready for ``.invoke()`` and ``.stream()``.
-    """
-    # --- Build subgraphs ----------------------------------------------
-    from workbench.graphs.rag_graph import build_rag_graph
-
-    rag_subgraph = build_rag_graph(
-        search_tool=search_tool,
-        open_chunk_tool=open_chunk_tool,
-        model=model,
-        prompt_builder=prompt_builder,
-        generation_settings=generation_settings,
-        open_top_n=open_top_n,
-        search_top_k=search_top_k,
-        web_search_tool=web_search_tool,
-        confidence_threshold=confidence_threshold,
-    )
-
-    researcher_subgraph = None
-    if timeline_tool is not None:
-        from workbench.graphs.researcher_graph import build_researcher_graph
-
-        researcher_subgraph = build_researcher_graph(
-            search_tool=search_tool,
-            open_chunk_tool=open_chunk_tool,
-            timeline_tool=timeline_tool,
-            model=model,
-            prompt_builder=prompt_builder,
-            generation_settings=generation_settings,
-            open_top_n=open_top_n,
-            search_top_k=search_top_k,
-        )
-
-    # --- Build supervisor StateGraph ----------------------------------
-    builder: StateGraph = StateGraph(SupervisorState)
-
-    # ← NEW (Day 11): rewrite_query as the new entry point
-    builder.add_node(
-        "rewrite_query",
-        _make_rewrite_query_node(model, prompt_builder, generation_settings),
-    )
-
-    # ← NEW (Day 11): decompose_check after rewrite
-    builder.add_node(
-        "decompose_check",
-        make_decompose_node(
-            model=model,
-            prompt_builder=prompt_builder,
-            generation_settings=generation_settings,
-            enabled=decomposer_enabled,
-        ),
-    )
-
-    # ← NEW (Day 11): parallel retrieve + synthesise for decomposed questions
-    builder.add_node(
-        "parallel_retrieve",
-        make_parallel_retrieve_node(
-            rag_subgraph=rag_subgraph,
-            max_workers=decomposer_max_workers,
-        ),
-    )
-    builder.add_node(
-        "synthesise",
-        make_synthesise_node(
-            model=model,
-            prompt_builder=prompt_builder,
-            generation_settings=generation_settings,
-        ),
-    )
-
-    builder.add_node(
-        "route_question",
-        _make_route_node(model, routing_mode, generation_settings),
-    )
-    builder.add_node("run_local_rag", _make_local_rag_node(rag_subgraph))
-
-    if web_search_tool is not None:
-        builder.add_node(
-            "run_web_research",
-            _make_web_research_node(
-                web_search_tool,
-                model,
-                prompt_builder,
-                generation_settings,
-            ),
-        )
-
-    if researcher_subgraph is not None:
-        builder.add_node(
-            "run_timeline_research",
-            _make_timeline_research_node(researcher_subgraph),
-        )
-
-    if calculator_tool is not None:
-        builder.add_node(
-            "run_math",
-            _make_math_node(calculator_tool, model, generation_settings),
-        )
-
-    builder.add_node("merge", _make_merge_node())
-
-    # --- Wire edges ---------------------------------------------------
-    # ← CHANGED (Day 11): entry is now rewrite_query → decompose_check
-    builder.set_entry_point("rewrite_query")
-    builder.add_edge("rewrite_query", "decompose_check")
-
-    # ← NEW (Day 11): conditional split after decompose_check
-    decompose_dispatch_map: dict[str, str] = {
-        "parallel_retrieve": "parallel_retrieve",
-        "route_question": "route_question",
-    }
-    builder.add_conditional_edges(
-        "decompose_check",
-        decompose_dispatcher,
-        decompose_dispatch_map,
-    )
-
-    # Decomposed path → synthesise → merge
-    builder.add_edge("parallel_retrieve", "synthesise")
-    builder.add_edge("synthesise", "merge")
-
-    # Simple path → normal routing dispatch
-    dispatch_map: dict[str, str] = {"run_local_rag": "run_local_rag"}
-    if web_search_tool is not None:
-        dispatch_map["run_web_research"] = "run_web_research"
-    if researcher_subgraph is not None:
-        dispatch_map["run_timeline_research"] = "run_timeline_research"
-    if calculator_tool is not None:
-        dispatch_map["run_math"] = "run_math"
-
-    def safe_dispatcher(state: SupervisorState) -> str:
-        target = _route_dispatcher(state)
-        return target if target in dispatch_map else "run_local_rag"
-
-    builder.add_conditional_edges("route_question", safe_dispatcher, dispatch_map)
-
-    builder.add_edge("run_local_rag", "merge")
-    if web_search_tool is not None:
-        builder.add_edge("run_web_research", "merge")
-    if researcher_subgraph is not None:
-        builder.add_edge("run_timeline_research", "merge")
-    if calculator_tool is not None:
-        builder.add_edge("run_math", "merge")
-
-    builder.add_edge("merge", END)
-
-    return builder.compile()
-
-
-# ------------------------------------------------------------------ #
-#  Convenience runner (observability wrapper)                          #
-# ------------------------------------------------------------------ #
-
-
-def run_supervisor_graph(
-    graph: Any,
-    question: str,
-    config_snapshot: dict[str, Any] | None = None,
     *,
-    search_top_k: int | None = None,
-    open_top_n: int | None = None,
-    chat_history: list[dict[str, str]] | None = None,  # ← NEW (Day 11)
-    conversation_summary: str | None = None,  # ← NEW (Day 11)
-    run_type: str = "supervisor_graph",
-    service_name: str = "agentic-workbench-supervisor-graph",
-) -> SupervisorState:
-    """
-    Invoke the supervisor graph with full observability setup.
+    retriever: Any,
+    model: Any,
+    snapshot_id: str,
+    limits: Limits | None = None,
+    forced_single_task: bool = False,
+) -> Any:
+    """Internal composition; public execution belongs to systems.runner.Application."""
+    validate_environment()
+    limits = limits or Limits()
+    admitted_model = AdmittedModel(model)
+    worker = build_evidence_worker(
+        retriever=AdmittedRetriever(retriever),
+        model=admitted_model,
+        snapshot_id=snapshot_id,
+    )
 
-    Args:
-        graph:  Compiled supervisor graph.
-        question:  The user question.
-        config_snapshot:  Frozen config dict for the run record.
-        search_top_k:  Override the default search_top_k.
-        open_top_n:  Override the default open_top_n.
-        chat_history:  Recent conversation turns for multi-turn chat.
-        conversation_summary:  Rolling summary of older conversation.
-        run_type:  Run type label for the context.
-        service_name:  Service name for tracing.
+    def phase(name, fn):
+        def node(state, config: RunnableConfig):
+            execution = _execution(config)
+            execution.check()
+            with execution.bind(), start_span(name):
+                return fn(state, execution)
 
-    Returns:
-        Final ``SupervisorState`` dict.
-    """
-    from workbench.core.run_context import run_context
-    from workbench.observability.logging import get_logger
-    from workbench.observability.metrics import get_metrics_store
-    from workbench.observability.tracing import setup_tracing
+        return node
 
-    snapshot = config_snapshot or {}
-    setup_tracing(service_name=service_name)
-
-    with run_context(snapshot, run_type=run_type) as ctx:
-        logger = get_logger(run_id=ctx.run_id)
-        metrics = get_metrics_store()
-
-        logger.log_run_started(ctx.run_id, run_type, snapshot)
-        logger.log_query(question)
-
-        with start_span(
-            "supervisor_graph.run",
-            attributes={"question": question[:200]},
-        ):
-            t0 = time.time()
-
-            initial_state: dict[str, Any] = {"question": question}
-            if search_top_k is not None:
-                initial_state["search_top_k"] = search_top_k
-            if open_top_n is not None:
-                initial_state["open_top_n"] = open_top_n
-            # ← NEW (Day 11): pass chat context
-            if chat_history is not None:
-                initial_state["chat_history"] = chat_history
-            if conversation_summary is not None:
-                initial_state["conversation_summary"] = conversation_summary
-
-            result: SupervisorState = graph.invoke(initial_state)
-
-            total_ms = (time.time() - t0) * 1000
-
-        # --- Log results ----------------------------------------------
-        logger.log_event(
-            "supervisor_graph_completed",
-            {
-                "question": question[:200],
-                "rewritten_query": (result.get("rewritten_query") or "")[:200],
-                "route": result.get("route") or "unknown",
-                "router_method": result.get("router_method") or "unknown",
-                "router_confidence": result.get("router_confidence") or 0.0,
-                "router_rationale": result.get("router_rationale") or "",
-                "router_latency_ms": result.get("router_latency_ms") or 0.0,
-                "subgraph_used": result.get("subgraph_used") or "unknown",
-                "is_decomposed": result.get("is_decomposed", False),
-                "sub_question_count": len(result.get("sub_questions") or []),
-                "answer_length": len(result.get("answer_text") or ""),
-                "citation_count": len(result.get("citations") or []),
-                "web_citation_count": len(result.get("web_citations") or []),
-                "retrieved_count": len(result.get("retrieved") or []),
-                "opened_count": len(result.get("opened") or []),
-                "tokens_in": result.get("tokens_in") or 0,
-                "tokens_out": result.get("tokens_out") or 0,
-                "error": result.get("error"),
-                "total_ms": round(total_ms, 1),
+    def normalize_node(state, execution):
+        execution.emit("normalizing")
+        return dict(
+            **{
+                k: v
+                for k, v in application_state(state["input"]).items()
+                if k != "normalized_question"
             },
+            normalized_question=normalize(state["input"], admitted_model, limits),
         )
 
-        tokens_out = result.get("tokens_out") or 0
-        if tokens_out > 0:
-            logger.log_model_call(
-                model_name="local-model",
-                tokens_in=result.get("tokens_in") or 0,
-                tokens_out=tokens_out,
-                duration_ms=result.get("model_latency_ms") or 0.0,
-            )
-
-        # --- Record metrics -------------------------------------------
-        metrics.record_component_latency(
-            component_name="supervisor_graph.run",
-            duration_ms=total_ms,
-            component_type="graph",
+    def plan_node(state, execution):
+        execution.emit("planning")
+        proposal = plan(
+            state["input"], state["normalized_question"], admitted_model, limits
         )
-        metrics.record_component_latency(
-            component_name="supervisor_graph.router",
-            duration_ms=result.get("router_latency_ms") or 0.0,
-            component_type="router",
-        )
-        # ← NEW (Day 11): decomposer latency metric
-        if (result.get("decompose_latency_ms") or 0) > 0:
-            metrics.record_component_latency(
-                component_name="supervisor_graph.decomposer",
-                duration_ms=result.get("decompose_latency_ms") or 0.0,
-                component_type="decomposer",
+        if forced_single_task:
+            proposal = ResearchPlan(
+                tasks=(
+                    ResearchTask(
+                        task_id="t1",
+                        label="Research",
+                        question=state["normalized_question"].standalone_question,
+                        needs_timeline=any(t.needs_timeline for t in proposal.tasks),
+                    ),
+                )
             )
+        execution.emit("plan_ready")
+        return {"plan": proposal}
 
-        if tokens_out > 0:
-            metrics.record_model_tokens(
-                model_name="local-model",
-                tokens_in=result.get("tokens_in") or 0,
-                tokens_out=tokens_out,
-                duration_ms=result.get("model_latency_ms") or 0.0,
+    def dispatch(state):
+        add_span_event("dispatch", {"tasks": len(state["plan"].tasks)})
+        return [
+            Send(
+                "research_task",
+                {"input": WorkerInput(task=t, snapshot_id=snapshot_id, limits=limits)},
             )
+            for t in state["plan"].tasks
+        ]
 
-        if result.get("retrieved"):
-            metrics.record_retrieval(
-                final_count=len(result.get("opened") or []),
-                query=question,
-                keyword_candidates=len(result.get("retrieved") or []),
-                vector_candidates=len(result.get("retrieved") or []),
-                reranked=len(result.get("retrieved") or []),
-                duration_ms=total_ms,
+    def research_task(state, config: RunnableConfig):
+        execution = _execution(config)
+        value = WorkerInput.model_validate(state["input"])
+        try:
+            # Queue waits count toward the run deadline; task time starts at admission.
+            with execution.bind(), execution.admit(_WORKER):
+                task = TaskContext(
+                    execution.run_id,
+                    value.task.task_id,
+                    snapshot_id,
+                    time.monotonic() + limits.task_seconds,
+                )
+                with (
+                    execution.bind(task),
+                    start_span(
+                        "researcher.task",
+                        attributes={
+                            "run_id": task.run_id,
+                            "task_id": task.task_id,
+                            "snapshot_id": task.snapshot_id,
+                        },
+                    ),
+                ):
+                    execution.emit("task_started", task_id=task.task_id)
+                    output = worker.invoke({"input": value}, config=config)
+                    execution.check()
+                    result = ResearchResult.model_validate(output["result"])
+                    if (
+                        result.task_id != value.task.task_id
+                        or result.snapshot_id != snapshot_id
+                    ):
+                        raise ValueError("worker identity mismatch")
+        except (RuntimeError, ValueError, TimeoutError, OSError) as exc:
+            result = ResearchResult(
+                task_id=value.task.task_id,
+                snapshot_id=snapshot_id,
+                status="failed",
+                error=StageError(
+                    stage="research_task",
+                    code="task_failed",
+                    message=f"Task could not complete: {type(exc).__name__}.",
+                ),
             )
+        execution.emit("task_finished", task_id=value.task.task_id)
+        return {"results_by_task": {value.task.task_id: result}}
 
-        print(f"\nRun ID: {ctx.run_id}")
-        return result
+    def aggregate_node(state, execution):
+        try:
+            return {
+                "synthesis_packet": aggregate(
+                    state["input"],
+                    state["normalized_question"],
+                    state["plan"],
+                    state["results_by_task"],
+                    snapshot_id,
+                    limits,
+                )
+            }
+        except ValueError:
+            return {
+                "error": StageError(
+                    stage="aggregate",
+                    code="barrier_failed",
+                    message="Task barrier or evidence registry is inconsistent.",
+                )
+            }
+
+    def synthesize_node(state, execution, repair=False):
+        execution.emit("synthesizing")
+        try:
+            draft = synthesize(
+                state["synthesis_packet"],
+                admitted_model,
+                limits,
+                state["final_validation"].errors if repair else (),
+            )
+            return {"draft": draft, "repair_count": int(repair)}
+        except Exception:
+            return {
+                "draft": None,
+                "repair_count": int(repair),
+                "final_validation": ValidationReport(
+                    status="failed", errors=("Structured synthesis failed.",)
+                ),
+            }
+
+    def validate_node(state, execution):
+        execution.emit("validating")
+        return {
+            "final_validation": validate_draft(
+                state["synthesis_packet"], state["draft"]
+            )
+        }
+
+    def finalize_node(state, execution):
+        intent = state["normalized_question"]
+        if state.get("error"):
+            result = _message(
+                execution, "failed", state["error"].code, state["error"].message
+            )
+        elif intent.status in {"failed", "unresolved"}:
+            result = _message(
+                execution,
+                "failed" if intent.status == "failed" else "insufficient_evidence",
+                "rewrite_failed"
+                if intent.status == "failed"
+                else "ambiguous_reference",
+                "Contextual question normalization failed."
+                if intent.status == "failed"
+                else "Please clarify the unresolved reference in your question.",
+            )
+        else:
+            result = finalize(
+                state["synthesis_packet"],
+                state["draft"],
+                state["final_validation"],
+                execution,
+            )
+        return {"result": result}
+
+    graph = StateGraph(
+        ApplicationState, input_schema=ApplicationInput, output_schema=ApplicationOutput
+    )
+    for name, fn in [
+        ("normalize_question", normalize_node),
+        ("plan", plan_node),
+        ("aggregate", aggregate_node),
+        ("synthesize", synthesize_node),
+        ("validate_final", validate_node),
+        ("repair_synthesis", lambda s, e: synthesize_node(s, e, True)),
+        ("finalize", finalize_node),
+    ]:
+        graph.add_node(name, phase(name, fn))
+    graph.add_node("research_task", research_task)
+    graph.set_entry_point("normalize_question")
+    graph.add_conditional_edges(
+        "normalize_question",
+        lambda s: (
+            "plan"
+            if s["normalized_question"].status in {"identity", "resolved"}
+            else "finalize"
+        ),
+    )
+    graph.add_conditional_edges("plan", dispatch)
+    graph.add_edge("research_task", "aggregate")
+    graph.add_conditional_edges(
+        "aggregate",
+        lambda s: (
+            "synthesize"
+            if not s.get("error") and s["synthesis_packet"].admitted_finding_ids
+            else "finalize"
+        ),
+    )
+    graph.add_edge("synthesize", "validate_final")
+    graph.add_conditional_edges(
+        "validate_final",
+        lambda s: (
+            "repair_synthesis"
+            if s["final_validation"].status == "failed" and s["repair_count"] == 0
+            else "finalize"
+        ),
+    )
+    graph.add_edge("repair_synthesis", "validate_final")
+    graph.add_edge("finalize", END)
+    return graph.compile()

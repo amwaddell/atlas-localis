@@ -15,9 +15,9 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from workbench.retrieval.keyword_search import LanceDBKeywordSearcher
 
 from workbench.core.types import Query
+from workbench.retrieval.keyword_search import LanceDBKeywordSearcher
 
 # Five chunks with clearly distinct vocabulary.
 SAMPLE_CHUNKS = [
@@ -204,3 +204,6 @@ class TestKeywordSearchSmall:
         query = Query(text="is")
         results = keyword_searcher.search(query, top_k=2)
         assert len(results) <= 2
+
+
+pytestmark = pytest.mark.fixture_integration

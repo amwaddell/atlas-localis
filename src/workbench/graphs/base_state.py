@@ -1,138 +1,98 @@
-"""
-Shared state schemas for LangGraph-based RAG workflows.
-
-All graphs in this package use ``RAGState`` (or a superset of it)
-as their state type.  LangGraph nodes receive the full state dict
-and return a *partial* dict of fields to update.
-
-State schemas
--------------
-``RAGState``
-    Day 3: basic search → open → answer.
-    Day 5: adds optional web search fallback fields.
-    Day 9: adds multi-turn chat fields (chat_history,
-    conversation_summary, rewritten_query).
-
-``ResearcherState``
-    Day 4: extends RAGState with timeline extraction,
-    citation validation, and a repair loop.
-
-``SupervisorState``
-    Day 7: extends RAGState with routing metadata and
-    subgraph result aggregation for the supervisor graph.
-    Day 11: adds task decomposition fields for multi-part
-    question handling.
-
-Both use ``total=False`` so callers only need to provide ``question``
-at invoke time — the rest is populated by graph nodes.
-"""
+"""Private reducer-backed application and isolated worker channels."""
 
 from __future__ import annotations
 
-from typing import Any, TypedDict
+from typing import Annotated, TypedDict
+
+from workbench.graphs.research_models import (
+    AnswerDraft,
+    ApplicationResult,
+    ConversationInput,
+    Diagnostics,
+    EvidenceRecord,
+    Findings,
+    NormalizedIntent,
+    Notice,
+    ResearchPlan,
+    ResearchResult,
+    StageError,
+    SynthesisPacket,
+    ValidationReport,
+    WorkerInput,
+    merge_task_results,
+)
+from workbench.retrieval.hybrid import HydratedRetrieval
 
 
-class ChatMessage(TypedDict, total=False):
-    """A single turn in conversation history."""
-
-    role: str  # "user" or "assistant"
-    content: str
+class ApplicationInput(TypedDict):
+    input: ConversationInput
 
 
-class RAGState(TypedDict, total=False):
-    """
-    State schema for the basic RAG graph.
-
-    ``total=False`` means every field is optional in the TypedDict sense,
-    which lets callers pass only ``question`` at invoke time.  The graph
-    topology guarantees downstream nodes see the fields they need
-    (retrieve runs before open, open runs before answer).
-    """
-
-    # --- Input --------------------------------------------------------
-    question: str
-
-    # --- Multi-turn chat (Day 9) --------------------------------------
-    chat_history: list[ChatMessage]  # recent turns (user+assistant pairs)
-    conversation_summary: str  # rolling summary of older turns
-    rewritten_query: str  # standalone query after coreference resolution
-
-    # --- Retrieval control (overridable per-invoke) -------------------
-    search_top_k: int
-    open_top_n: int
-
-    # --- Retrieval output ---------------------------------------------
-    retrieved: list[dict[str, Any]]  # chunk summaries from search
-    opened: list[dict[str, Any]]  # full chunk data after open
-
-    # --- Web search fallback (Day 5) ----------------------------------
-    web_search_used: bool  # True if web search was triggered
-    web_results: list[dict[str, Any]]  # results from web search
-
-    # --- Answer -------------------------------------------------------
-    answer_text: str
-    citations: list[str]  # chunk_ids cited in the answer
-    web_citations: list[str]  # URLs cited from web search results
-
-    # --- Metadata -----------------------------------------------------
-    tokens_in: int
-    tokens_out: int
-    model_latency_ms: float
-    prompt_meta: dict[str, Any]  # template version, variant, etc.
-
-    # --- Error --------------------------------------------------------
-    error: str | None
+class ApplicationOutput(TypedDict):
+    result: ApplicationResult
 
 
-class ResearcherState(RAGState):
-    """
-    Extended state for the researcher graph.
-
-    Inherits every field from ``RAGState`` and adds timeline,
-    citation-validation, and repair-loop fields.
-    """
-
-    # --- Timeline (Day 4) --------------------------------------------
-    timeline: list[dict[str, Any]]  # parsed timeline items
-    timeline_raw: str  # raw model output for debugging
-
-    # --- Citation validation (Day 4) ---------------------------------
-    citation_validation: dict[str, Any]  # ValidationResult.to_dict()
-    repair_attempts: int
+class ApplicationState(TypedDict):
+    error: StageError | None
+    input: ConversationInput
+    normalized_question: NormalizedIntent | None
+    plan: ResearchPlan | None
+    results_by_task: Annotated[dict[str, ResearchResult], merge_task_results]
+    synthesis_packet: SynthesisPacket | None
+    draft: AnswerDraft | None
+    final_validation: ValidationReport
+    repair_count: int
+    result: ApplicationResult | None
 
 
-class SupervisorState(RAGState):
-    """
-    Extended state for the supervisor (hierarchical) graph.
+class WorkerChannels(TypedDict):
+    input: WorkerInput
 
-    Inherits every field from ``RAGState`` and adds routing metadata
-    and subgraph-specific result fields.  The supervisor routes
-    the question to one of several specialist subgraphs, then
-    merges the subgraph result back into this unified state.
-    """
 
-    # --- Routing (Day 7) ---------------------------------------------
-    route: str  # chosen route label: "local_rag", "web_research", etc.
-    router_method: str  # "heuristic" or "llm"
-    router_confidence: float  # 0.0–1.0 confidence in route choice
-    router_rationale: str  # short reason (for logs / debugging)
-    router_latency_ms: float  # time spent in the router node
+class WorkerOutput(TypedDict):
+    result: ResearchResult
 
-    # --- Subgraph results (Day 7) ------------------------------------
-    # Timeline fields (populated when researcher subgraph is used)
-    timeline: list[dict[str, Any]]
-    timeline_raw: str
-    citation_validation: dict[str, Any]
-    repair_attempts: int
 
-    # Calculator result (populated when math route is used)
-    calculator_result: dict[str, Any]
+class WorkerState(TypedDict):
+    input: WorkerInput
+    retrieval: HydratedRetrieval | None
+    packed_evidence: tuple[EvidenceRecord, ...]
+    findings_draft: Findings | None
+    validation: ValidationReport
+    repair_count: int
+    result: ResearchResult | None
+    error: StageError | None
+    warnings: tuple[Notice, ...]
+    diagnostics: Diagnostics
+    started: float
 
-    # Subgraph provenance
-    subgraph_used: str  # name of the subgraph that actually ran
 
-    # --- Task decomposition (Day 11) ---------------------------------
-    is_decomposed: bool  # True if question was split into sub-questions
-    sub_questions: list[str]  # extracted sub-questions (empty if not decomposed)
-    sub_results: list[dict[str, Any]]  # results from each sub-question retrieval
-    decompose_latency_ms: float  # time spent in the decompose node
+def application_state(value: ConversationInput) -> ApplicationState:
+    return ApplicationState(
+        error=None,
+        input=value,
+        normalized_question=None,
+        plan=None,
+        results_by_task={},
+        synthesis_packet=None,
+        draft=None,
+        final_validation=ValidationReport(),
+        repair_count=0,
+        result=None,
+    )
+
+
+def worker_state(value: WorkerInput) -> WorkerState:
+    return WorkerState(
+        input=value,
+        retrieval=None,
+        packed_evidence=(),
+        findings_draft=None,
+        validation=ValidationReport(),
+        repair_count=0,
+        result=None,
+        error=None,
+        warnings=(),
+        diagnostics=Diagnostics(),
+        started=0.0,
+    )

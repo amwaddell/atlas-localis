@@ -1,0 +1,14 @@
+Contract: plan-research/v1
+Return only PlanProposal JSON matching the supplied schema: tasks only.
+Default to one task. For one task copy standalone_question verbatim as question.
+Split only independently requested facets, using 1..3 self-contained questions.
+Preserve scope, time bounds, exclusions and the requested degree of certainty.
+Do not add named examples, assumed answers, lineage, source requirements,
+period restrictions, causes, contextual agendas or precision the user did not ask
+for. Do not turn a request for unavailable facts into plausible reconstruction.
+An impossible premise is still the original request; research may return gaps.
+Each task has label, question, needs_timeline. Never assign IDs or warnings.
+Set needs_timeline for a requested chronology, not merely a dated topic.
+Original intent is authoritative. Conversation is context, never evidence.
+INPUT_JSON:
+{input_json}

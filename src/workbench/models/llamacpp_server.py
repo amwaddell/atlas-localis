@@ -1,5 +1,5 @@
 """
-Adapter for llama-cpp-python's OpenAI-compatible server.
+Adapter for native Metal llama-server's local OpenAI-compatible API.
 
 Connects to a local llama.cpp server and implements the LanguageModel interface.
 """
@@ -9,6 +9,7 @@ from typing import Any
 
 import httpx
 
+from workbench.core.offline import local_url, validate_environment
 from workbench.core.registry import register_component
 from workbench.core.types import ModelResponse
 from workbench.models.errors import (
@@ -21,6 +22,7 @@ from workbench.models.language_model import (
     extract_settings,
     validate_messages,
 )
+from workbench.models.native_schema import native_schema
 from workbench.models.token_counting import count_tokens_from_usage, estimate_tokens
 from workbench.observability.logging import get_logger
 from workbench.observability.tracing import start_span
@@ -56,7 +58,8 @@ class LlamaCppServerModel:
             default_max_tokens: Default max tokens for generation
             **kwargs: Additional configuration (ignored)
         """
-        self.base_url = base_url.rstrip("/")
+        validate_environment()
+        self.base_url = local_url(base_url)
         self.model_name = model_name
         self.timeout_seconds = timeout_seconds
 
@@ -70,6 +73,8 @@ class LlamaCppServerModel:
         self.client = httpx.Client(
             base_url=self.base_url,
             timeout=timeout_seconds,
+            trust_env=False,
+            follow_redirects=False,
         )
 
         # Lazy logger initialization (only create when needed)
@@ -120,6 +125,11 @@ class LlamaCppServerModel:
 
         # Prepare request
         request_data = self._create_request(messages, gen_settings)
+        if settings.get("json_schema") is not None:
+            request_data["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {"schema": native_schema(settings["json_schema"])},
+            }
 
         # Execute with tracing
         with start_span(
@@ -132,25 +142,36 @@ class LlamaCppServerModel:
                 "messages.count": len(messages),
             },
         ):
-            return self._execute_request(request_data)
+            return self._execute_request(
+                request_data, request_timeout=settings.get("request_timeout")
+            )
+
+    def check_identity(self) -> None:
+        """Fail before model use if readiness or the configured served alias differs."""
+        health = self.client.get("/health")
+        health.raise_for_status()
+        if health.json().get("status") != "ok":
+            raise ModelResponseError("Native llama-server is not ready")
+        response = self.client.get("/v1/models")
+        response.raise_for_status()
+        if self.model_name not in {
+            m.get("id") for m in response.json().get("data", [])
+        }:
+            raise ModelResponseError("Native llama-server model identity mismatch")
+
+    def exact_token_count(self, text: str) -> int:
+        """Use the provisioned GGUF tokenizer; errors never fall back to estimates."""
+        response = self.client.post(
+            "/tokenize", json={"content": text, "add_special": False}
+        )
+        response.raise_for_status()
+        tokens = response.json()["tokens"]
+        if not isinstance(tokens, list) or any(type(t) is not int for t in tokens):
+            raise ModelResponseError("Invalid native tokenizer response")
+        return len(tokens)
 
     def count_tokens(self, text: str) -> int:
-        """
-        Count tokens in text.
-
-        For llama.cpp server, we use a simple estimation since
-        the server doesn't provide a dedicated tokenization endpoint.
-
-        Args:
-            text: Text to count tokens for
-
-        Returns:
-            Estimated token count
-
-        Note:
-            This is a rough estimate. For exact counts, you would need
-            to load the tokenizer separately or use the model's tokenizer.
-        """
+        """Protocol's cheap estimate; canonical request gates use exact_token_count."""
         return estimate_tokens(text)
 
     def _create_request(
@@ -186,7 +207,9 @@ class LlamaCppServerModel:
 
         return request
 
-    def _execute_request(self, request_data: dict[str, Any]) -> ModelResponse:
+    def _execute_request(
+        self, request_data: dict[str, Any], *, request_timeout: float | None = None
+    ) -> ModelResponse:
         """
         Execute the API request and parse response.
 
@@ -208,6 +231,9 @@ class LlamaCppServerModel:
             response = self.client.post(
                 "/v1/chat/completions",
                 json=request_data,
+                timeout=min(self.timeout_seconds, request_timeout)
+                if request_timeout is not None
+                else self.timeout_seconds,
             )
             response.raise_for_status()
 
@@ -246,6 +272,13 @@ class LlamaCppServerModel:
             ) from e
 
         except httpx.HTTPStatusError as e:
+            detail = ""
+            try:
+                native_error = e.response.json().get("error", {})
+                if isinstance(native_error, dict):
+                    detail = str(native_error.get("message", ""))[:300]
+            except (ValueError, AttributeError):
+                pass
             self._log_event(
                 "model_http_error",
                 {
@@ -256,6 +289,7 @@ class LlamaCppServerModel:
             )
             raise ModelResponseError(
                 f"Server returned error status: {e.response.status_code}"
+                + (f" ({detail})" if detail else "")
             ) from e
 
         except Exception as e:

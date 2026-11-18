@@ -1,0 +1,9 @@
+{
+  "identity": "simplewiki-20261001",
+  "url": "https://dumps.wikimedia.org/simplewiki/20261001/simplewiki-20261001-pages-articles.xml.bz2",
+  "size": 358258425,
+  "sha256": "2db94ff149adbbaf88efecb8f510a549eaa2a82d59df6278a4af88e13c1b99bd",
+  "publisher_sha1": "f55881650e447c39e8bdeba4b1bb8d5576342d4b",
+  "verification": "SHA-256 computed after publisher dumpstatus SHA-1 and size verification",
+  "license_reference": "https://dumps.wikimedia.org/legal.html"
+}

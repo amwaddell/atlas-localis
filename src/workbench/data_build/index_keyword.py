@@ -42,6 +42,14 @@ def build_keyword_index(
     Returns:
         Summary dict with keys: table_name, num_rows, duration_s.
     """
+    if (
+        "active" in db_path.parts
+        or db_path.is_symlink()
+        or (db_path.parent / "manifest.json").exists()
+    ):
+        raise ValueError(
+            "Existing active/sealed index is immutable; build a new snapshot"
+        )
     with start_span(
         "index.keyword.build",
         attributes={

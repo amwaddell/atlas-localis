@@ -100,7 +100,7 @@ def test_validate_messages_empty():
     """Test message validation with empty list."""
     try:
         validate_messages([])
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError as e:
         assert "cannot be empty" in str(e)
 
@@ -109,7 +109,7 @@ def test_validate_messages_missing_role():
     """Test message validation with missing role."""
     try:
         validate_messages([{"content": "Hello"}])
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError as e:
         assert "missing 'role'" in str(e)
 
@@ -118,7 +118,7 @@ def test_validate_messages_invalid_role():
     """Test message validation with invalid role."""
     try:
         validate_messages([{"role": "invalid", "content": "Hello"}])
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError as e:
         assert "invalid role" in str(e)
 
@@ -183,7 +183,7 @@ def test_llamacpp_server_init():
         model_name="test-model",
         timeout_seconds=30.0,
     )
-    assert model.base_url == "http://localhost:8080"
+    assert model.base_url == "http://127.0.0.1:8080"
     assert model.model_name == "test-model"
     assert model.timeout_seconds == 30.0
 
@@ -253,7 +253,7 @@ def test_llamacpp_server_parse_response_invalid():
 
     try:
         model._parse_response({"invalid": "data"}, latency_ms=0)
-        assert False, "Should have raised ModelResponseError"
+        raise AssertionError("Should have raised ModelResponseError")
     except ModelResponseError:
         pass
 
@@ -295,7 +295,7 @@ def test_llamacpp_server_generate_timeout(mock_post):
 
     try:
         model.generate(messages)
-        assert False, "Should have raised ModelTimeoutError"
+        raise AssertionError("Should have raised ModelTimeoutError")
     except ModelTimeoutError:
         pass
 
@@ -310,7 +310,7 @@ def test_llamacpp_server_generate_connection_error(mock_post):
 
     try:
         model.generate(messages)
-        assert False, "Should have raised ModelConnectionError"
+        raise AssertionError("Should have raised ModelConnectionError")
     except ModelConnectionError:
         pass
 
@@ -357,3 +357,56 @@ if __name__ == "__main__":
 
     if failed > 0:
         exit(1)
+
+
+def test_structured_schema_reaches_native_request_and_fences_still_fail():
+    """Regression: the real native model fenced JSON with prompt-only schemas."""
+    import json
+
+    import pytest
+    from pydantic import ValidationError
+
+    from workbench.graphs.research_models import PlanProposal
+    from workbench.models.structured_json import generate_validated_json
+
+    payload = {
+        "tasks": [{"label": "Research", "question": "When?", "needs_timeline": True}]
+    }
+    model = LlamaCppServerModel()
+    requests = []
+
+    def respond(request):
+        requests.append(json.loads(request.content))
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {
+                        "message": {
+                            "content": "```json\n" + json.dumps(payload) + "\n```"
+                        },
+                        "finish_reason": "stop",
+                    }
+                ],
+                "usage": {"prompt_tokens": 10, "completion_tokens": 20},
+            },
+        )
+
+    model.client.close()
+    model.client = httpx.Client(
+        base_url=model.base_url, transport=httpx.MockTransport(respond)
+    )
+    try:
+        with pytest.raises(ValidationError, match="Invalid JSON"):
+            generate_validated_json(
+                model, [{"role": "user", "content": "When?"}], PlanProposal
+            )
+        assert len(requests) == 1
+        from workbench.models.native_schema import native_schema
+
+        assert requests[0]["response_format"] == {
+            "type": "json_schema",
+            "json_schema": {"schema": native_schema(PlanProposal.model_json_schema())},
+        }
+    finally:
+        model.close()

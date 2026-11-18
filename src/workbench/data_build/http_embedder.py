@@ -1,5 +1,5 @@
 """
-HTTP embedding client for remote embedding servers (Infinity / TEI / OpenAI-compatible).
+HTTP embedding client for local embedding servers (Infinity / TEI / OpenAI-compatible).
 
 Sends texts to a ``embeddings`` endpoint and returns vectors.
 Handles E5-style prefixes client-side, just like the local
@@ -29,6 +29,7 @@ from typing import Any
 
 import httpx
 
+from workbench.core.offline import local_url, validate_environment
 from workbench.observability.tracing import add_span_attributes, start_span
 
 # Models that use the E5 "query: " / "passage: " prefix convention.
@@ -43,7 +44,7 @@ def _is_e5_model(model_name: str) -> bool:
 
 class HTTPEmbedder:
     """
-    Embedding client that calls a remote ``embeddings`` endpoint.
+    Embedding client that calls a local ``embeddings`` endpoint.
 
     Compatible with Infinity, TEI, and any OpenAI-compatible embedding
     server.  Satisfies the ``Embedder`` protocol.
@@ -69,10 +70,13 @@ class HTTPEmbedder:
         query_prefix: str | None = None,
         passage_prefix: str | None = None,
     ) -> None:
-        self.base_url = base_url.rstrip("/")
+        validate_environment()
+        self.base_url = local_url(base_url)
         self.model_name = model_name
         self.batch_size = batch_size
-        self._client = httpx.Client(timeout=timeout_seconds)
+        self._client = httpx.Client(
+            timeout=timeout_seconds, trust_env=False, follow_redirects=False
+        )
 
         # --- Auto-detect E5 prefixes (same logic as local embedder) ---
         if query_prefix is not None:

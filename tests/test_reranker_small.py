@@ -9,9 +9,9 @@ match the expected schema.
 from __future__ import annotations
 
 import pytest
-from workbench.retrieval.rerankers import CrossEncoderReranker
 
 from workbench.core.types import Chunk, Query
+from workbench.retrieval.rerankers import CrossEncoderReranker
 
 # Three candidates: one highly relevant, one tangential, one irrelevant.
 QUERY = Query(text="How do plants convert sunlight into energy?")
@@ -126,3 +126,6 @@ class TestCrossEncoderReranker:
         result_ids = {r.chunk_id for r in results}
         expected_ids = {c.chunk_id for c in CANDIDATES}
         assert result_ids == expected_ids
+
+
+pytestmark = pytest.mark.acceptance

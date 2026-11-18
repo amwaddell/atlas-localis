@@ -1,5 +1,5 @@
 """
-HTTP reranker client for remote reranking servers (Infinity / TEI / Jina).
+HTTP reranker client for local reranking servers (Infinity / TEI / Jina).
 
 Sends (query, documents) to a ``/rerank`` endpoint and returns
 scored results sorted by relevance.
@@ -28,13 +28,14 @@ from typing import Any
 
 import httpx
 
+from workbench.core.offline import local_url, validate_environment
 from workbench.core.types import Chunk, Query, RerankResult
 from workbench.observability.tracing import add_span_attributes, start_span
 
 
 class HTTPReranker:
     """
-    Reranker client that calls a remote ``/rerank`` endpoint.
+    Reranker client that calls a local ``/rerank`` endpoint.
 
     Compatible with Infinity, TEI, and Jina-style reranking APIs.
     Satisfies the ``Reranker`` protocol.
@@ -52,9 +53,12 @@ class HTTPReranker:
         model_name: str = "BAAI/bge-reranker-v2-m3",
         timeout_seconds: float = 60,
     ) -> None:
-        self.base_url = base_url.rstrip("/")
+        validate_environment()
+        self.base_url = local_url(base_url)
         self.model_name = model_name
-        self._client = httpx.Client(timeout=timeout_seconds)
+        self._client = httpx.Client(
+            timeout=timeout_seconds, trust_env=False, follow_redirects=False
+        )
 
     # ------------------------------------------------------------------ #
     #  Health check                                                       #
@@ -79,7 +83,7 @@ class HTTPReranker:
         top_n: int = 5,
     ) -> list[RerankResult]:
         """
-        Rerank candidate chunks by sending them to the remote server.
+        Rerank candidate chunks by sending them to the local server.
 
         Args:
             query: Query object.

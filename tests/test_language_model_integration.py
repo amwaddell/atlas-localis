@@ -1,12 +1,14 @@
 """
 Integration tests for language model with actual server.
 
-These tests require a running llama-cpp-python server.
-Run with: python -m pytest tests/test_language_model_integration.py -m integration
+These tests require a running native llama.cpp server.
+Run with: python -m pytest tests/test_language_model_integration.py -o addopts='' -m acceptance
 
 To run the server:
     bash scripts/start_model_server.sh
 """
+
+import os
 
 import pytest
 
@@ -15,29 +17,7 @@ from workbench.models.llamacpp_server import LlamaCppServerModel
 from workbench.observability.tracing import setup_tracing
 
 # Mark all tests in this module as integration tests
-pytestmark = pytest.mark.integration
-
-
-def _server_is_reachable(base_url: str = "http://localhost:8080") -> bool:
-    """Check if the model server is reachable."""
-    try:
-        import httpx
-
-        response = httpx.get(f"{base_url}/v1/models", timeout=2.0)
-        return response.status_code == 200
-    except Exception:
-        return False
-
-
-# Auto-skip entire module if model server is not running
-if not _server_is_reachable():
-    pytestmark = [
-        pytestmark,
-        pytest.mark.skip(
-            reason="Model server not running at localhost:8080. "
-            "Start with: bash scripts/start_model_server.sh"
-        ),
-    ]
+pytestmark = pytest.mark.acceptance
 
 
 @pytest.fixture(scope="module")
@@ -50,7 +30,11 @@ def setup_observability():
 @pytest.fixture(scope="module")
 def config():
     """Load configuration."""
-    return load_config()
+    config = load_config()
+    config.model["base_url"] = os.environ.get(
+        "ATLAS_ACCEPTANCE_ENDPOINT", config.model["base_url"]
+    )
+    return config
 
 
 @pytest.fixture(scope="module")
@@ -238,6 +222,6 @@ if __name__ == "__main__":
     print("  bash scripts/start_model_server.sh")
     print("\nThen run:")
     print(
-        "  python -m pytest tests/test_language_model_integration.py -m integration -v"
+        "  python -m pytest tests/test_language_model_integration.py -o addopts='' -m acceptance -v"
     )
     print("=" * 70)

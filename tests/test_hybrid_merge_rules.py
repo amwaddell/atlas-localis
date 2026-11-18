@@ -8,9 +8,8 @@ the expected ordering.
 
 from __future__ import annotations
 
-from workbench.retrieval.hybrid import reciprocal_rank_fusion
-
 from workbench.core.types import RetrievalResult
+from workbench.retrieval.hybrid import reciprocal_rank_fusion
 
 
 def _make_result(chunk_id: str, score: float, source: str) -> RetrievalResult:

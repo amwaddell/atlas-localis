@@ -1,23 +1,56 @@
 [project]
-name = "agentic-workbench"
+name = "atlas-localis"
 version = "0.0.0"
-requires-python = ">=3.11"
-description = "Agentic Workbench"
+requires-python = ">=3.12,<3.13"
+description = "Offline historical research on Apple Silicon"
 readme = "README.md"
 
+dependencies = [
+    "pydantic==2.12.5",
+    "pyyaml==6.0.3",
+    "httpx==0.28.1",
+    "requests==2.32.5",
+    "opentelemetry-api==1.39.1",
+    "opentelemetry-sdk==1.39.1",
+    "opentelemetry-exporter-otlp==1.39.1",
+    "lancedb==0.29.2",
+    "pyarrow==23.0.0",
+    "pandas==2.3.3",
+    "sentence-transformers==3.4.1",
+    "numpy==1.26.4",
+    "tqdm==4.67.3",
+    "langgraph==1.0.9",
+    "langchain-core==1.2.15",
+    "langchain==1.2.10",
+    "streamlit==1.54.0",
+    "torch==2.8.0",
+    "transformers==4.57.6",
+    "huggingface-hub==0.36.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.0.2", "ruff==0.15.0"]
+phoenix = ["arize-phoenix==12.35.0", "arize-phoenix-otel==0.14.0", "openinference-instrumentation-langchain==0.1.59"]
+
 [build-system]
-requires = ["setuptools>=45", "wheel"]
+requires = ["setuptools==82.0.0", "wheel==0.46.3"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"workbench.evaluation" = ["data/*.json"]
+"workbench.prompting" = ["templates/*.txt"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q -m 'not integration'"
+addopts = "-q --strict-markers -m 'not acceptance and not integration'"
 pythonpath = ["src", "."]
 markers = [
-    "integration: marks tests as integration tests (require external services like model server)",
+    "integration: legacy external-service tests (excluded by default)",
+    "acceptance: explicit provisioned Apple Silicon real-model checks; missing assets fail",
+    "fixture_integration: model-free local Arrow/LanceDB/graph/process integration",
 ]
 filterwarnings = [
     "error::DeprecationWarning",

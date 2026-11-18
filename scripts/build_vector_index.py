@@ -3,12 +3,12 @@
 Build the LanceDB vector index from chunks.parquet.
 
 Usage:
-    python scripts/build_vector_index.py
+    python scripts/build_vector_index.py --db-path /tmp/new-fixture/lancedb
 
     # With custom paths:
     python scripts/build_vector_index.py \
         --chunks data/processed/chunks.parquet \
-        --db-path data/indexes/active/lancedb \
+        --db-path /tmp/new-fixture/lancedb \
         --batch-size 64
 
     # Force local embedder (even if config says http):
@@ -36,9 +36,9 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from workbench.core.config import load_config
-from workbench.data_build.index_vector import build_vector_index
-from workbench.observability.tracing import setup_tracing
+from workbench.core.config import load_config  # noqa: E402
+from workbench.data_build.index_vector import build_vector_index  # noqa: E402
+from workbench.observability.tracing import setup_tracing  # noqa: E402
 
 
 def main() -> None:
@@ -53,7 +53,7 @@ def main() -> None:
         "--db-path",
         type=Path,
         default=None,
-        help="LanceDB database directory (default: from config)",
+        help="Fresh fixture destination; active/existing destinations are refused",
     )
     parser.add_argument(
         "--batch-size",
@@ -150,8 +150,8 @@ def main() -> None:
         chunks_path=args.chunks,
         db_path=db_path,
         embedder=embedder,
-        embed_batch_size=512,
-        write_batch_size=512,
+        embed_batch_size=min(batch_size, 256),
+        write_batch_size=min(batch_size, 256),
     )
 
     # --- Print summary ---
