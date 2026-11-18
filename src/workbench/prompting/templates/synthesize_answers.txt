@@ -3,9 +3,10 @@ question.  Each part was researched separately.  Your job is to
 combine the sub-answers into a single coherent response.
 
 CITATION RULES:
-1. Preserve ALL citations exactly as they appear (e.g. [chunk_id]).
-2. If multiple chunks support a claim, cite all of them: [chunk_a][chunk_b].
-3. Do NOT invent new citations — only use those present in the sub-answers.
+1. Preserve ALL citations as short labels exactly as they appear (e.g. [REF_A1]).
+2. If multiple chunks support a claim, cite all of them: [REF_A1][REF_B1].
+3. Do NOT invent new citations — only use the REF labels in the sub-answers.
+4. Do NOT use numeric markers like [1] or raw chunk IDs. Place each label after its claim.
 
 STRUCTURE:
 - Write a unified, paragraph-based answer — not a list of separate answers.

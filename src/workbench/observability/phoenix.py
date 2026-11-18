@@ -2,10 +2,13 @@
 Arize Phoenix integration for trace visualization.
 
 Phoenix is a local trace viewer that runs on port 6006.
-Start it with: phoenix serve
+Start it with: bash scripts/run_phoenix.sh
 """
 
 import os
+
+from workbench.core.local_http import LocalSession
+from workbench.core.offline import local_url, validate_environment
 
 # Use stub if OpenTelemetry is not installed
 try:
@@ -26,7 +29,8 @@ def get_phoenix_endpoint() -> str:
     Returns:
         Phoenix endpoint URL
     """
-    return os.getenv("PHOENIX_ENDPOINT", "http://localhost:6006/v1/traces")
+    validate_environment()
+    return local_url(os.getenv("PHOENIX_ENDPOINT", "http://127.0.0.1:6006/v1/traces"))
 
 
 def setup_phoenix_tracing(
@@ -57,8 +61,11 @@ def setup_phoenix_tracing(
     if endpoint is None:
         endpoint = get_phoenix_endpoint()
 
+    validate_environment()
+    endpoint = local_url(endpoint)
+
     # Create OTLP exporter pointing to Phoenix
-    exporter = OTLPSpanExporter(endpoint=endpoint)
+    exporter = OTLPSpanExporter(endpoint=endpoint, session=LocalSession())
 
     # Setup tracing with Phoenix exporter
     tracer = setup_tracing(
@@ -86,12 +93,16 @@ def is_phoenix_available(endpoint: str | None = None) -> bool:
     if endpoint is None:
         endpoint = get_phoenix_endpoint()
 
+    validate_environment()
+    endpoint = local_url(endpoint)
     try:
         import httpx
 
         # Try to connect to Phoenix base URL
         base_url = endpoint.replace("/v1/traces", "")
-        response = httpx.get(base_url, timeout=2.0)
+        response = httpx.get(
+            base_url, timeout=2.0, trust_env=False, follow_redirects=False
+        )
         return response.status_code == 200
     except Exception:
         return False
@@ -107,11 +118,11 @@ def phoenix_instructions() -> str:
     return """
 To start Phoenix locally:
 
-1. Install Phoenix:
+1. During explicit setup, install Phoenix:
    pip install arize-phoenix arize-phoenix-otel
 
 2. Start the server:
-   phoenix serve
+   bash scripts/run_phoenix.sh
 
 3. Open browser to:
    http://localhost:6006

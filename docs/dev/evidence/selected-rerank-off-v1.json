@@ -1,0 +1,3110 @@
+{
+  "format": 1,
+  "metadata": {
+    "format": 1,
+    "command": [
+      "scripts/run_researcher_eval.py",
+      "--question-id",
+      "f01,c01",
+      "--rerank",
+      "off",
+      "--owned-native",
+      "--output",
+      "runs/reports/stage5-rerank-off-v1"
+    ],
+    "commit": "a5e491df9558ccbc8b849a916470ccf8d50110db",
+    "dirty": true,
+    "source_sha256": {
+      "configs/artifacts/models.json": "1eb083a5923f63c65da512a5ec714f7c5cfe55dc129856da3665dd827d32b22f",
+      "configs/artifacts/native.json": "d29d69bd91c38efd8e76c79542f649e3504c8c4a4c627575794f75ebe71439c1",
+      "configs/artifacts/wikipedia.json": "6f938b00f46080b0730aeec7d64a3d2e9bc2cc6d5bfb35ed1a97389125e949fa",
+      "configs/defaults.yaml": "55ef18ab3e5ddbf201f6cf3f5cebef86e6b4a53cb915d2e83afc2731484bd3f3",
+      "locks/ci-py312.txt": "20a83cd670e506645a307e65e3560c089ee11371a3d3794df68ac5901af11512",
+      "locks/dev-macos-arm64-py312.txt": "63e2615068162c56128bf1d6ba24397f904aeb2961573d92c220f4d5a36944e1",
+      "locks/phoenix-macos-arm64-py312.txt": "9447c260620a91faa988d206e241ffe1fcc112b3243b1a5b012cfdc8df7e1998",
+      "locks/runtime-macos-arm64-py312.txt": "ac22bf33c6b3f7c1eab504bc8f95fadbf44deeff674343f3413675d0a52aedc0",
+      "scripts/build_chunks.py": "0dc7acb578df44cebf4380253df197dc028378b7f11c54535b8d1d092e94b7b4",
+      "scripts/build_keyword_index.py": "dc99ebc2552814b4a4eefc7defc114c2c277da6674386cf26ff28ce80ff87779",
+      "scripts/build_vector_index.py": "8a6d6a0cb4b4377e9aeca4b420b9048b3842d20b439c281742dfea8e712a9d97",
+      "scripts/generate_locks.py": "bbb777b29e7a4cde85630e916618e8046b39a2a32e866ce4075edafcd01d88e7",
+      "scripts/langgraph_smoke.py": "9a160714986af2f210207fed613e458cde4e7730d8842c98cbef7405a0942d08",
+      "scripts/map_architecture.py": "896b0a6e0b7c1d63d1cce014f71ddae6170575357ccc88bdcf2cc22ff537d31b",
+      "scripts/native_runtime.py": "fb473830647fe19afe3f328e3b35f3b67e8d4147de3cc8892d836b2ec5dc309e",
+      "scripts/preflight.py": "68a6a96cb7beca534de0d4e0b56d00fadfd210f41bd3ee2b6a0bd5768b9045b4",
+      "scripts/probe_local_runtime.py": "54ba1b2dd9767ab09cfedd343234764647a11e07ab7054c8431ba5a479448b47",
+      "scripts/probe_provisioning.py": "a575b976acf0b003c890498ed707acba76c8b8e3609ab047cd3efa199682dcc4",
+      "scripts/provision.py": "905224b7c43dc0f295b10ac18d7f8b568ea93b8409a2e1d68e3a9cb390aa0f93",
+      "scripts/run_agent_chat.py": "c8a945af6e73d5029206678a2060921141b85fb97435f551ff230bd7a45f1054",
+      "scripts/run_ingest_wikipedia.py": "3d15ddac7620bf9cb419e15fc9bb12f5af9c9b986dd5dd2e65743c633040b6eb",
+      "scripts/run_researcher_eval.py": "94255bf89bf7c9b17b162ff80d135e1c448d4a5dff569258fbbc0c67bef6f27e",
+      "scripts/run_tests.py": "6704533fa507f81c9ba3eb16694973998ce935f44b5ef8d1eb9e0497e665839a",
+      "scripts/runtime_guard.py": "918d517ee3515f26e186b2d15df7f67987e4841255d80f3fbc8d4102e155ec71",
+      "scripts/smoke.py": "672fa86832a5e0c501838eacf6d3c5857d62a42e864a0bfa1accc648fdff6da4",
+      "scripts/trace_smoke_test.py": "78c8f82fd32a503d29a8d847dfacb412399124e53daba33d459df16a25b2d98e",
+      "src/workbench/__init__.py": "d32fb09cac6d610b3bebd3e5a4f2da7032e98bb8176f19ebe92de3dc3160577f",
+      "src/workbench/agents/__init__.py": "1c83c1a4b709c6bf503802baa0a084a18f201662fc223b9e4fbefb2ac1990113",
+      "src/workbench/agents/state.py": "b3669c8e7afb73e0c3f38e29bcbb2a2c93aa57e522c8ceb99afe8a962ab55406",
+      "src/workbench/core/__init__.py": "35855ce9cb0563012df4243b0b2aee1eb588251c0135887b1d904096f159ada0",
+      "src/workbench/core/config.py": "1e88191a7ef699547d7a6eba74b4293d6af6f4202dcf89bc70bdbba60cb17d5d",
+      "src/workbench/core/interfaces.py": "28adb754cb42f6c9af8868ac06067c440b292f4c1cff049fc66b8c6d1c99ea02",
+      "src/workbench/core/local_http.py": "f01c354808e1848780d5ae020f96793f778d6b8423de5b74aa94b0a1de523d82",
+      "src/workbench/core/offline.py": "38ab9469c18f26bdc7598e62ef4862a1cb0f30f54a623991529283f960853b63",
+      "src/workbench/core/registry.py": "c6f42fa9d9eca722e4b6466380790222d738aaf593560ce50dcf1eaeae9b1c14",
+      "src/workbench/core/run_context.py": "131b2093752cc80f7cfe24dc4b4376eaf432059bb6f2ff5af1af2cb490120838",
+      "src/workbench/core/types.py": "9e4ca593411e25e982e14f31afd075be593744dad4c11635be5a6363b1a875a6",
+      "src/workbench/data_build/__init__.py": "5b76095c3c19bd707f273b2e6c6da9d29fc0b8ef158f4b2e3a96daab0339b0e5",
+      "src/workbench/data_build/acquisition.py": "4a838cf14aeb29cacca82857f921640fc1382cda4a0e1a542f252e60a0f10357",
+      "src/workbench/data_build/chunking.py": "8b108c94c492a974cbd9e36c02e3c4b5cedc5c6a5f5b204807fa7ebbe94b5633",
+      "src/workbench/data_build/embeddings.py": "6801a2226aae13557545acf322bfe05b653a4b0f9878ba01599cfc62facb04a6",
+      "src/workbench/data_build/http_embedder.py": "e532cfefc34c7bdad83a0f7d0ee19730acb4536009e10561dc6613c3ba2a2513",
+      "src/workbench/data_build/index_keyword.py": "ce1d73415d562d39503d42a5db088a717df161fc61aa901fd6cc0475932ed8c2",
+      "src/workbench/data_build/index_vector.py": "1a7aaecaf084d52ac4129c822c0f753a4b27d6e0df235451aa15dbe7817da1cc",
+      "src/workbench/data_build/ingest_wikipedia.py": "5315f21662fc869304c1c1f98cc87a217be5521a1b7ee1795a472411803e18d0",
+      "src/workbench/data_build/lifecycle.py": "5d68f77f3b0fb944e9b957f33f99d6c88a60ffc46b61e0438d93f703eb547e92",
+      "src/workbench/data_build/manifests.py": "5ed20fd853d37c3d9c60d5cf03e7cb6c900a8c3af12cc533c457e804ca0a6e67",
+      "src/workbench/data_build/pipeline.py": "31c65ae6569604476619028322f748a9ea50feeefa3be4dfda23974abc605771",
+      "src/workbench/data_build/provisioning.py": "f86c4c1d139f18b2f7dbb3d42d10eda11d43f6e8a79d7efec63396c602204e09",
+      "src/workbench/data_build/snapshots.py": "f81b2de6971b837ba6d7917eed194e2d3e4bab1ec57780735611af5e79f8214b",
+      "src/workbench/evaluation/__init__.py": "d4757b4e89526232ecd34c81dd32d3201d6e28c499c0b7f73e43affa200db7c7",
+      "src/workbench/evaluation/benchmark.py": "8fb1ef98d2b338d31b5f8a325514b787f4abacf80d192e28e8975f20b9fbdd7b",
+      "src/workbench/evaluation/data/history-rubric-v1.json": "8f2d545368886d4f2b395181081e00ce479d50f40d3ad9bd450e698abdcc81dc",
+      "src/workbench/evaluation/data/history-v1.json": "ba592ffcc563a2f0ecba114b5970c0911fcc07926e370d9e61249dc79d7a2171",
+      "src/workbench/evaluation/datasets.py": "1400f58e2e616870a54d78dd246ff180206cdf5c292e151d088472a7ebe2e62f",
+      "src/workbench/evaluation/measures.py": "9de698b1a4d8a8820b51fa671953349aa0e8ee6ebb5ecb5c4643a37d830184a5",
+      "src/workbench/evaluation/reports.py": "1f7e9c7c9d47564223f345318a44e74c1d14ebe0373c187a6e5dfd6191fd59cd",
+      "src/workbench/evaluation/suite.py": "ebf1e99533f2b1c6a7685ff44d5805ed628d790aae7c23a13deef577a2bf4d04",
+      "src/workbench/evaluation/summarize.py": "ec518ec95818aa21e855e340f9c5a1697f20304f6c1773dd6d96c41dd5e19af5",
+      "src/workbench/graphs/__init__.py": "768c467898e5c0908eed56644248dc56bb390fdbcc54429f70267f53e0e1adb6",
+      "src/workbench/graphs/base_state.py": "b8ee00b78b13f278033738c533de079c7e97edc6b51e25e92ab904367f8e724c",
+      "src/workbench/graphs/execution.py": "252e915cb0f5ba75213d264a6b1fad9a36c647394733a82a7e319c6dfb883bd4",
+      "src/workbench/graphs/finding_dates.py": "4055d71447becb6f5ba004fc10fef40a91ba91bce7d4218ec9c6e003f52c69ec",
+      "src/workbench/graphs/planning.py": "fc1d41576bb7344036c0947aa89477e11708cc76c06892987c2d1b5634147582",
+      "src/workbench/graphs/research_models.py": "ef339271b6a5be00d6395559cb0e3fc76b784d80bfb6e76113694f13f48ad630",
+      "src/workbench/graphs/researcher_graph.py": "08301b909ff699219b15a990a21900989c1255681be896f2361a591c77c3a607",
+      "src/workbench/graphs/supervisor_graph.py": "e961a8c5a557c03851a277d7f04789b66f221d8457f445efeb5283151d981c50",
+      "src/workbench/graphs/synthesis.py": "618dd7e6b4d3c7ec5902020856edd13fc2d73bfac72e24cb28ed17d74219cae8",
+      "src/workbench/models/__init__.py": "3af3a159be413e3bb26c4c0ee4f6e4fecb7fa77c0e2a7ce6cf01ea093630cb2c",
+      "src/workbench/models/errors.py": "fbefded1f17e184e320a974ebab760b19f527bd95c2ddc14c75b4b48710b246d",
+      "src/workbench/models/language_model.py": "dee062981a003c170373463cd1b0761d86dce96b8536b2d3e126ead26e1af881",
+      "src/workbench/models/llamacpp_server.py": "bbf58f184d4a020f896e3906224f689c886db1969f7aa24fe65b4402fa33ef5e",
+      "src/workbench/models/local_inference.py": "b44afbfc0e5d2397910e12fa25667adcb6f2b6924c1dfac3f435de1f3bdfd0f6",
+      "src/workbench/models/native_process.py": "166f6abe3ec9cc20eba76afee3e8bf1d7b9a7b71102b4c308591310f23f1b205",
+      "src/workbench/models/structured_json.py": "45e4645672cbbf087d9bffd4973ef2256dfe79d2f7dc33e24203df63e9df9bc3",
+      "src/workbench/models/token_counting.py": "839c994949de33f06cee204a50723484ca7a318985384ff30fb45f5dc7131558",
+      "src/workbench/observability/__init__.py": "5c40ae330269ce6b02f0aa1fc48cd0af281e58578b1bcd9856ff3da2d2aee1c4",
+      "src/workbench/observability/lifecycle.py": "cb66272e3ab6fa1a77f922e5b07ff28526132266ca7316aaac9aa46d42df6479",
+      "src/workbench/observability/logging.py": "4ba5bfc5635e1d0d07f4f94f2b1066e387e6f1217d0afa793704bf3a4ba2f3fa",
+      "src/workbench/observability/metrics.py": "d0fb5e074b6494dea186f902d1a7668300374e8caf9f865c2f62852993747134",
+      "src/workbench/observability/otel_stub.py": "9b3afc2487bf77ce05a57fc00270402901dd55852f0082d8f92aa431ca7f204d",
+      "src/workbench/observability/phoenix.py": "7f93e16ef28128b92444b3e2c40a1e91845d59747066f6fe0ffe87b9c530b2a5",
+      "src/workbench/observability/tracing.py": "63d193e5f7abcc5a96d14e388f6e3c9cec13182ba8c48994c9966427952b17c6",
+      "src/workbench/prompting/__init__.py": "f081e9e0cebdd624ac7ecd9d5d4acf05e11b6d14b0192da8f9ec13a1e56bc55b",
+      "src/workbench/prompting/citations.py": "f24edee37ee702e0ee9909c335c554f5eb8363a72abf185f0654f54aac8a4511",
+      "src/workbench/prompting/prompt_builder.py": "cb73efbe4ba68038e4e3ce5a00b797ef59b0b8c47ecfb54fc9f8bdefb2fe3c34",
+      "src/workbench/prompting/templates/answer_with_citations.txt": "04bdced659157eb8c70bd69c20165a329afc231c00af458203e577ccd42d072a",
+      "src/workbench/prompting/templates/chat_answer_with_citations.txt": "78b13e144c33ecd305bcc552781cd226ab25a21c6e58a01f3eea841b3268aa32",
+      "src/workbench/prompting/templates/chat_query_rewrite.txt": "71a04f5ebbf51a6aaa2b1a3dbbed9518c89dfccc0d3a2bb8dd9e18d71142a428",
+      "src/workbench/prompting/templates/decompose_question.txt": "ae27200616ee0d7f2df4c66be49e88c00a6290b79c7c913168950a3a2cb593c8",
+      "src/workbench/prompting/templates/derive_findings_v1.txt": "3764b3e0cbc85dfdf0672ff3e54adb0202ba32d70dec96f8cde4dd1100146c38",
+      "src/workbench/prompting/templates/evidence_summary.txt": "49c39169b9aadd197176c114f1fe6cbdaa6f877e489c29c7a2ea9facca76575e",
+      "src/workbench/prompting/templates/normalize_intent_v1.txt": "963b0b01fdcbc16bcc08e4d6793e6a6e466ba741013d9e122f4b3728212fe532",
+      "src/workbench/prompting/templates/plan_research_v1.txt": "c96bd3eda623b560b0821298097a14adbef7dbc2f8868661703c2f64a8d66e72",
+      "src/workbench/prompting/templates/query_rewrite.txt": "a1e6dc985638f26375bf03dd77a05bc3197d9f1f0c3b0427e8ccb564fd0cc6c7",
+      "src/workbench/prompting/templates/synthesize_answers.txt": "1e3ceef336a84c3c313110f7b277d544187f7f5517bd2227f39e6753daf123bb",
+      "src/workbench/prompting/templates/synthesize_findings_v1.txt": "f74172685d56ac1921085b36c9aabb72731ae61f165831a1501200a3def57901",
+      "src/workbench/retrieval/__init__.py": "13503322d22fda6315a1d57ceab880260ef4d15092ddac461078b3fbdc352341",
+      "src/workbench/retrieval/context_builder.py": "43c64181696f547a6546254d00ed72e8ef6ee14b35a5945231bb6cf4f0bd8074",
+      "src/workbench/retrieval/evidence_packing.py": "302511b440709b57563919730f925e9cfab90e612039fb86d40452bf5b33f57c",
+      "src/workbench/retrieval/http_reranker.py": "53f5d3a32beb8ca7ea0b18af35ab468f21a3dcf910e1b2633df2fdd9df95b714",
+      "src/workbench/retrieval/hybrid.py": "1836c866e8d8f423044b0ba880252c88bb3c035f2024067f884db2c0884cc394",
+      "src/workbench/retrieval/keyword_search.py": "3b971c7308423582bd52f44062a1594d4082d335fbf52d4207207cede2ac3ffb",
+      "src/workbench/retrieval/rerankers.py": "3797eccfed78e44c4200dd9cd0c2ab2ae6767a09cb39d100f030e61c97da5cc8",
+      "src/workbench/retrieval/vector_search.py": "db6a03ed2d3f6090144067c890aa36c8ee7baa51983abf2b3ea5724e69b06da0",
+      "src/workbench/stores/__init__.py": "4a69b119ae865d073cd17ea81ebd67113dfc6c3ce985a141bf2d999a3c9cf48e",
+      "src/workbench/stores/chunk_store.py": "1ff0cd5708202af855e1c049b19d0e3560d7bc845e956fad9984a8e8874bf747",
+      "src/workbench/systems/__init__.py": "e86b813cf4dec4bf0eaf3f4398f1111d16a33c7568bca0400fdda97e4a78028b",
+      "src/workbench/systems/presentation.py": "d483efcb4b0f6bb7a8bb3b652ff1b3318f751ef1002c20ce27ab429c76126a45",
+      "src/workbench/systems/runner.py": "bb8508f9e713b5997c4090fed101ae819c7b3b690169379fb6d807daf6c657f5",
+      "src/workbench/tools/__init__.py": "39d133bfe33b93a983bbad6a04b95248fb0ae17a62019e8152f934d439918aef",
+      "src/workbench/tools/base.py": "02df6fd9d3cbb8cedbfa09c5d719cb7a3e1b2b0d6856061f3b8172634607e522",
+      "src/workbench/tools/open_chunk.py": "7748e433919cb085c5d739707f180cd1b1e0fa400b5fef389591d1e7e96a02f4",
+      "src/workbench/tools/search_wikipedia.py": "2bee87b356f1d7b921ed18e97f687ca5471ba1508e3897ad3cd5213e4371089d",
+      "src/workbench/tools/utility/__init__.py": "28c957d437a7ea23b3338bd1cb0cb2d4591717e10930a87f48b6eaf26d209cac",
+      "src/workbench/tools/utility/dates.py": "d3d8f054801874b1be3182c52e16f514b8162f9f624005ae290ef856d7729215",
+      "src/workbench/ui/__init__.py": "61a5a6b1d2d0d2a4fc500ef873c0e30fa034e2696df77c909673ae93a6e0d152",
+      "src/workbench/ui/chat_state.py": "b7acba5ba2fa2ba9b6c596eb56106690fd5fcbd6fcde6df3094791834f499868",
+      "src/workbench/ui/components.py": "b347e71e1349056f55b83b3ab6854e85733581878a6d4161cef15f42384cb1d1",
+      "src/workbench/ui/graph_runner.py": "71a2269ac3ad2120c43f05e2c13559b2192c5956a17902d8a23be9c8a76e3194",
+      "src/workbench/ui/renderers.py": "e574fb68b52553c883e10a2d9edaefe625acf900f7c62190b90985fdd6b3ef92",
+      "src/workbench/ui/streamlit_app.py": "eed5f7c09dcecb7ad807671ce01d89bbbea0025d607204b3e2795fd5f88fddd3"
+    },
+    "config": {
+      "model": {
+        "provider": "llamacpp_server",
+        "base_url": "http://127.0.0.1:8080",
+        "model_name": "ministral-3-8b-instruct",
+        "temperature": 0.7,
+        "max_tokens": 2048,
+        "timeout_seconds": 60
+      },
+      "embeddings": {
+        "provider": "local",
+        "model_name": "intfloat/multilingual-e5-base",
+        "batch_size": 4,
+        "device": "mps"
+      },
+      "retrieval": {
+        "strategy": "hybrid",
+        "keyword_top_k": 20,
+        "vector_top_k": 20,
+        "merge_top_n": 50,
+        "rrf_k": 60,
+        "final_top_k": 5
+      },
+      "reranking": {
+        "enabled": true,
+        "provider": "cross_encoder",
+        "model_name": "BAAI/bge-reranker-v2-m3",
+        "device": "mps",
+        "batch_size": 1,
+        "max_length": 8192
+      },
+      "chunking": {
+        "strategy": "paragraph_aware",
+        "target_size": 1000,
+        "max_size": 1500,
+        "min_chunk_size": 100
+      },
+      "paths": {
+        "data_dir": "./data",
+        "raw_data": "./data/raw",
+        "processed_data": "./data/processed",
+        "indexes_dir": "./data/indexes",
+        "active_index": "./data/indexes/active",
+        "index_snapshots": "./data/indexes/snapshots"
+      },
+      "runs": {
+        "output_dir": "runs/reports/stage5-rerank-off-v1",
+        "logs_dir": "runs/reports/stage5-rerank-off-v1/logs",
+        "traces_dir": "./runs/traces",
+        "reports_dir": "./runs/reports"
+      },
+      "observability": {
+        "enable_tracing": true,
+        "enable_metrics": false,
+        "phoenix_endpoint": "http://127.0.0.1:6006",
+        "log_level": "INFO"
+      },
+      "context": {
+        "prompt_tokens": 6000,
+        "output_tokens": 1200,
+        "max_chunks_per_doc": 3
+      }
+    },
+    "suite_version": "history-v1",
+    "suite_sha256": "23c69b1c2db25d90a96820bfc9ab8555df27bd8765b2ab8714d2cac782a0f4f3",
+    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+    "corpus_provenance": "Legacy owner index, Lance version 843; dump date/revision unknown. No migration/conversion performed.",
+    "models_manifest": {
+      "format": 1,
+      "models": [
+        {
+          "id": "intfloat/multilingual-e5-base",
+          "revision": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+          "license": "mit",
+          "license_reference": "https://huggingface.co/intfloat/multilingual-e5-base/blob/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/README.md",
+          "files": {
+            "1_Pooling/config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/1_Pooling/config.json",
+              "sha256": "f586ab6c734af7b8d14d898bfa7faa886f23b46f86dd1730514309893af13d75",
+              "size": 200,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "README.md": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/README.md",
+              "sha256": "9d129cb0b912b55c7b5378f976a9c35ae4796c80466b659ad63930d8ca090fca",
+              "size": 179345,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/config.json",
+              "sha256": "9dab198f24c8c0879e481cf7822005d5ecbceedbacb390ffafa594e28d31bac4",
+              "size": 694,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "model.safetensors": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/model.safetensors",
+              "sha256": "a18a44fad1d0b46ded15928144138cff1135d5cc8233bdd90be5f18822de09a7",
+              "size": 1112201288,
+              "verification": "publisher-lfs-sha256"
+            },
+            "modules.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/modules.json",
+              "sha256": "c6e29747481e8b5dd2b58401966aeac910de39092f90cda9a704b1545f902b04",
+              "size": 387,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "sentence_bert_config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/sentence_bert_config.json",
+              "sha256": "948201d8329907aae938fa62f9ceeed53f5694dacc2b87b9f3b78b37ee986529",
+              "size": 57,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "sentencepiece.bpe.model": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/sentencepiece.bpe.model",
+              "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+              "size": 5069051,
+              "verification": "publisher-lfs-sha256"
+            },
+            "special_tokens_map.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/special_tokens_map.json",
+              "sha256": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f",
+              "size": 280,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "tokenizer.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/tokenizer.json",
+              "sha256": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626",
+              "size": 17082660,
+              "verification": "publisher-lfs-sha256"
+            },
+            "tokenizer_config.json": {
+              "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/tokenizer_config.json",
+              "sha256": "efb5c0d09722e5fe59a462cd2a9976ee216d55b037597d997cd3fe833216da15",
+              "size": 418,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            }
+          }
+        },
+        {
+          "id": "BAAI/bge-reranker-v2-m3",
+          "revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+          "license": "apache-2.0",
+          "license_reference": "https://huggingface.co/BAAI/bge-reranker-v2-m3/blob/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/README.md",
+          "files": {
+            "README.md": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/README.md",
+              "sha256": "c887aa6dd2598f908bf0582ca7068cc816585c7a1b6a07df305b631ede0cb174",
+              "size": 17229,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "config.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/config.json",
+              "sha256": "13dcd6c31d9fec9d1d8e158702072f62d7fa7d312a64b9fe057bec9a08cfe41a",
+              "size": 795,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "model.safetensors": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/model.safetensors",
+              "sha256": "d9e3e081faff1eefb84019509b2f5558fd74c1a05a2c7db22f74174fcedb5286",
+              "size": 2271071852,
+              "verification": "publisher-lfs-sha256"
+            },
+            "sentencepiece.bpe.model": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/sentencepiece.bpe.model",
+              "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+              "size": 5069051,
+              "verification": "publisher-lfs-sha256"
+            },
+            "special_tokens_map.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/special_tokens_map.json",
+              "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+              "size": 964,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            },
+            "tokenizer.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/tokenizer.json",
+              "sha256": "69564b696052886ed0ac63fa393e928384e0f8caada38c1f4864a9bfbf379c15",
+              "size": 17098273,
+              "verification": "publisher-lfs-sha256"
+            },
+            "tokenizer_config.json": {
+              "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/tokenizer_config.json",
+              "sha256": "7e4c1cc848840aeccdd763458c18dd525eb0f795c992e00ebe9c28554e7db2d4",
+              "size": 1173,
+              "verification": "publisher-git-blob-verified-local-sha256"
+            }
+          }
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+          "revision": "0102285ad796bd99af90f58de616092e5630e970",
+          "license": "apache-2.0",
+          "license_reference": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/blob/0102285ad796bd99af90f58de616092e5630e970/README.md",
+          "files": {
+            "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf": {
+              "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/resolve/0102285ad796bd99af90f58de616092e5630e970/Ministral-3-8B-Instruct-2512-Q4_K_M.gguf",
+              "size": 5198911904,
+              "sha256": "33e7a72cf5e6e2cfc2f2847075acc013d68bba023e35310cef86b5cf8fdca761",
+              "verification": "publisher-lfs-sha256"
+            }
+          }
+        }
+      ],
+      "embedding": {
+        "id": "intfloat/multilingual-e5-base",
+        "revision": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+        "dimension": 768,
+        "normalize": true,
+        "query_prefix": "query: ",
+        "passage_prefix": "passage: "
+      }
+    },
+    "cached_revisions": {
+      "intfloat/multilingual-e5-base": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+      "BAAI/bge-reranker-v2-m3": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e"
+    },
+    "native_manifest": {
+      "format": 1,
+      "implementation": "native llama.cpp Metal",
+      "build": 8130,
+      "commit": "ed4837891",
+      "source_reference": "https://github.com/ggml-org/llama.cpp/tree/ed4837891",
+      "license_reference": "https://github.com/ggml-org/llama.cpp/blob/ed4837891/LICENSE",
+      "observed_binary_sha256": "08fdafb92257b7e946f3a9b2794d5e74ae26446abfa4e7c5ae065fe14b270c73",
+      "binary_provenance": "Observed local AppleClang 17 arm64 build; not a publisher-verified downloadable binary. Setup validates the commit and records the supplied binary hash. Native binary/toolchain installation remains an explicit prerequisite."
+    },
+    "hardware": {
+      "platform": "macOS-26.7.1-arm64-arm-64bit",
+      "machine": "arm64",
+      "cpu": "Apple M4 Pro",
+      "memory_bytes": "51539607552"
+    },
+    "python": "3.12.7",
+    "packages": {
+      "datasets": "4.6.1",
+      "anyio": "4.12.1",
+      "shellingham": "1.5.4",
+      "soundfile": "0.12.1",
+      "ml_dtypes": "0.5.4",
+      "posthog": "7.9.4",
+      "ply": "3.11",
+      "threadpoolctl": "3.6.0",
+      "coloredlogs": "15.0.1",
+      "humanfriendly": "10.0",
+      "colpali_engine": "0.3.13",
+      "pexpect": "4.9.0",
+      "Authlib": "1.6.7",
+      "openinference-semantic-conventions": "0.1.26",
+      "arize-phoenix-evals": "2.9.0",
+      "requests": "2.32.5",
+      "uuid_utils": "0.14.1",
+      "aiohttp": "3.13.3",
+      "traitlets": "5.14.3",
+      "aioitertools": "0.13.0",
+      "multidict": "6.7.1",
+      "nest-asyncio": "1.6.0",
+      "arize-phoenix-otel": "0.14.0",
+      "asttokens": "3.0.1",
+      "diskcache": "5.6.3",
+      "ptyprocess": "0.7.0",
+      "einops": "0.8.2",
+      "langgraph-sdk": "0.3.8",
+      "filelock": "3.20.3",
+      "tzdata": "2025.3",
+      "iniconfig": "2.3.0",
+      "pytz": "2025.2",
+      "agentic-workbench": "0.0.0",
+      "toml": "0.10.2",
+      "uvicorn": "0.32.1",
+      "opentelemetry-sdk": "1.39.1",
+      "certifi": "2026.1.4",
+      "sse-starlette": "3.2.0",
+      "alembic": "1.18.3",
+      "prometheus_client": "0.24.1",
+      "pydeck": "0.9.1",
+      "jsonschema-specifications": "2025.9.1",
+      "cross-web": "0.4.1",
+      "executing": "2.2.1",
+      "python-multipart": "0.0.22",
+      "greenlet": "3.3.1",
+      "websockets": "16.0",
+      "pydantic": "2.12.5",
+      "ctranslate2": "4.7.1",
+      "grpcio": "1.78.0",
+      "propcache": "0.4.1",
+      "langchain-core": "1.2.15",
+      "optimum": "1.23.3",
+      "networkx": "3.6.1",
+      "wheel": "0.46.3",
+      "jsonpath-ng": "1.7.0",
+      "torch": "2.8.0",
+      "protobuf": "6.33.5",
+      "python-dotenv": "1.2.1",
+      "blinker": "1.9.0",
+      "jsonschema": "4.26.0",
+      "ipython": "9.10.0",
+      "ruff": "0.15.0",
+      "aiosqlite": "0.22.1",
+      "fsspec": "2026.2.0",
+      "jedi": "0.19.2",
+      "infinity_emb": "0.0.77",
+      "yarl": "1.23.0",
+      "tornado": "6.5.4",
+      "ormsgpack": "1.12.2",
+      "pystache": "0.6.8",
+      "idna": "3.11",
+      "debugpy": "1.8.20",
+      "typer": "0.24.1",
+      "cffi": "2.0.0",
+      "opentelemetry-exporter-otlp-proto-grpc": "1.39.1",
+      "fastapi": "0.131.0",
+      "rich": "13.9.4",
+      "zstandard": "0.25.0",
+      "setuptools": "82.0.0",
+      "openinference-instrumentation": "0.1.44",
+      "opentelemetry-proto": "1.39.1",
+      "starlette": "0.52.1",
+      "langgraph-checkpoint": "4.0.0",
+      "jsonpatch": "1.33",
+      "jsonpointer": "3.0.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "appnope": "0.1.4",
+      "openinference-instrumentation-langchain": "0.1.59",
+      "dnspython": "2.8.0",
+      "numpy": "1.26.4",
+      "prometheus-fastapi-instrumentator": "7.1.0",
+      "opentelemetry-api": "1.39.1",
+      "tenacity": "9.1.4",
+      "pillow": "12.1.1",
+      "prompt_toolkit": "3.0.52",
+      "email-validator": "2.3.0",
+      "httpcore": "1.0.9",
+      "decorator": "5.2.1",
+      "langgraph-prebuilt": "1.0.8",
+      "langgraph": "1.0.9",
+      "duckduckgo_search": "8.1.1",
+      "jupyter_client": "8.8.0",
+      "soupsieve": "2.8.3",
+      "stack-data": "0.6.3",
+      "jmespath": "1.1.0",
+      "langsmith": "0.7.6",
+      "charset-normalizer": "3.4.4",
+      "sympy": "1.14.0",
+      "huggingface_hub": "0.36.2",
+      "pip": "26.2.1",
+      "markdown-it-py": "4.0.0",
+      "ipykernel": "7.2.0",
+      "graphql-core": "3.2.7",
+      "torchvision": "0.23.0",
+      "pydantic-settings": "2.13.1",
+      "matplotlib-inline": "0.2.1",
+      "wrapt": "1.17.3",
+      "llama_cpp_python": "0.3.16",
+      "watchfiles": "1.1.1",
+      "narwhals": "2.17.0",
+      "opentelemetry-instrumentation": "0.60b1",
+      "sentence-transformers": "3.4.1",
+      "h11": "0.16.0",
+      "gitdb": "4.0.12",
+      "googleapis-common-protos": "1.72.0",
+      "pycparser": "3.0",
+      "httptools": "0.7.1",
+      "cachetools": "6.2.6",
+      "regex": "2026.1.15",
+      "importlib_metadata": "8.7.1",
+      "starlette-context": "0.3.6",
+      "mdurl": "0.1.2",
+      "python-dateutil": "2.9.0.post0",
+      "mpmath": "1.3.0",
+      "PyYAML": "6.0.3",
+      "timm": "1.0.25",
+      "opentelemetry-exporter-otlp-proto-http": "1.39.1",
+      "typer-slim": "0.23.0",
+      "parso": "0.8.6",
+      "multiprocess": "0.70.18",
+      "transformers": "4.57.6",
+      "pydantic_core": "2.41.5",
+      "Mako": "1.3.10",
+      "urllib3": "2.6.3",
+      "frozenlist": "1.8.0",
+      "strawberry-graphql": "0.287.3",
+      "wcwidth": "0.6.0",
+      "typing_extensions": "4.15.0",
+      "streamlit": "1.54.0",
+      "aiosignal": "1.4.0",
+      "jupyter_core": "5.9.1",
+      "click": "8.2.1",
+      "beautifulsoup4": "4.14.3",
+      "joblib": "1.5.3",
+      "cryptography": "46.0.4",
+      "hf-xet": "1.2.0",
+      "Jinja2": "3.1.6",
+      "referencing": "0.37.0",
+      "pandas": "2.3.3",
+      "pyasn1": "0.6.2",
+      "MarkupSafe": "3.0.3",
+      "dill": "0.4.0",
+      "langchain": "1.2.10",
+      "pure_eval": "0.2.3",
+      "grpc-interceptor": "0.15.4",
+      "deprecation": "2.1.0",
+      "distro": "1.9.0",
+      "GitPython": "3.1.46",
+      "flatbuffers": "25.12.19",
+      "arize-phoenix": "12.35.0",
+      "pluggy": "1.6.0",
+      "Pygments": "2.19.2",
+      "aiohappyeyeballs": "2.6.1",
+      "pyarrow": "23.0.0",
+      "lance-namespace": "0.4.5",
+      "attrs": "25.4.0",
+      "requests-toolbelt": "1.0.0",
+      "platformdirs": "4.5.1",
+      "primp": "1.0.0",
+      "packaging": "26.0",
+      "opentelemetry-exporter-otlp": "1.39.1",
+      "onnx": "1.20.1",
+      "lancedb": "0.29.2",
+      "httpx": "0.28.1",
+      "smmap": "5.0.2",
+      "tqdm": "4.67.3",
+      "sqlean.py": "3.50.4.5",
+      "backoff": "2.2.1",
+      "safetensors": "0.7.0",
+      "tokenizers": "0.22.2",
+      "uvloop": "0.22.1",
+      "psutil": "7.2.2",
+      "orjson": "3.11.7",
+      "altair": "6.0.0",
+      "lance-namespace-urllib3-client": "0.4.5",
+      "peft": "0.17.1",
+      "lxml": "6.0.2",
+      "typing-inspection": "0.4.2",
+      "scipy": "1.17.0",
+      "zipp": "3.23.0",
+      "annotated-types": "0.7.0",
+      "accelerate": "1.12.0",
+      "ldap3": "2.9.1",
+      "rpds-py": "0.30.0",
+      "six": "1.17.0",
+      "pyzmq": "27.1.0",
+      "opentelemetry-exporter-otlp-proto-common": "1.39.1",
+      "scikit-learn": "1.8.0",
+      "xxhash": "3.6.0",
+      "arize-phoenix-client": "1.28.1",
+      "lia-web": "0.3.1",
+      "opentelemetry-semantic-conventions": "0.60b1",
+      "SQLAlchemy": "2.0.46",
+      "annotated-doc": "0.0.4",
+      "pytest": "9.0.2",
+      "comm": "0.2.3",
+      "atlas-localis": "0.0.0"
+    },
+    "limitations": [
+      "Legacy corpus dump date and index build provenance unknown.",
+      "No independent human review; agent labels are provisional.",
+      "Parent RSS high-water excludes native server; Metal allocation is not additive physical memory."
+    ]
+  },
+  "selection": {
+    "split": "development",
+    "case_ids": [
+      "f01",
+      "c01"
+    ],
+    "repetitions": 1,
+    "controls": {
+      "forced_single_task": false,
+      "rerank": false
+    }
+  },
+  "results": [
+    {
+      "question_id": "f01",
+      "question": "When did the Roman Republic end?",
+      "question_meta": {
+        "id": "f01",
+        "category": "single",
+        "split": "development",
+        "question": "When did the Roman Republic end?",
+        "seed_ids": [
+          "hist_001"
+        ],
+        "scope": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "task_facets": [
+          "27 BC and competing end dates; do not conflate Republic with Western Empire"
+        ],
+        "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+        "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+        "evidence": [
+          {
+            "chunk_id": "1510dc7a9342c459",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 797,
+            "excerpt": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC.",
+            "excerpt_sha256": "d1cae925621f2b012054f012dd569f5a6b8936c1978123a3bae0ef44071fc5f7",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          },
+          {
+            "chunk_id": "75b50d1b43560333",
+            "article": "Roman Republic",
+            "section": "",
+            "start": 0,
+            "end": 800,
+            "excerpt": "Some people say the Roman Republic ended with the naval Battle of Actium between Marcus Antonius and Octavian. Both had been in the Second Triumvirate. The battle was fought on 2 September 31 BC in which Octavian won. Later, he was proclaimed Roman emperor. The end date could also be when Octavian was given the title of the first Augustus by the Senate, on 16 January 27 BC.\n\nThose are modern views, however. In the view of the early emperors, the Res Publica (Republic, literally \"Thing of the People\") still existed but was simply \"under their protection\". They promised that some day that the Republic would restored to its original form. That never happened and so scholars divide the Roman Empire and the Roman Republic as two different and distinct periods in the history of Rome.\n\nReferences",
+            "excerpt_sha256": "d9d09b8d07c64c890915f9cf5050f8221ec59937388e6a575768ecec521ce3f6",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          }
+        ],
+        "rubric": "history-rubric-v1",
+        "annotation": {
+          "reviewer": "codex-agent",
+          "status": "provisional; human review pending",
+          "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+        }
+      },
+      "result": {
+        "final_validation": {
+          "status": "passed",
+          "errors": []
+        },
+        "run_id": "055621be95c847d38bf8cf765c582449",
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "units": [
+          {
+            "text": "The Roman Republic’s collapse is conventionally dated to **44 BC** with Julius Caesar’s assassination on 15 March, which triggered civil war and dismantled traditional republican institutions, though its *de jure* dissolution remains debated. The Second Triumvirate (43–33 BC) consolidated power under Octavian, effectively ending Senate-led governance. Augustus’ 27 BC title of *Princeps* marked the formal transition to Empire, though republican pretense persisted.",
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f5"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "36ca4925b6b567f6",
+                "start": 0,
+                "end": 858
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "e2b7688cb5b4b5a8",
+                "start": 0,
+                "end": 830
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "0cac06facc7d68de",
+                "start": 0,
+                "end": 645
+              }
+            ]
+          },
+          {
+            "text": "Scholarly disagreement persists over the definitive end date: Caesar’s assassination (44 BC) or the Triumvirate’s formation (43 BC) could mark the Republic’s collapse, while 27 BC represents its *de jure* institutional shift. Operational gaps in evidence prevent definitive chronology, but primary sources (e.g., Suetonius, Cassius Dio) align on the 44–43 BC period as pivotal.",
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "36ca4925b6b567f6",
+                "start": 0,
+                "end": 858
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "e2b7688cb5b4b5a8",
+                "start": 0,
+                "end": 830
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "0cac06facc7d68de",
+                "start": 0,
+                "end": 645
+              }
+            ]
+          },
+          {
+            "text": "The Triumvirate’s victory at Philippi (42 BC) eliminated remaining republican factions, leaving Octavian as the sole powerbroker. His elimination of rivals (Lepidus by 36 BC, Antony by 31 BC) solidified his dominance, though the Senate’s formal authority persisted until Augustus’ 27 BC title.",
+            "finding_ids": [
+              "t1.f3",
+              "t1.f4"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "0cac06facc7d68de",
+                "start": 0,
+                "end": 645
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "56f2e56051bb3640",
+                "start": 0,
+                "end": 871
+              }
+            ]
+          }
+        ],
+        "answer_text": "The Roman Republic’s collapse is conventionally dated to **44 BC** with Julius Caesar’s assassination on 15 March, which triggered civil war and dismantled traditional republican institutions, though its *de jure* dissolution remains debated. The Second Triumvirate (43–33 BC) consolidated power under Octavian, effectively ending Senate-led governance. Augustus’ 27 BC title of *Princeps* marked the formal transition to Empire, though republican pretense persisted. [1][2][3][4]\n\nScholarly disagreement persists over the definitive end date: Caesar’s assassination (44 BC) or the Triumvirate’s formation (43 BC) could mark the Republic’s collapse, while 27 BC represents its *de jure* institutional shift. Operational gaps in evidence prevent definitive chronology, but primary sources (e.g., Suetonius, Cassius Dio) align on the 44–43 BC period as pivotal. [1][2][3][4]\n\nThe Triumvirate’s victory at Philippi (42 BC) eliminated remaining republican factions, leaving Octavian as the sole powerbroker. His elimination of rivals (Lepidus by 36 BC, Antony by 31 BC) solidified his dominance, though the Senate’s formal authority persisted until Augustus’ 27 BC title. [4][3]",
+        "citations": [
+          {
+            "number": 1,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "36ca4925b6b567f6",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "36ca4925b6b567f6",
+                  "start": 0,
+                  "end": 858
+                },
+                "document_id": "27296",
+                "title": "40s BC",
+                "section": null,
+                "text": "This article talks about what happened in between 40 and 31 BC.\n\nEvents\nJulius Caesar wins the civil war (49–45 BC) in the Roman Republic against the Roman Senate. He becomes dictator for life.\nJulius Caesar, Roman dictator, is killed by 23 Roman people. Some people who killed him were Marcus Junius Brutus and Gaius Cassius Longinus. (15 March 44 BC).\n\nImportant people\nJulius Caesar, Roman dictator (lived 100–44 BC, ruled 46–44 BC).\nMarcus Junius Brutus, Roman politician ( 85–42 BC).\nMark Antony, Roman politician and general ( 83–30 BC).\nPharaoh (Egyptian Queen) Cleopatra VII of Egypt (lived 70/69 – 30 BC, ruled 51–30 BC).\nGaius Iulius Caesar Octavianus (Octavian), Roman politician and general (62 BC – 14).\nPharaoh Ptolemy XV Caesarion (Cleopatra VII's son) (lived 47–30 BC, reigned 44–30 BC).\nGaius Cassius Longinus, Roman politician (died 42 BC).",
+                "text_hash": "2593264ff57a669a0e1ecc7bbe703b2976308a958781ed278e5234284a61938b",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f5"
+            ]
+          },
+          {
+            "number": 2,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "e2b7688cb5b4b5a8",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "e2b7688cb5b4b5a8",
+                  "start": 0,
+                  "end": 830
+                },
+                "document_id": "215074",
+                "title": "Assassination of Julius Caesar",
+                "section": null,
+                "text": "The assassination (murder) of Julius Caesar was the result of a conspiracy by forty Roman senators, the self-styled Liberatores. They were led by Cassius and Brutus.\n\nAttack and death\nThe senators stabbed Caesar to death in the Theatre of Pompey on the Ides of March, 15 March 44 BC. Caesar was the dictator of the Roman Republic at the time. He had been declared dictator perpetuo (dictator for life) by the Senate. This declaration resulted in many senators fearing that Caesar wanted to overthrow the Senate in favour of a tyranny.\n\nThe assassination led to civil war. The Second Triumvirate led to the ascendancy of Caesar's adopted heir Octavian to the position of emperor, and the end of the Republic leading to the Roman Empire. In the end, by murdering Caesar, the Liberators caused the end of the Republic they supported.",
+                "text_hash": "c7671740724283403a6b587e86e39446c7729165e1a27375ed755438fa47c554",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f5"
+            ]
+          },
+          {
+            "number": 3,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "56f2e56051bb3640",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "56f2e56051bb3640",
+                  "start": 0,
+                  "end": 871
+                },
+                "document_id": "15583",
+                "title": "Augustus",
+                "section": null,
+                "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f5",
+              "t1.f3",
+              "t1.f4"
+            ]
+          },
+          {
+            "number": 4,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "0cac06facc7d68de",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "0cac06facc7d68de",
+                  "start": 0,
+                  "end": 645
+                },
+                "document_id": "41098",
+                "title": "Second Triumvirate",
+                "section": null,
+                "text": "The Second Triumvirate was an alliance between Octavian, Mark Antony and Lepidus. It was formed to punish the conspirators who assassinated Julius Caesar.\n\nThe Triumvirate lasted from 43 BC to 33 BC. It ended the effort by Marcus Tullius Cicero to make the Senate once again the top body of the Republic. From then on Rome was ruled by an Emperor.\n\nThe Triumvirate army, led by Octavian and Mark Antony, defeated the Conspirators' army led by Cassius and Brutus. The war ended with the Battle of Philippi in Roman Macedonia in 42 BC. Cassius and Brutus committed suicide and the remainder of their army joined the Triumvirate forces.\n\nReferences",
+                "text_hash": "e176e0fe18ccedd05ff401cab8ee60bc1de630f77107586ed67f93ac7f07d90e",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f5",
+              "t1.f3",
+              "t1.f4"
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "task_id": "t1",
+            "status": "insufficient_evidence",
+            "admitted_findings": 5,
+            "used_findings": 5,
+            "gaps": [
+              "No primary source explicitly dates the Republic’s *de jure* dissolution beyond Augustus’ 27 BC title; secondary analyses vary on whether 44 BC (Caesar’s dictatorship) or 43 BC (Triumvirate formation) marks the definitive break.",
+              "The role of Cleopatra and Caesarion in the power struggle (e.g., Antony’s alliance with Egypt) is referenced but not detailed in the provided excerpts, limiting clarity on their impact on the Republic’s collapse.",
+              "The exact mechanisms by which the Senate’s authority was dismantled (e.g., legal or constitutional changes) are not described in the evidence, leaving gaps in understanding the institutional transition. Requested chronology is not supported by dated findings.",
+              "t1.f6: synthesis budget omitted supported material."
+            ]
+          }
+        ],
+        "gaps": [
+          "No primary source explicitly dates the Republic’s *de jure* dissolution beyond Augustus’ 27 BC title; secondary analyses vary on whether 44 BC (Caesar’s dictatorship) or 43 BC (Triumvirate formation) marks the definitive break.",
+          "The role of Cleopatra and Caesarion in the power struggle (e.g., Antony’s alliance with Egypt) is referenced but not detailed in the provided excerpts, limiting clarity on their impact on the Republic’s collapse.",
+          "The exact mechanisms by which the Senate’s authority was dismantled (e.g., legal or constitutional changes) are not described in the evidence, leaving gaps in understanding the institutional transition. Requested chronology is not supported by dated findings.",
+          "t1.f6: synthesis budget omitted supported material."
+        ],
+        "conflicts": [
+          [
+            "t1.f1",
+            "t1.f2"
+          ],
+          [
+            "t1.f2",
+            "t1.f5"
+          ]
+        ],
+        "warnings": [],
+        "error": null,
+        "diagnostics": {
+          "retrieved": 32,
+          "opened": 32,
+          "presented": 5,
+          "tokens_in": 5920,
+          "tokens_out": 1078,
+          "elapsed_ms": 43546.412292009336
+        },
+        "fingerprints": [
+          {
+            "component": "code",
+            "identity": "e901b2403edd67a953b14a068d8219217b483f03f3292d80d07a2889da5956c7"
+          },
+          {
+            "component": "snapshot",
+            "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+          },
+          {
+            "component": "models",
+            "identity": "919cba8cffef4ed5becee72a5570012aa2b632a2af0c10765e1ea3ddbbbf1e5e"
+          },
+          {
+            "component": "config",
+            "identity": "23cc5f3af7c947ac12dc6049e2c9536af4cde96c9c91441db972c7c05d832a99"
+          },
+          {
+            "component": "evaluation_controls",
+            "identity": "{\"forced_single_task\": false, \"rerank\": false}"
+          },
+          {
+            "component": "prompts",
+            "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+          }
+        ]
+      },
+      "metrics": {
+        "citation_count": 4,
+        "citations": [
+          "36ca4925b6b567f6",
+          "e2b7688cb5b4b5a8",
+          "56f2e56051bb3640",
+          "0cac06facc7d68de"
+        ],
+        "unique_cited_titles": 4,
+        "title_list": [
+          "40s BC",
+          "Assassination of Julius Caesar",
+          "Augustus",
+          "Second Triumvirate"
+        ],
+        "retrieved_count": 32,
+        "opened_count": 32,
+        "presented_count": 5,
+        "total_latency_ms": 43546.412292009336,
+        "tokens_in": 5920,
+        "tokens_out": 1078,
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "final_validation": "passed",
+        "tasks": 1,
+        "failed_tasks": 0,
+        "warnings": []
+      },
+      "error": null,
+      "observation": {
+        "calls": [],
+        "spans": [
+          {
+            "name": "normalize_question",
+            "elapsed_ms": 0.036,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 3940.941,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "plan",
+            "elapsed_ms": 3946.75,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "retrieve.keyword",
+            "elapsed_ms": 56.09,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 56.0
+            }
+          },
+          {
+            "name": "embedding.query",
+            "elapsed_ms": 124.148,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "model_name": "intfloat/multilingual-e5-base",
+              "query_length": 354,
+              "query_prefix": "query: ",
+              "device": "mps:0"
+            }
+          },
+          {
+            "name": "retrieve.vector",
+            "elapsed_ms": 187.408,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 187.4
+            }
+          },
+          {
+            "name": "retrieve.hybrid_merge",
+            "elapsed_ms": 243.705,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "query_text": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the esta",
+              "keyword_count": 20,
+              "vector_count": 20,
+              "merged_count": 32,
+              "duration_ms": 243.7
+            }
+          },
+          {
+            "name": "chunk_store.get_many",
+            "elapsed_ms": 48.785,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "requested_count": 32,
+              "found_count": 32,
+              "duration_ms": 48.8
+            }
+          },
+          {
+            "name": "retrieve.hydrate",
+            "elapsed_ms": 48.832,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.retrieve",
+            "elapsed_ms": 292.712,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.pack_evidence",
+            "elapsed_ms": 16.393,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 19460.274,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.derive_findings",
+            "elapsed_ms": 19463.628,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.046,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.finish_task",
+            "elapsed_ms": 0.119,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "researcher.task",
+            "elapsed_ms": 19775.362,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "task_id": "t1",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          },
+          {
+            "name": "aggregate",
+            "elapsed_ms": 38.384,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 19777.71,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "synthesize",
+            "elapsed_ms": 19780.228,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "validate_final",
+            "elapsed_ms": 0.07,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "finalize",
+            "elapsed_ms": 0.256,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "atlas_localis.question",
+            "elapsed_ms": 43544.85,
+            "attributes": {
+              "run_id": "055621be95c847d38bf8cf765c582449",
+              "run_type": "application",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          }
+        ],
+        "note": "Call inputs/responses and generation settings projected into review_packet; full schemas/templates identified by hashes."
+      },
+      "failures": {
+        "planner_fallback": 0,
+        "worker_repair_attempts": 0,
+        "synthesis_repair_attempts": 0,
+        "synthesis_fallback": 0,
+        "failed_tasks": 0,
+        "coverage_gaps": 1,
+        "final_validation_failure": 0,
+        "operational_error": null
+      },
+      "resources": {
+        "parent_peak_rss_bytes": 1253818368,
+        "metal_driver_allocated_bytes_at_sample": 1164656640
+      },
+      "repeat": 1,
+      "review_packet": [
+        {
+          "schema": "PlanProposal",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "81e20416c14529f8c355fbe06268636698cd8865a28bd9e68dd7f09c04c7c6ea",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?"
+            }
+          ],
+          "response": {
+            "tasks": [
+              {
+                "label": "Roman Republic End Date and Historical Context",
+                "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                "needs_timeline": true
+              }
+            ]
+          },
+          "error": null,
+          "wall_ms": 3941.378249990521,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t1",
+          "input": [
+            {
+              "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Second Triumvirate",
+                  "section": null,
+                  "text": "The Second Triumvirate was an alliance between Octavian, Mark Antony and Lepidus. It was formed to punish the conspirators who assassinated Julius Caesar.\n\nThe Triumvirate lasted from 43 BC to 33 BC. It ended the effort by Marcus Tullius Cicero to make the Senate once again the top body of the Republic. From then on Rome was ruled by an Emperor.\n\nThe Triumvirate army, led by Octavian and Mark Antony, defeated the Conspirators' army led by Cassius and Brutus. The war ended with the Battle of Philippi in Roman Macedonia in 42 BC. Cassius and Brutus committed suicide and the remainder of their army joined the Triumvirate forces.\n\nReferences"
+                },
+                {
+                  "alias": "E3",
+                  "title": "Roman Republic",
+                  "section": null,
+                  "text": "The Roman Republic suffered many disasters, including Spartacus (the leader of a slave revolt) who defeated one consul's army before he was captured. Also, Hannibal crossed the Alps and then defeated the Roman army at Cannae and many other battles, which saw Rome greatly fear being destroyed by Carthage.\n\nThe end of the Roman Republic is still a matter of dispute, and different scholars will give different dates for it. Usually, the dates of the start of either the First Triumvirate or the Second Triumvirate are given. The triumvirates were groups of three men who had much power.\n\nThe end of the Roman Republic is often said to be Gaius Julius Caesar's appointment as dictator (single ruler) by the Roman Senate. That happened after a series of civil wars lasting from about 49 BC to 44 BC."
+                },
+                {
+                  "alias": "E4",
+                  "title": "40s BC",
+                  "section": null,
+                  "text": "This article talks about what happened in between 40 and 31 BC.\n\nEvents\nJulius Caesar wins the civil war (49–45 BC) in the Roman Republic against the Roman Senate. He becomes dictator for life.\nJulius Caesar, Roman dictator, is killed by 23 Roman people. Some people who killed him were Marcus Junius Brutus and Gaius Cassius Longinus. (15 March 44 BC).\n\nImportant people\nJulius Caesar, Roman dictator (lived 100–44 BC, ruled 46–44 BC).\nMarcus Junius Brutus, Roman politician ( 85–42 BC).\nMark Antony, Roman politician and general ( 83–30 BC).\nPharaoh (Egyptian Queen) Cleopatra VII of Egypt (lived 70/69 – 30 BC, ruled 51–30 BC).\nGaius Iulius Caesar Octavianus (Octavian), Roman politician and general (62 BC – 14).\nPharaoh Ptolemy XV Caesarion (Cleopatra VII's son) (lived 47–30 BC, reigned 44–30 BC).\nGaius Cassius Longinus, Roman politician (died 42 BC)."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Assassination of Julius Caesar",
+                  "section": null,
+                  "text": "The assassination (murder) of Julius Caesar was the result of a conspiracy by forty Roman senators, the self-styled Liberatores. They were led by Cassius and Brutus.\n\nAttack and death\nThe senators stabbed Caesar to death in the Theatre of Pompey on the Ides of March, 15 March 44 BC. Caesar was the dictator of the Roman Republic at the time. He had been declared dictator perpetuo (dictator for life) by the Senate. This declaration resulted in many senators fearing that Caesar wanted to overthrow the Senate in favour of a tyranny.\n\nThe assassination led to civil war. The Second Triumvirate led to the ascendancy of Caesar's adopted heir Octavian to the position of emperor, and the end of the Republic leading to the Roman Empire. In the end, by murdering Caesar, the Liberators caused the end of the Republic they supported."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "Julius Caesar was assassinated on 15 March 44 BC by a group of senators led by Brutus and Cassius, marking a turning point that triggered civil war and the collapse of the Republic’s traditional institutions.",
+                "evidence_refs": [
+                  "E4",
+                  "E5"
+                ]
+              },
+              {
+                "statement": "Following Caesar’s assassination, the Second Triumvirate—comprising Octavian, Mark Antony, and Lepidus—formed in 43 BC to avenge Caesar and suppress the conspirators, effectively ending Senate-led governance.",
+                "evidence_refs": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "statement": "The Second Triumvirate defeated the conspirators at the Battle of Philippi in 42 BC, forcing Brutus and Cassius to commit suicide and consolidating power for Octavian, Antony, and Lepidus.",
+                "evidence_refs": [
+                  "E2"
+                ]
+              },
+              {
+                "statement": "Octavian, Caesar’s adopted heir, emerged as the dominant figure in the Triumvirate, using military victories and political maneuvering to eliminate rivals like Lepidus by 36 BC and Antony by 31 BC.",
+                "evidence_refs": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "statement": "The Senate formally granted Octavian the title *Augustus* in 27 BC, marking the official transition from Republic to Empire, though he retained the pretense of republican institutions.",
+                "evidence_refs": [
+                  "E1"
+                ]
+              },
+              {
+                "statement": "Scholars debate the precise end of the Republic, with key markers including Caesar’s appointment as *dictator perpetuo* in 44 BC and the establishment of the Second Triumvirate in 43 BC, though the formal imperial transition occurred in 27 BC.",
+                "evidence_refs": [
+                  "E3"
+                ]
+              }
+            ],
+            "gaps": [
+              "No primary source explicitly dates the Republic’s *de jure* dissolution beyond Augustus’ 27 BC title; secondary analyses vary on whether 44 BC (Caesar’s dictatorship) or 43 BC (Triumvirate formation) marks the definitive break.",
+              "The role of Cleopatra and Caesarion in the power struggle (e.g., Antony’s alliance with Egypt) is referenced but not detailed in the provided excerpts, limiting clarity on their impact on the Republic’s collapse.",
+              "The exact mechanisms by which the Senate’s authority was dismantled (e.g., legal or constitutional changes) are not described in the evidence, leaving gaps in understanding the institutional transition."
+            ]
+          },
+          "error": null,
+          "wall_ms": 19461.146292000194,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "AnswerDraft",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "d41cb9d34c531e8e61907d2f75491012c02566761b4b7edbe35d5800b494ac1d",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "When did the Roman Republic end?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "When did the Roman Republic end?",
+              "tasks": [
+                {
+                  "task": {
+                    "label": "Roman Republic End Date and Historical Context",
+                    "question": "What were the key events, political transitions, and scholarly consensus dates marking the official end of the Roman Republic, including the role of Julius Caesar, the Second Triumvirate, and the establishment of the Roman Empire under Augustus? Focus on primary sources (e.g., Suetonius, Cassius Dio) and secondary analyses from the 19th–21st centuries.",
+                    "needs_timeline": true,
+                    "task_id": "t1"
+                  },
+                  "status": "insufficient_evidence",
+                  "gaps": [
+                    "No primary source explicitly dates the Republic’s *de jure* dissolution beyond Augustus’ 27 BC title; secondary analyses vary on whether 44 BC (Caesar’s dictatorship) or 43 BC (Triumvirate formation) marks the definitive break.",
+                    "The role of Cleopatra and Caesarion in the power struggle (e.g., Antony’s alliance with Egypt) is referenced but not detailed in the provided excerpts, limiting clarity on their impact on the Republic’s collapse.",
+                    "The exact mechanisms by which the Senate’s authority was dismantled (e.g., legal or constitutional changes) are not described in the evidence, leaving gaps in understanding the institutional transition. Requested chronology is not supported by dated findings."
+                  ],
+                  "error": null
+                }
+              ],
+              "findings": [
+                {
+                  "alias": "F1",
+                  "finding_id": "t1.f1",
+                  "statement": "Julius Caesar was assassinated on 15 March 44 BC by a group of senators led by Brutus and Cassius, marking a turning point that triggered civil war and the collapse of the Republic’s traditional institutions.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "36ca4925b6b567f6",
+                      "start": 0,
+                      "end": 858
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "e2b7688cb5b4b5a8",
+                      "start": 0,
+                      "end": 830
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F2",
+                  "finding_id": "t1.f2",
+                  "statement": "Following Caesar’s assassination, the Second Triumvirate—comprising Octavian, Mark Antony, and Lepidus—formed in 43 BC to avenge Caesar and suppress the conspirators, effectively ending Senate-led governance.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "0cac06facc7d68de",
+                      "start": 0,
+                      "end": 645
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F3",
+                  "finding_id": "t1.f3",
+                  "statement": "The Second Triumvirate defeated the conspirators at the Battle of Philippi in 42 BC, forcing Brutus and Cassius to commit suicide and consolidating power for Octavian, Antony, and Lepidus.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "0cac06facc7d68de",
+                      "start": 0,
+                      "end": 645
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F4",
+                  "finding_id": "t1.f4",
+                  "statement": "Octavian, Caesar’s adopted heir, emerged as the dominant figure in the Triumvirate, using military victories and political maneuvering to eliminate rivals like Lepidus by 36 BC and Antony by 31 BC.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "0cac06facc7d68de",
+                      "start": 0,
+                      "end": 645
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F5",
+                  "finding_id": "t1.f5",
+                  "statement": "The Senate formally granted Octavian the title *Augustus* in 27 BC, marking the official transition from Republic to Empire, though he retained the pretense of republican institutions.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "56f2e56051bb3640",
+                      "start": 0,
+                      "end": 871
+                    }
+                  ],
+                  "date_text": null
+                }
+              ],
+              "excerpts": [
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "36ca4925b6b567f6",
+                    "start": 0,
+                    "end": 858
+                  },
+                  "document_id": "27296",
+                  "title": "40s BC",
+                  "section": null,
+                  "text": "This article talks about what happened in between 40 and 31 BC.\n\nEvents\nJulius Caesar wins the civil war (49–45 BC) in the Roman Republic against the Roman Senate. He becomes dictator for life.\nJulius Caesar, Roman dictator, is killed by 23 Roman people. Some people who killed him were Marcus Junius Brutus and Gaius Cassius Longinus. (15 March 44 BC).\n\nImportant people\nJulius Caesar, Roman dictator (lived 100–44 BC, ruled 46–44 BC).\nMarcus Junius Brutus, Roman politician ( 85–42 BC).\nMark Antony, Roman politician and general ( 83–30 BC).\nPharaoh (Egyptian Queen) Cleopatra VII of Egypt (lived 70/69 – 30 BC, ruled 51–30 BC).\nGaius Iulius Caesar Octavianus (Octavian), Roman politician and general (62 BC – 14).\nPharaoh Ptolemy XV Caesarion (Cleopatra VII's son) (lived 47–30 BC, reigned 44–30 BC).\nGaius Cassius Longinus, Roman politician (died 42 BC).",
+                  "text_hash": "2593264ff57a669a0e1ecc7bbe703b2976308a958781ed278e5234284a61938b",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "e2b7688cb5b4b5a8",
+                    "start": 0,
+                    "end": 830
+                  },
+                  "document_id": "215074",
+                  "title": "Assassination of Julius Caesar",
+                  "section": null,
+                  "text": "The assassination (murder) of Julius Caesar was the result of a conspiracy by forty Roman senators, the self-styled Liberatores. They were led by Cassius and Brutus.\n\nAttack and death\nThe senators stabbed Caesar to death in the Theatre of Pompey on the Ides of March, 15 March 44 BC. Caesar was the dictator of the Roman Republic at the time. He had been declared dictator perpetuo (dictator for life) by the Senate. This declaration resulted in many senators fearing that Caesar wanted to overthrow the Senate in favour of a tyranny.\n\nThe assassination led to civil war. The Second Triumvirate led to the ascendancy of Caesar's adopted heir Octavian to the position of emperor, and the end of the Republic leading to the Roman Empire. In the end, by murdering Caesar, the Liberators caused the end of the Republic they supported.",
+                  "text_hash": "c7671740724283403a6b587e86e39446c7729165e1a27375ed755438fa47c554",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "56f2e56051bb3640",
+                    "start": 0,
+                    "end": 871
+                  },
+                  "document_id": "15583",
+                  "title": "Augustus",
+                  "section": null,
+                  "text": "Augustus (; 23 September 63 BC – 19 August 14 AD) was the first Roman Emperor, ruling from 27 BC until his death in AD 14. He led Rome in its transition from the Roman Republic to the Roman Empire.\n\nWhen Julius Caesar was assassinated, Augustus and his allies fought against the assassins and defeated them. Later, Augustus fought against his allies and defeated them.\n\nLife\nOctavian, as he was originally called, was the adopted son of the dictator of the Roman Republic, Julius Caesar. Octavian came into power in the Second Triumvirate. This was three men ruling over the Roman Republic: Mark Antony, Lepidus and Octavian.\n\nAll three were loyal to Julius Caesar, the assassinated dictator, killed in 44 BC. Following his death a civil war broke out across Rome, between those loyal to Caesar, and the conspirators, led by two of Caesar's assassins, Brutus and Cassius.",
+                  "text_hash": "39aef3a94e26ca2f10e514a53118ebcfc0e976368c9fc2cf8e9a67a345f3e23e",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "0cac06facc7d68de",
+                    "start": 0,
+                    "end": 645
+                  },
+                  "document_id": "41098",
+                  "title": "Second Triumvirate",
+                  "section": null,
+                  "text": "The Second Triumvirate was an alliance between Octavian, Mark Antony and Lepidus. It was formed to punish the conspirators who assassinated Julius Caesar.\n\nThe Triumvirate lasted from 43 BC to 33 BC. It ended the effort by Marcus Tullius Cicero to make the Senate once again the top body of the Republic. From then on Rome was ruled by an Emperor.\n\nThe Triumvirate army, led by Octavian and Mark Antony, defeated the Conspirators' army led by Cassius and Brutus. The war ended with the Battle of Philippi in Roman Macedonia in 42 BC. Cassius and Brutus committed suicide and the remainder of their army joined the Triumvirate forces.\n\nReferences",
+                  "text_hash": "e176e0fe18ccedd05ff401cab8ee60bc1de630f77107586ed67f93ac7f07d90e",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                }
+              ],
+              "budget_omissions": [
+                "t1.f6: synthesis budget omitted supported material."
+              ]
+            }
+          ],
+          "response": {
+            "units": [
+              {
+                "text": "The Roman Republic’s collapse is conventionally dated to **44 BC** with Julius Caesar’s assassination on 15 March, which triggered civil war and dismantled traditional republican institutions, though its *de jure* dissolution remains debated. The Second Triumvirate (43–33 BC) consolidated power under Octavian, effectively ending Senate-led governance. Augustus’ 27 BC title of *Princeps* marked the formal transition to Empire, though republican pretense persisted.",
+                "finding_ids": [
+                  "F1",
+                  "F2",
+                  "F5"
+                ]
+              },
+              {
+                "text": "Scholarly disagreement persists over the definitive end date: Caesar’s assassination (44 BC) or the Triumvirate’s formation (43 BC) could mark the Republic’s collapse, while 27 BC represents its *de jure* institutional shift. Operational gaps in evidence prevent definitive chronology, but primary sources (e.g., Suetonius, Cassius Dio) align on the 44–43 BC period as pivotal.",
+                "finding_ids": [
+                  "F1",
+                  "F2"
+                ]
+              },
+              {
+                "text": "The Triumvirate’s victory at Philippi (42 BC) eliminated remaining republican factions, leaving Octavian as the sole powerbroker. His elimination of rivals (Lepidus by 36 BC, Antony by 31 BC) solidified his dominance, though the Senate’s formal authority persisted until Augustus’ 27 BC title.",
+                "finding_ids": [
+                  "F3",
+                  "F4"
+                ]
+              }
+            ],
+            "conflict_groups": [
+              [
+                "F1",
+                "F2"
+              ],
+              [
+                "F2",
+                "F5"
+              ]
+            ]
+          },
+          "error": null,
+          "wall_ms": 19777.948666000157,
+          "finish_reason": "stop"
+        }
+      ]
+    },
+    {
+      "question_id": "c01",
+      "question": "How did World War I start and what were its major turning points?",
+      "question_meta": {
+        "id": "c01",
+        "category": "comparative",
+        "split": "development",
+        "question": "How did World War I start and what were its major turning points?",
+        "seed_ids": [
+          "hist_003"
+        ],
+        "scope": [
+          "Assassination and alliance escalation",
+          "1917 US entry/Russian departure and 1918 end"
+        ],
+        "task_facets": [
+          "Assassination and alliance escalation",
+          "1917 US entry/Russian departure and 1918 end"
+        ],
+        "acceptable_uncertainty": "Acknowledge source gaps, conflicting dates and approximation. No unsupported precision.",
+        "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+        "evidence": [
+          {
+            "chunk_id": "c147efb4d96822a0",
+            "article": "World War I",
+            "section": "",
+            "start": 0,
+            "end": 694,
+            "excerpt": "| casualties2 = \nfurther details...\n----\nMilitary deaths by country\n\nBefore the war, European countries had formed alliances to protect themselves. However, that made them divide themselves into two groups. When Archduke Franz Ferdinand of Austria was assassinated on 28 June 1914, Austria-Hungary blamed Serbia and declared war on it. Russia then declared war on Austria-Hungary, which set off a chain of events in which members from both groups of countries declared war on each other.\n\nThe two sides were the Allied Powers (mainly Russia, France, the British Empire and later Italy and the United States) and the Central Powers (mainly German Empire, Austria-Hungary and the Ottoman Empire).",
+            "excerpt_sha256": "d510cbb3c0999edfe6862f2e667888dd969c103107240ddac050d63988901c60",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          },
+          {
+            "chunk_id": "a5f7470c1e81528a",
+            "article": "World War I",
+            "section": "",
+            "start": 0,
+            "end": 862,
+            "excerpt": "There was fighting in many different fronts (areas). The French and the British fought the Germans on the Western Front in France and Belgium. Germany had tried to defeat France quickly with the Schlieffen Plan but were stopped in the First Battle of the Marne. Most of the fighting on the western front was trench warfare. The Russians fought the Germans and Austro-Hungarians on the Eastern Front in Central and Eastern Europe. Fighting on the eastern front was not trench warfare as in the west, but mobile warfare. The other main areas of fighting were in the Middle East, in the Gallipoli region of the Ottoman Empire and between Italy and Austria-Hungary. Fighting also took place in southeastern Europe, Africa, China, at sea and in the air. World War I was the first major war in which tanks, airplanes and submarines (or U-boats) were important weapons.",
+            "excerpt_sha256": "3f1032d35432be04bd7bedee6b3c5e0633fb47d3c8131454a4a5607e1c1d5ac9",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          },
+          {
+            "chunk_id": "36cab64b11d6a392",
+            "article": "World War I",
+            "section": "",
+            "start": 0,
+            "end": 929,
+            "excerpt": "End\nIn 1917, the Russian Revolution led to Russia leaving the war in March 1918. Also in 1917, the United States entered the war, but it took a year for most of its army to arrive. From the time of the Russian departure, before the American arrival, the Germans launched a huge attack in March 1918 to try to win the war, but it failed.\n\nFrom August to November 1918, the Allied Powers won a large victory against the Germans during the Hundred Days Offensive. Austria-Hungary and the Ottoman Empire then agreed to stop fighting. The German government collapsed, and a new government was forced to agree to stop the fighting on 11 November 1918. Basically, the Germans ran out of men.\n\nAlso, the influenza pandemic of 1918 had a big influence. It killed many people in Europe: it lasted for three years, from January 1918 to December 1920. About 500&nbsp;million The countries had allies that entered the war in a matter of days.",
+            "excerpt_sha256": "83e1a9ae6c83a9683f0fc41368bc5526d07f92cc0959f3bd8a0a53e0e0ce15cc",
+            "relevance": 2,
+            "note": "Direct scope support; not exhaustive."
+          }
+        ],
+        "rubric": "history-rubric-v1",
+        "annotation": {
+          "reviewer": "codex-agent",
+          "status": "provisional; human review pending",
+          "coverage": "Hand-selected title evidence, not complete pooled relevance judgments."
+        }
+      },
+      "result": {
+        "final_validation": {
+          "status": "passed",
+          "errors": []
+        },
+        "run_id": "3823627229c4498da0f6ec108bc977fc",
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "units": [
+          {
+            "text": "World War I originated from long-term tensions including empire formation, militarism, and alliance systems. Competing empires heightened regional tensions, while militarism intensified as European armies expanded, creating a climate of heightened military readiness. The Triple Entente (France, UK, Russia) formed to counter Germany’s growing power, prompting Germany to ally with Austria-Hungary and Italy in the Triple Alliance. The immediate trigger was the assassination of Archduke Franz Ferdinand on June 28, 1914, by a Serbian nationalist, which led Austria-Hungary to issue an ultimatum to Serbia, escalating into a broader conflict through alliance obligations.",
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "313eeafd1f3c909d",
+                "start": 0,
+                "end": 336
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "9f998d98422af07b",
+                "start": 0,
+                "end": 785
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "e236a95f72f0bafc",
+                "start": 0,
+                "end": 981
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "35ce0a3316163b5f",
+                "start": 0,
+                "end": 840
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "69b0a4785cf84b80",
+                "start": 0,
+                "end": 879
+              }
+            ]
+          },
+          {
+            "text": "Serbia’s ties to the Black Hand, a secret society aiming to liberate Slavic nations from Austro-Hungarian rule, directly contributed to the assassination of Archduke Franz Ferdinand and the subsequent escalation of tensions. While the assassination served as the catalyst, the interconnected alliance systems ensured the conflict rapidly expanded into a global war.",
+            "finding_ids": [
+              "t1.f5"
+            ],
+            "evidence_refs": [
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "e236a95f72f0bafc",
+                "start": 0,
+                "end": 981
+              },
+              {
+                "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                "chunk_id": "69b0a4785cf84b80",
+                "start": 0,
+                "end": 879
+              }
+            ]
+          }
+        ],
+        "answer_text": "World War I originated from long-term tensions including empire formation, militarism, and alliance systems. Competing empires heightened regional tensions, while militarism intensified as European armies expanded, creating a climate of heightened military readiness. The Triple Entente (France, UK, Russia) formed to counter Germany’s growing power, prompting Germany to ally with Austria-Hungary and Italy in the Triple Alliance. The immediate trigger was the assassination of Archduke Franz Ferdinand on June 28, 1914, by a Serbian nationalist, which led Austria-Hungary to issue an ultimatum to Serbia, escalating into a broader conflict through alliance obligations. [1][2][3][4][5]\n\nSerbia’s ties to the Black Hand, a secret society aiming to liberate Slavic nations from Austro-Hungarian rule, directly contributed to the assassination of Archduke Franz Ferdinand and the subsequent escalation of tensions. While the assassination served as the catalyst, the interconnected alliance systems ensured the conflict rapidly expanded into a global war. [3][5]",
+        "citations": [
+          {
+            "number": 1,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "313eeafd1f3c909d",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "313eeafd1f3c909d",
+                  "start": 0,
+                  "end": 336
+                },
+                "document_id": "698709",
+                "title": "Causes of World War I",
+                "section": null,
+                "text": "The First World War, which lasted from 1914 to 1918, was caused by the build-up of tension between European countries. Three long-term causes were the formation of empires, the rising size of armies and weapons, and the number of alliances. The trigger cause, however, was the assassination of Austro-Hungarian Archduke Franz Ferdinand.",
+                "text_hash": "0cbc7bea120253e09ce67b7ca9efbaa461efd3de47ea01bcd1196d71cb7f25ec",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ]
+          },
+          {
+            "number": 2,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "9f998d98422af07b",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "9f998d98422af07b",
+                  "start": 0,
+                  "end": 785
+                },
+                "document_id": "42874",
+                "title": "Human history",
+                "section": null,
+                "text": "These were causes that made it likely that a war would start in Europe. The \"spark\" that started the war was the assassination of the heir to the throne in Austria-Hungary: Archduke Franz Ferdinand by a group of young Serbians. Austria-Hungary declared war on Serbia and each country's allies then joined the war. This created a bigger conflict which turned into World War I.\n\nEurope divided into two groups of allies: the Central Powers and the Allied Powers (the \"Allies\"). The Central Powers were made up of Germany, Austria-Hungary, the Ottoman Empire and Bulgaria. The Allies were made up of Britain, France, Russia, Italy and the United States.\n\nWorld War I was fought on two fronts; the Eastern Front and the Western Front. Trench warfare was commonly used on the Eastern Front.",
+                "text_hash": "e3126f443101142df52417fe27f2194de0ca986f8a667127fe5885b5583f9c86",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ]
+          },
+          {
+            "number": 3,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "e236a95f72f0bafc",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "e236a95f72f0bafc",
+                  "start": 0,
+                  "end": 981
+                },
+                "document_id": "698709",
+                "title": "Causes of World War I",
+                "section": null,
+                "text": "The third long-term cause was military alliances. The main countries in Europe formed two sides: the Triple Entente (France, the United Kingdom, and Russia) and the Triple Alliance (Germany, Austria-Hungary, and Italy). The Triple Entente, worried about the growing strength of Germany, agreed to help its members if any of them was attacked. Germany objected to that arrangement because with France and the United Kingdom on the west and Russia on the east, it would be surrounded. That made Germany form the Triple Alliance.\n\nThe trigger cause of the war was the assassination of Archduke Franz Ferdinand, who as the heir to the throne, was supposed to be the next Austro-Hungarian emperor. He and his wife, Sophie, Duchess of Hohenberg, were killed in Sarajevo, the capital of Bosnia, on June 28, 1914, while they on a state visit there. A Serbian secret society, the Black Hand, wanted Bosnia and other Slavic nations to break free from Austria-Hungary with the help of Russia.",
+                "text_hash": "c11f0f6b2b779dd6f22e950749525d43d770b118acde036262a66bce138df7b0",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          },
+          {
+            "number": 4,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "35ce0a3316163b5f",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "35ce0a3316163b5f",
+                  "start": 0,
+                  "end": 840
+                },
+                "document_id": "377731",
+                "title": "List of Medal of Honor recipients",
+                "section": null,
+                "text": "World War I, also known as the First World War and the Great War, was a global military conflict which took place primarily in Europe from 1914–1918. Over 40 million casualties resulted, including approximately 20 million military and civilian deaths. Over 60 million European soldiers were mobilized from 1914–1918. The immediate cause of the war was the June 28, 1914 assassination of Archduke Franz Ferdinand, heir to the Austro-Hungarian throne, by Gavrilo Princip, a Bosnian Serb citizen of Austria-Hungary and member of the Black Hand. The retaliation by Austria-Hungary against Serbia activated a series of alliances that set off a chain reaction of war declarations. Within a month, much of Europe was in a state of open warfare.\n\nDuring this War, 119 men received the Medal for their actions, 33 of them posthumously.\n\nWorld War II",
+                "text_hash": "64308a34dfa7a4fc807c4f06c6d526930166abf12f1e35c3585094a0e3b18921",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f3",
+              "t1.f4"
+            ]
+          },
+          {
+            "number": 5,
+            "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+            "chunk_id": "69b0a4785cf84b80",
+            "excerpts": [
+              {
+                "key": {
+                  "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                  "chunk_id": "69b0a4785cf84b80",
+                  "start": 0,
+                  "end": 879
+                },
+                "document_id": "376908",
+                "title": "List of Medal of Honor recipients for World War I",
+                "section": null,
+                "text": "World War I (also known as the First World War and the Great War) was a global military conflict that involved most of the world's great powers. The war was assembled in two opposing groups: the Entente and the Central Powers. The immediate cause of the war was the June 28, 1914 assassination of Archduke Franz Ferdinand. He was heir to the Austro-Hungarian throne. He was killed by Gavrilo Princip who was a Bosnian Serb citizen of Austria–Hungary. He was also a member of the Black Hand. The retaliation by Austria–Hungary against Serbia activated a series of alliances that set off a chain reaction of war declarations. Within a month, much of Europe was in a state of open warfare. This resulted in the mobilization of more than 65&nbsp;million European soldiers, and more than 40&nbsp;million casualties—including approximately 20&nbsp;million deaths by the end of the war.",
+                "text_hash": "27ab50742d1884662ce9ae6f8bacc23dbea5074a95b0cc4491989af1e88f168c",
+                "source_url": "",
+                "presented_to": [
+                  "t1"
+                ]
+              }
+            ],
+            "finding_ids": [
+              "t1.f1",
+              "t1.f2",
+              "t1.f3",
+              "t1.f4",
+              "t1.f5"
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "task_id": "t1",
+            "status": "insufficient_evidence",
+            "admitted_findings": 5,
+            "used_findings": 5,
+            "gaps": [
+              "No explicit mention of the role of imperialism beyond empire formation; deeper analysis of colonial rivalries or resource competition is missing.",
+              "The interconnectedness of economic factors (e.g., arms races, trade blocs) in fueling long-term tensions is not addressed.",
+              "The specific dynamics of Italy’s shifting allegiance from the Triple Alliance to the Entente during the war are not detailed.",
+              "t1.f6: synthesis budget omitted supported material.",
+              "t1.f7: synthesis budget omitted supported material."
+            ]
+          },
+          {
+            "task_id": "t2",
+            "status": "failed",
+            "admitted_findings": 0,
+            "used_findings": 0,
+            "gaps": [
+              "Task failed: findings_invalid"
+            ]
+          }
+        ],
+        "gaps": [
+          "No explicit mention of the role of imperialism beyond empire formation; deeper analysis of colonial rivalries or resource competition is missing.",
+          "The interconnectedness of economic factors (e.g., arms races, trade blocs) in fueling long-term tensions is not addressed.",
+          "The specific dynamics of Italy’s shifting allegiance from the Triple Alliance to the Entente during the war are not detailed.",
+          "t1.f6: synthesis budget omitted supported material.",
+          "t1.f7: synthesis budget omitted supported material.",
+          "Task failed: findings_invalid"
+        ],
+        "conflicts": [
+          [
+            "t1.f4",
+            "t1.f5"
+          ]
+        ],
+        "warnings": [],
+        "error": null,
+        "diagnostics": {
+          "retrieved": 70,
+          "opened": 70,
+          "presented": 10,
+          "tokens_in": 14366,
+          "tokens_out": 1970,
+          "elapsed_ms": 77832.9647500068
+        },
+        "fingerprints": [
+          {
+            "component": "code",
+            "identity": "e901b2403edd67a953b14a068d8219217b483f03f3292d80d07a2889da5956c7"
+          },
+          {
+            "component": "snapshot",
+            "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+          },
+          {
+            "component": "models",
+            "identity": "919cba8cffef4ed5becee72a5570012aa2b632a2af0c10765e1ea3ddbbbf1e5e"
+          },
+          {
+            "component": "config",
+            "identity": "23cc5f3af7c947ac12dc6049e2c9536af4cde96c9c91441db972c7c05d832a99"
+          },
+          {
+            "component": "evaluation_controls",
+            "identity": "{\"forced_single_task\": false, \"rerank\": false}"
+          },
+          {
+            "component": "prompts",
+            "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+          }
+        ]
+      },
+      "metrics": {
+        "citation_count": 5,
+        "citations": [
+          "313eeafd1f3c909d",
+          "9f998d98422af07b",
+          "e236a95f72f0bafc",
+          "35ce0a3316163b5f",
+          "69b0a4785cf84b80"
+        ],
+        "unique_cited_titles": 4,
+        "title_list": [
+          "Causes of World War I",
+          "Human history",
+          "List of Medal of Honor recipients",
+          "List of Medal of Honor recipients for World War I"
+        ],
+        "retrieved_count": 70,
+        "opened_count": 70,
+        "presented_count": 10,
+        "total_latency_ms": 77832.9647500068,
+        "tokens_in": 14366,
+        "tokens_out": 1970,
+        "outcome": "partial",
+        "delivery": "synthesis",
+        "final_validation": "passed",
+        "tasks": 2,
+        "failed_tasks": 1,
+        "warnings": []
+      },
+      "error": null,
+      "observation": {
+        "calls": [],
+        "spans": [
+          {
+            "name": "normalize_question",
+            "elapsed_ms": 0.019,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 5596.258,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "plan",
+            "elapsed_ms": 5600.544,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "retrieve.keyword",
+            "elapsed_ms": 26.386,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "query_text": "Identify the primary long-term causes (e.g., alliances, militarism, imperialism, nationalism) and immediate triggers (e.g., assassination of Archduke Franz Ferdinand, July Crisis) of World War I, with",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 26.4
+            }
+          },
+          {
+            "name": "embedding.query",
+            "elapsed_ms": 50.49,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model_name": "intfloat/multilingual-e5-base",
+              "query_length": 325,
+              "query_prefix": "query: ",
+              "device": "mps:0"
+            }
+          },
+          {
+            "name": "retrieve.vector",
+            "elapsed_ms": 114.38,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "query_text": "Identify the primary long-term causes (e.g., alliances, militarism, imperialism, nationalism) and immediate triggers (e.g., assassination of Archduke Franz Ferdinand, July Crisis) of World War I, with",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 114.3
+            }
+          },
+          {
+            "name": "retrieve.hybrid_merge",
+            "elapsed_ms": 140.927,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "query_text": "Identify the primary long-term causes (e.g., alliances, militarism, imperialism, nationalism) and immediate triggers (e.g., assassination of Archduke Franz Ferdinand, July Crisis) of World War I, with",
+              "keyword_count": 20,
+              "vector_count": 20,
+              "merged_count": 30,
+              "duration_ms": 140.9
+            }
+          },
+          {
+            "name": "chunk_store.get_many",
+            "elapsed_ms": 50.135,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "requested_count": 30,
+              "found_count": 30,
+              "duration_ms": 50.1
+            }
+          },
+          {
+            "name": "retrieve.hydrate",
+            "elapsed_ms": 50.184,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.retrieve",
+            "elapsed_ms": 191.287,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.pack_evidence",
+            "elapsed_ms": 14.295,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 18916.937,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.derive_findings",
+            "elapsed_ms": 18920.589,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.062,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.finish_task",
+            "elapsed_ms": 0.267,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "researcher.task",
+            "elapsed_ms": 19129.003,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "task_id": "t1",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          },
+          {
+            "name": "retrieve.keyword",
+            "elapsed_ms": 34.82,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "query_text": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, militar",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 34.8
+            }
+          },
+          {
+            "name": "embedding.query",
+            "elapsed_ms": 39.924,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model_name": "intfloat/multilingual-e5-base",
+              "query_length": 300,
+              "query_prefix": "query: ",
+              "device": "mps:0"
+            }
+          },
+          {
+            "name": "retrieve.vector",
+            "elapsed_ms": 109.106,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "query_text": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, militar",
+              "top_k": 20,
+              "table_name": "chunks",
+              "results_count": 20,
+              "duration_ms": 109.1
+            }
+          },
+          {
+            "name": "retrieve.hybrid_merge",
+            "elapsed_ms": 144.638,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "query_text": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, militar",
+              "keyword_count": 20,
+              "vector_count": 20,
+              "merged_count": 40,
+              "duration_ms": 144.6
+            }
+          },
+          {
+            "name": "chunk_store.get_many",
+            "elapsed_ms": 54.132,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "requested_count": 40,
+              "found_count": 40,
+              "duration_ms": 54.1
+            }
+          },
+          {
+            "name": "retrieve.hydrate",
+            "elapsed_ms": 54.175,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.retrieve",
+            "elapsed_ms": 198.912,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.pack_evidence",
+            "elapsed_ms": 29.647,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 24973.477,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.derive_findings",
+            "elapsed_ms": 24976.785,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.031,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 9505.589,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "worker.repair_findings",
+            "elapsed_ms": 9517.053,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.validate_findings",
+            "elapsed_ms": 0.032,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "worker.finish_task",
+            "elapsed_ms": 0.139,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "researcher.task",
+            "elapsed_ms": 34725.343,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "task_id": "t2",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          },
+          {
+            "name": "aggregate",
+            "elapsed_ms": 48.768,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "model.generate",
+            "elapsed_ms": 18323.098,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "model.provider": "llamacpp_server",
+              "model.name": "ministral-3-8b-instruct",
+              "model.temperature": 0.0,
+              "model.max_tokens": 1200,
+              "messages.count": 2
+            }
+          },
+          {
+            "name": "synthesize",
+            "elapsed_ms": 18325.772,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "validate_final",
+            "elapsed_ms": 0.097,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "finalize",
+            "elapsed_ms": 0.356,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application"
+            }
+          },
+          {
+            "name": "atlas_localis.question",
+            "elapsed_ms": 77833.007,
+            "attributes": {
+              "run_id": "3823627229c4498da0f6ec108bc977fc",
+              "run_type": "application",
+              "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+            }
+          }
+        ],
+        "note": "Call inputs/responses and generation settings projected into review_packet; full schemas/templates identified by hashes."
+      },
+      "failures": {
+        "planner_fallback": 0,
+        "worker_repair_attempts": 1,
+        "synthesis_repair_attempts": 0,
+        "synthesis_fallback": 0,
+        "failed_tasks": 1,
+        "coverage_gaps": 2,
+        "final_validation_failure": 0,
+        "operational_error": null
+      },
+      "resources": {
+        "parent_peak_rss_bytes": 1318371328,
+        "metal_driver_allocated_bytes_at_sample": 1164656640
+      },
+      "repeat": 1,
+      "review_packet": [
+        {
+          "schema": "PlanProposal",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "81e20416c14529f8c355fbe06268636698cd8865a28bd9e68dd7f09c04c7c6ea",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "How did World War I start and what were its major turning points?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "How did World War I start and what were its major turning points?"
+            }
+          ],
+          "response": {
+            "tasks": [
+              {
+                "label": "Causes and Immediate Triggers of World War I",
+                "question": "Identify the primary long-term causes (e.g., alliances, militarism, imperialism, nationalism) and immediate triggers (e.g., assassination of Archduke Franz Ferdinand, July Crisis) of World War I, with a focus on their interconnectedness and regional dynamics (e.g., Balkans, Europe). Exclude secondary or speculative factors.",
+                "needs_timeline": true
+              },
+              {
+                "label": "Major Turning Points and Their Geopolitical Impact",
+                "question": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, military strategies, and alliances, without extrapolating long-term consequences beyond the conflict’s end.",
+                "needs_timeline": true
+              }
+            ]
+          },
+          "error": null,
+          "wall_ms": 5596.3337080029305,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t1",
+          "input": [
+            {
+              "question": "Identify the primary long-term causes (e.g., alliances, militarism, imperialism, nationalism) and immediate triggers (e.g., assassination of Archduke Franz Ferdinand, July Crisis) of World War I, with a focus on their interconnectedness and regional dynamics (e.g., Balkans, Europe). Exclude secondary or speculative factors.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Causes of World War I",
+                  "section": null,
+                  "text": "The First World War, which lasted from 1914 to 1918, was caused by the build-up of tension between European countries. Three long-term causes were the formation of empires, the rising size of armies and weapons, and the number of alliances. The trigger cause, however, was the assassination of Austro-Hungarian Archduke Franz Ferdinand."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Causes of World War I",
+                  "section": null,
+                  "text": "The third long-term cause was military alliances. The main countries in Europe formed two sides: the Triple Entente (France, the United Kingdom, and Russia) and the Triple Alliance (Germany, Austria-Hungary, and Italy). The Triple Entente, worried about the growing strength of Germany, agreed to help its members if any of them was attacked. Germany objected to that arrangement because with France and the United Kingdom on the west and Russia on the east, it would be surrounded. That made Germany form the Triple Alliance.\n\nThe trigger cause of the war was the assassination of Archduke Franz Ferdinand, who as the heir to the throne, was supposed to be the next Austro-Hungarian emperor. He and his wife, Sophie, Duchess of Hohenberg, were killed in Sarajevo, the capital of Bosnia, on June 28, 1914, while they on a state visit there. A Serbian secret society, the Black Hand, wanted Bosnia and other Slavic nations to break free from Austria-Hungary with the help of Russia."
+                },
+                {
+                  "alias": "E3",
+                  "title": "List of Medal of Honor recipients",
+                  "section": null,
+                  "text": "World War I, also known as the First World War and the Great War, was a global military conflict which took place primarily in Europe from 1914–1918. Over 40 million casualties resulted, including approximately 20 million military and civilian deaths. Over 60 million European soldiers were mobilized from 1914–1918. The immediate cause of the war was the June 28, 1914 assassination of Archduke Franz Ferdinand, heir to the Austro-Hungarian throne, by Gavrilo Princip, a Bosnian Serb citizen of Austria-Hungary and member of the Black Hand. The retaliation by Austria-Hungary against Serbia activated a series of alliances that set off a chain reaction of war declarations. Within a month, much of Europe was in a state of open warfare.\n\nDuring this War, 119 men received the Medal for their actions, 33 of them posthumously.\n\nWorld War II"
+                },
+                {
+                  "alias": "E4",
+                  "title": "List of Medal of Honor recipients for World War I",
+                  "section": null,
+                  "text": "World War I (also known as the First World War and the Great War) was a global military conflict that involved most of the world's great powers. The war was assembled in two opposing groups: the Entente and the Central Powers. The immediate cause of the war was the June 28, 1914 assassination of Archduke Franz Ferdinand. He was heir to the Austro-Hungarian throne. He was killed by Gavrilo Princip who was a Bosnian Serb citizen of Austria–Hungary. He was also a member of the Black Hand. The retaliation by Austria–Hungary against Serbia activated a series of alliances that set off a chain reaction of war declarations. Within a month, much of Europe was in a state of open warfare. This resulted in the mobilization of more than 65&nbsp;million European soldiers, and more than 40&nbsp;million casualties—including approximately 20&nbsp;million deaths by the end of the war."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Human history",
+                  "section": null,
+                  "text": "These were causes that made it likely that a war would start in Europe. The \"spark\" that started the war was the assassination of the heir to the throne in Austria-Hungary: Archduke Franz Ferdinand by a group of young Serbians. Austria-Hungary declared war on Serbia and each country's allies then joined the war. This created a bigger conflict which turned into World War I.\n\nEurope divided into two groups of allies: the Central Powers and the Allied Powers (the \"Allies\"). The Central Powers were made up of Germany, Austria-Hungary, the Ottoman Empire and Bulgaria. The Allies were made up of Britain, France, Russia, Italy and the United States.\n\nWorld War I was fought on two fronts; the Eastern Front and the Western Front. Trench warfare was commonly used on the Eastern Front."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "The long-term cause of World War I included the formation of competing empires across Europe, which heightened regional tensions and territorial disputes.",
+                "evidence_refs": [
+                  "E1",
+                  "E5"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "Militarism intensified as European armies and weaponry expanded significantly, contributing to a climate of heightened military readiness and competition.",
+                "evidence_refs": [
+                  "E1"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The Triple Entente (France, United Kingdom, Russia) formed an alliance system to counter Germany’s growing power, while Germany responded by forming the Triple Alliance (Germany, Austria-Hungary, Italy) to avoid encirclement.",
+                "evidence_refs": [
+                  "E2"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The assassination of Archduke Franz Ferdinand on June 28, 1914, in Sarajevo served as the immediate trigger for the war, as Austria-Hungary blamed Serbia and issued an ultimatum.",
+                "evidence_refs": [
+                  "E2",
+                  "E3",
+                  "E4"
+                ],
+                "date_text": "June 28, 1914"
+              },
+              {
+                "statement": "Serbia’s ties to the Black Hand, a secret society aiming to liberate Slavic nations from Austro-Hungarian rule, played a direct role in the assassination and subsequent escalation.",
+                "evidence_refs": [
+                  "E2",
+                  "E4"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "Austria-Hungary’s declaration of war on Serbia activated a chain reaction of alliance obligations, rapidly drawing France, Russia, Germany, and later other nations into the conflict within weeks.",
+                "evidence_refs": [
+                  "E3",
+                  "E4",
+                  "E5"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The Balkans region became a flashpoint due to nationalist movements, particularly Serbian aspirations for independence and Austro-Hungarian control over Bosnia, exacerbating regional tensions.",
+                "evidence_refs": [
+                  "E2",
+                  "E5"
+                ],
+                "date_text": null
+              }
+            ],
+            "gaps": [
+              "No explicit mention of the role of imperialism beyond empire formation; deeper analysis of colonial rivalries or resource competition is missing.",
+              "The interconnectedness of economic factors (e.g., arms races, trade blocs) in fueling long-term tensions is not addressed.",
+              "The specific dynamics of Italy’s shifting allegiance from the Triple Alliance to the Entente during the war are not detailed."
+            ]
+          },
+          "error": null,
+          "wall_ms": 18917.027625007904,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t2",
+          "input": [
+            {
+              "question": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, military strategies, and alliances, without extrapolating long-term consequences beyond the conflict’s end.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Battle of France",
+                  "section": null,
+                  "text": "Alexander, Martin. Republic in Danger, General Maurice Gamelin and the Politics of French Defence, 1933-1940, Cambridge: Cambridge University Press, 1992. An examination of Gamelin’s career and French military preparations during the 1930s. Highly complimentary work stressing French rational preparations for the war.\nThis was the first detailed account of the B.E.F. in France. The fight for survival finished with the return from France in the little ships\nBloch, Marc. Strange Defeat, A Statement of Evidence Written in 1940, Hopkins, New York: W.W. Norton & Co., 1968. Written in 1940 by a veteran of the campaign. Considered one of the early key works on understanding how the French saw this defeat. Writer killed in 1943 by Gestapo due to resistance work.\nSix nations locked in aerial combat - September 1939 to June 1940.\nDoughty, Robert Allan. The Seeds of Disaster: The Development of French Army Doctrine, 1919-1939, Archon, 1986. Examination of errors the French made in military doctrine during the inter-war years and how this, not defeatism or lack of quality equipment, led to the defeat of 1940.\nDoughty, Robert Allan. The Breaking Point: Sedan and the Fall of France, 1940. Archon, 1990. Classic study on the events of 13 and 14 May.\nGerard, Lt. Robert M. Tank-Fighter Team, 1943\nHorne, Alistair. To Lose a Battle, 1940, Boston: Little Brown and Co., 1969. Narrative account of the Fall of France in 1940. Very readable but also dated in terms of its non-critical acceptance of the defeatism argument.\nKeisling, Eugenia C. Arming Against Hitler: France and the Limits of Military Planning. UP of Kansas, 1996. Study stressing the weaknesses of the French reserve, mobilization and training system. Rejects the defeatism interpretation.\nMaier, Klaus A. Germany and the Second World War: Germany's Initial Conquests in Europe. Oxford UP, 1991. English translation of a thorough collective German academic study, giving a detailed account of all events.\nMay, Ernest R. Strange Victory: Hitler's Conquest of France. Hill & Wang, 2001. A modern account for the general public focusing on politics, strategy and intelligence.\nMosier, John. The Blitzkrieg Myth: How Hitler and the Allies Misread the Strategic Realities of World War II. HarperCollins, 2003. Strongly revisionist interpretation, denying that the concept of Blitzkrieg can even be applied to this campaign.\nShepperd, Alan. France 1940, Blitzkrieg in the West; Osprey Campaign Series #3, Osprey Publishing, 1990.\nShirer, William L.. Berlin Diary: The Journal of a Foreign Correspondent, 1934-1941. Johns Hopkins UP, 2002. In the period just before the surrender, Shirer worked for CBS News under Edward R Murrow, moving around Europe as events dictated. This is his written account of the period.\nYoung, Robert J. In Command of France: French Foreign Policy and Military Planning, 1933-1940, Cambridge: Harvard University Press, 1978."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Victoria Cross for Australia",
+                  "section": null,
+                  "text": "Australian winners of the Victoria Cross\n1900 to 1920\n1900 - John Bisdee, Second Boer War\n1900 - Sir Neville Howse, Second Boer War\n1900 - Guy Wylly, Second Boer War\n1901 - Frederick Bell, Second Boer War\n1901 - Leslie Maygar, Second Boer War, Geelhoutboom, South Africa\n1901 - James Rogers, Second Boer War\n1915 - Alexander Burton, Gallipoli Campaign\n1915 - Wilbur Dartnell, Maktau, Kenya\n1915 - William Dunstan, World War I, Gallipoli Campaign\n1915 - John Patrick Hamilton, World War I, Gallipoli Campaign\n1915 - Albert Jacka, Gallipoli Campaign\n1915 - Leonard Keysor, World War I, Gallipoli Campaign\n1915 - Alfred Shout, Gallipoli Campaign\n1915 - William Symons, World War I, Gallipoli Campaign\n1915 - Hugo Throssell, World War I, Gallipoli Campaign\n1915 - Frederick Tubb, World War I, Gallipoli Campaign\n1916 - Arthur Blackburn, World War I, Pozières, France\n1916 - Claud Castleton, Pozières, France\n1916 - Thomas Cooke, Pozières, France\n1916 - William Jackson, World War I, Armentières, France\n1916 - John Leak, World War I, Pozières, France\n1916 - Martin O'Meara, World War I, Pozières, France\n1917 - Frederick Birks, Battle of Passchendaele\n1917 - Patrick Bugden, Zonnebeke, Belgium\n1917 - Percy Cherry, Lagnicourt, France\n1917 - John Carroll, World War I, Battle of Messines (1917)\n1917 - John Dwyer, World War I, Zonnebeke, Belgium\n1917 - Robert Grieve, World War I, Battle of Messines (1917)\n1917 - George Howell, World War I, Battle of Arras (1917)\n1917 - Roy Inwood, World War I, Battle of the Menin Road Ridge\n1917 - Clarence Jeffries, First Battle of Passchendaele\n1917 - Jørgen Jensen, World War I, Noreuil, France\n1917 - Bede Kenny, World War I, Hermies, France\n1917 - Lewis McGee, Battle of Ypres\n1917 - Frank McNamara, World War I, Capture of Wadi el Hesi\n1917 - Mick Moon, World War I, Battle of Arras (1917)\n1917 - Harry Murray, World War I\n1917 - James Newland, World War I, Bapaume, France\n1917 - Walter Peeler, World War I, Battle of Ypres\n1917 - Charles Pope, Louveral, France\n1917 - John Whittle, World War I\n1918 - Thomas Axford, World War I, Battle of Hamel\n1918 - Robert Beatham, Battle of Rosières\n1918 - Albert Borella, World War I, Villers-Bretonneux, France\n1918 - Walter Brown, World War I, Villers-Bretonneux, France\n1918 - Alexander Buckley, Battle of Mont Saint-Quentin\n1918 - Maurice Buckley, World War I, Le Verguier, France\n1918 - George Cartwright, World War I, Bouchavesnes, France\n1918 - William Currey, World War I, Battle of Mont Saint-Quentin\n1918 - Henry Dalziel, World War I, Battle of Hamel\n1918 - Phillip Davey, World War I, Merris, France\n1918 - Alfred Gaby, Villers-Bretonneux, France\n1918 - Bernard Gordon, World War I, Battle of Amiens\n1918 - Arthur Hall, World War I, Battle of Mont Saint-Quentin\n1918 - George Ingram, World War I, Montbrehain, France\n1918 - William Joynt, World War I, Battle of Herleville Wood\n1918 - Alby Lowerson, World War I, Battle of Mont Saint-Quentin\n1918 - Robert MacTier, Battle of Mont Saint-Quentin\n1918 - Joseph Maxwell, World War I, Estrees, France\n1918 - Dominic McCarthy, World War I, Vermandovillers, France\n1918 - Stanley McDougall, World War I, Dernancourt, France\n1918 - William Ruthven, World War I, Ville-sur-Ancre, France\n1918 - John Ryan, World War I, Hindenburg Defences, France\n1918 - Clifford Sadlier, World War I, Villers-Bretonneux, France\n1918 - Percy Statton, World War I, Proyart, France\n1918 - Percy Storkey, World War I, Hangard Wood, France\n1918 - Edgar Towner, World War I, Battle of Mont Saint-Quentin\n1918 - Blair Wark, World War I, Bellicourt, France\n1918 - Lawrence Weathers, World War I, Peronne, France\n1918 - James Park Woods, World War I, Le Verguier, France\n1919 - Arthur Percy Sullivan, North Russia Campaign\n1919 - Samuel Pearse, North Russia Campaign\n1941 - 1969\n1941 - Roden Cutler, Syria–Lebanon Campaign\n1941 - Corporal John Edmondson, Tobruk\n1941 - Hughie Edwards, Bremen\n1941 - Jim Gordon, Djezzine, Lebanon\n1942 - Charles Groves Wright Anderson, Malaya\n1942 - Percy Gratwick, El Alamein, Egypt\n1942 - Stan Gurney, Egypt\n1942 - Jack French, Milne Bay, New Guinea\n1942 - Percy Gratwick\n1942 - Bill Kibby, El Alamein, Egypt\n1942 - Bruce Kingsbury, Kokoda Trail, Papua New Guinea\n1942 - Ron Middleton, Turin, Italy\n1943 - Tom Derrick, New Guinea\n1943 - Richard Kelliher, New Guinea\n1943 - Bill Newton, New Guinea\n1945 - Albert Chowne, Dagua, New Guinea\n1945 - Edward Kenna, New Guinea\n1945 - John Bernard Mackey, Tarakan Island, Borneo\n1945 - Frank Partridge, Bougainville Campaign, Solomon Islands\n1945 - Reg Rattey, Bougainville, Solomon Islands\n1945 - Leslie Thomas Starcevich, Battle of North Borneo\n1965 - Kevin Wheatley, Vietnam\n1967 - Peter Badcoe, Huong Tra, Vietnam\n1969 - Keith Payne, Ben Het Camp, Vietnam\n1969 -Ray Simpson, Vietnam"
+                },
+                {
+                  "alias": "E3",
+                  "title": "History of Europe",
+                  "section": null,
+                  "text": "Conflict intensified across the globe, in a chase for empires, where powerful countries turned less powerful ones into colonies, until the outbreak, in 1914, of the biggest war that had ever been fought up to that point in time. It was called the Great War but now most often called World War I or the First World War. In the desperation of war, the Russian Revolution promised the people \"peace, bread and land\" and led to the end of the Russian Empire and its replacement by the formation of the Soviet Union. The defeat of Germany came at the price of economic destruction, which was formally written into the Treaty of Versailles in 1919 where it was stated that the First World War had been entirely the fault of Germany and its allies and demanded that they pay back the entire amount the war had cost."
+                },
+                {
+                  "alias": "E4",
+                  "title": "September 11",
+                  "section": null,
+                  "text": "Events\nUp to 1900\n9 &ndash; The Battle of Teutoburg Forest finishes.\n1041 &ndash; Fire destroys most of Bremen's Old Town.\n1297 &ndash; Led by William Wallace, the Scots defeat the English at the Battle of Stirling Bridge.\n1390 &ndash; The Teutonic Knights besiege Vilnius.\n1541 &ndash; Santiago, Chile, is destroyed by indigenous warriors led by Michimalonko.\n1565 &ndash; Ottoman Empire forces retreat from Malta, ending the Great Siege of Malta.\n1609 &ndash; Henry Hudson arrives at the island of Manhattan.\n1649 &ndash; Under orders from Oliver Cromwell, the Drogheda Massacre is committed in Ireland.\n1708 &ndash; King Charles XII of Sweden stops his march to Moscow, by halting outside Smolensk, marking a turning point in the Great Northern War.\n1714 &ndash; Siege of Barcelona: Barcelona, capital city of Catalonia, surrenders to French and Spanish Bourbon armies in the War of the Spanish Succession.\n1758 &ndash; Seven Years' War: In the Battle of Saint Cast, France holds off a British invasion.\n1775 &ndash; American Revolutionary War: Benedict Arnold's expedition leaves Cambridge, Massachusetts, as part of the invasion of Quebec.\n1776 &ndash; A British–American peace conference on Staten Island fails to stop the already started American Revolutionary War.\n1789 &ndash; Alexander Hamilton becomes the first United States Secretary of the Treasury.\n1802 &ndash; France annexes the Kingdom of Piedmont.\n1813 &ndash; War of 1812: British troops arrive in Mount Vernon and prepare to march and invade Washington, DC.\n1814 &ndash; War of 1812: Climax of the Battle of Plattsburgh, a major US victory in the war.\n1852 &ndash; The State of Buenos Aires separates from the Argentine federal government, before re–joining on September 17, 1861.\n1857 &ndash; Mountain Meadows massacre: Mormon settlers and Paiutes massacre 120 pioneers at Mountain Meadows, Utah.\n1877 &ndash; British three–mast sailing boat collides with another vessel off the Isle of Portland, sinking shortly after, killing 106 people.\n1897 &ndash; After months of pursuit, generals of Menelik II of Ethiopia capture Gaki Sherocho, the last King of Kaffa, bringing the ancient kingdom of Kaffa to an end."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Battle of Verdun",
+                  "section": null,
+                  "text": "The Battle of Verdun was a battle of World War I that started when the German Fifth Army attacked French positions, near Verdun, on February 21, 1916. It ended on December 18, but the front line had not changed very much. Both sides lost about 337,000 soldiers each. Never before had industrialization been so visible in war. The Battle of Verdun is considered the largest and longest in world history and has been called the \"Hell of Verdun\" or the \"Blood Pump\"."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "The Gallipoli Campaign (1915) marked a major strategic failure for the Allies, diverting resources from Western Front offensives and damaging morale, particularly in Australia and New Zealand, as evidenced by the high number of Victoria Cross recipients from the campaign.",
+                "evidence_refs": [
+                  "E2"
+                ],
+                "date_text": "1915"
+              },
+              {
+                "statement": "The Battle of Verdun (February 21, 1916 – December 18, 1916) became the longest and bloodiest battle of World War I, with both sides suffering around 337,000 casualties each, demonstrating the industrialized nature of trench warfare.",
+                "evidence_refs": [
+                  "E5"
+                ],
+                "date_text": "February 21, 1916 – December 18, 1916"
+              },
+              {
+                "statement": "The Russian Revolution (1917) led to the withdrawal of Russia from World War I, shifting the burden of the Eastern Front to other Allied powers and weakening the Central Powers' coalition.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The U.S. entry into World War I in 1917, following prolonged neutrality, provided critical manpower and industrial resources that tipped the balance against Germany, though its direct impact on the war’s trajectory was not immediate.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": null
+              },
+              {
+                "statement": "The Armistice of November 11, 1918, ended World War I, but the Treaty of Versailles (1919) formally attributed full blame for the war to Germany and imposed harsh reparations, setting the stage for future conflicts.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": "1919"
+              }
+            ],
+            "gaps": [
+              "No direct evidence from the provided sources details the Battle of the Somme (1916) or its immediate effects on military strategies or alliances, despite its high casualty toll.",
+              "The specific role of the Battle of France (1940) in the context of World War I’s turning points is not addressed, as the provided sources focus on interwar French military doctrine rather than WWI.",
+              "Chronological precision for the U.S. entry into the war is missing, as the provided sources do not specify the exact date or immediate strategic shifts caused by American involvement."
+            ]
+          },
+          "error": null,
+          "wall_ms": 24973.470958007965,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "Findings",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "8003a513801a31d9fc2a03724b050cd82f5ac4e23719310d4120f4567e444d11",
+          "task_id": "t2",
+          "input": [
+            {
+              "question": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, military strategies, and alliances, without extrapolating long-term consequences beyond the conflict’s end.",
+              "needs_timeline": true,
+              "evidence": [
+                {
+                  "alias": "E1",
+                  "title": "Battle of France",
+                  "section": null,
+                  "text": "Alexander, Martin. Republic in Danger, General Maurice Gamelin and the Politics of French Defence, 1933-1940, Cambridge: Cambridge University Press, 1992. An examination of Gamelin’s career and French military preparations during the 1930s. Highly complimentary work stressing French rational preparations for the war.\nThis was the first detailed account of the B.E.F. in France. The fight for survival finished with the return from France in the little ships\nBloch, Marc. Strange Defeat, A Statement of Evidence Written in 1940, Hopkins, New York: W.W. Norton & Co., 1968. Written in 1940 by a veteran of the campaign. Considered one of the early key works on understanding how the French saw this defeat. Writer killed in 1943 by Gestapo due to resistance work.\nSix nations locked in aerial combat - September 1939 to June 1940.\nDoughty, Robert Allan. The Seeds of Disaster: The Development of French Army Doctrine, 1919-1939, Archon, 1986. Examination of errors the French made in military doctrine during the inter-war years and how this, not defeatism or lack of quality equipment, led to the defeat of 1940.\nDoughty, Robert Allan. The Breaking Point: Sedan and the Fall of France, 1940. Archon, 1990. Classic study on the events of 13 and 14 May.\nGerard, Lt. Robert M. Tank-Fighter Team, 1943\nHorne, Alistair. To Lose a Battle, 1940, Boston: Little Brown and Co., 1969. Narrative account of the Fall of France in 1940. Very readable but also dated in terms of its non-critical acceptance of the defeatism argument.\nKeisling, Eugenia C. Arming Against Hitler: France and the Limits of Military Planning. UP of Kansas, 1996. Study stressing the weaknesses of the French reserve, mobilization and training system. Rejects the defeatism interpretation.\nMaier, Klaus A. Germany and the Second World War: Germany's Initial Conquests in Europe. Oxford UP, 1991. English translation of a thorough collective German academic study, giving a detailed account of all events.\nMay, Ernest R. Strange Victory: Hitler's Conquest of France. Hill & Wang, 2001. A modern account for the general public focusing on politics, strategy and intelligence.\nMosier, John. The Blitzkrieg Myth: How Hitler and the Allies Misread the Strategic Realities of World War II. HarperCollins, 2003. Strongly revisionist interpretation, denying that the concept of Blitzkrieg can even be applied to this campaign.\nShepperd, Alan. France 1940, Blitzkrieg in the West; Osprey Campaign Series #3, Osprey Publishing, 1990.\nShirer, William L.. Berlin Diary: The Journal of a Foreign Correspondent, 1934-1941. Johns Hopkins UP, 2002. In the period just before the surrender, Shirer worked for CBS News under Edward R Murrow, moving around Europe as events dictated. This is his written account of the period.\nYoung, Robert J. In Command of France: French Foreign Policy and Military Planning, 1933-1940, Cambridge: Harvard University Press, 1978."
+                },
+                {
+                  "alias": "E2",
+                  "title": "Victoria Cross for Australia",
+                  "section": null,
+                  "text": "Australian winners of the Victoria Cross\n1900 to 1920\n1900 - John Bisdee, Second Boer War\n1900 - Sir Neville Howse, Second Boer War\n1900 - Guy Wylly, Second Boer War\n1901 - Frederick Bell, Second Boer War\n1901 - Leslie Maygar, Second Boer War, Geelhoutboom, South Africa\n1901 - James Rogers, Second Boer War\n1915 - Alexander Burton, Gallipoli Campaign\n1915 - Wilbur Dartnell, Maktau, Kenya\n1915 - William Dunstan, World War I, Gallipoli Campaign\n1915 - John Patrick Hamilton, World War I, Gallipoli Campaign\n1915 - Albert Jacka, Gallipoli Campaign\n1915 - Leonard Keysor, World War I, Gallipoli Campaign\n1915 - Alfred Shout, Gallipoli Campaign\n1915 - William Symons, World War I, Gallipoli Campaign\n1915 - Hugo Throssell, World War I, Gallipoli Campaign\n1915 - Frederick Tubb, World War I, Gallipoli Campaign\n1916 - Arthur Blackburn, World War I, Pozières, France\n1916 - Claud Castleton, Pozières, France\n1916 - Thomas Cooke, Pozières, France\n1916 - William Jackson, World War I, Armentières, France\n1916 - John Leak, World War I, Pozières, France\n1916 - Martin O'Meara, World War I, Pozières, France\n1917 - Frederick Birks, Battle of Passchendaele\n1917 - Patrick Bugden, Zonnebeke, Belgium\n1917 - Percy Cherry, Lagnicourt, France\n1917 - John Carroll, World War I, Battle of Messines (1917)\n1917 - John Dwyer, World War I, Zonnebeke, Belgium\n1917 - Robert Grieve, World War I, Battle of Messines (1917)\n1917 - George Howell, World War I, Battle of Arras (1917)\n1917 - Roy Inwood, World War I, Battle of the Menin Road Ridge\n1917 - Clarence Jeffries, First Battle of Passchendaele\n1917 - Jørgen Jensen, World War I, Noreuil, France\n1917 - Bede Kenny, World War I, Hermies, France\n1917 - Lewis McGee, Battle of Ypres\n1917 - Frank McNamara, World War I, Capture of Wadi el Hesi\n1917 - Mick Moon, World War I, Battle of Arras (1917)\n1917 - Harry Murray, World War I\n1917 - James Newland, World War I, Bapaume, France\n1917 - Walter Peeler, World War I, Battle of Ypres\n1917 - Charles Pope, Louveral, France\n1917 - John Whittle, World War I\n1918 - Thomas Axford, World War I, Battle of Hamel\n1918 - Robert Beatham, Battle of Rosières\n1918 - Albert Borella, World War I, Villers-Bretonneux, France\n1918 - Walter Brown, World War I, Villers-Bretonneux, France\n1918 - Alexander Buckley, Battle of Mont Saint-Quentin\n1918 - Maurice Buckley, World War I, Le Verguier, France\n1918 - George Cartwright, World War I, Bouchavesnes, France\n1918 - William Currey, World War I, Battle of Mont Saint-Quentin\n1918 - Henry Dalziel, World War I, Battle of Hamel\n1918 - Phillip Davey, World War I, Merris, France\n1918 - Alfred Gaby, Villers-Bretonneux, France\n1918 - Bernard Gordon, World War I, Battle of Amiens\n1918 - Arthur Hall, World War I, Battle of Mont Saint-Quentin\n1918 - George Ingram, World War I, Montbrehain, France\n1918 - William Joynt, World War I, Battle of Herleville Wood\n1918 - Alby Lowerson, World War I, Battle of Mont Saint-Quentin\n1918 - Robert MacTier, Battle of Mont Saint-Quentin\n1918 - Joseph Maxwell, World War I, Estrees, France\n1918 - Dominic McCarthy, World War I, Vermandovillers, France\n1918 - Stanley McDougall, World War I, Dernancourt, France\n1918 - William Ruthven, World War I, Ville-sur-Ancre, France\n1918 - John Ryan, World War I, Hindenburg Defences, France\n1918 - Clifford Sadlier, World War I, Villers-Bretonneux, France\n1918 - Percy Statton, World War I, Proyart, France\n1918 - Percy Storkey, World War I, Hangard Wood, France\n1918 - Edgar Towner, World War I, Battle of Mont Saint-Quentin\n1918 - Blair Wark, World War I, Bellicourt, France\n1918 - Lawrence Weathers, World War I, Peronne, France\n1918 - James Park Woods, World War I, Le Verguier, France\n1919 - Arthur Percy Sullivan, North Russia Campaign\n1919 - Samuel Pearse, North Russia Campaign\n1941 - 1969\n1941 - Roden Cutler, Syria–Lebanon Campaign\n1941 - Corporal John Edmondson, Tobruk\n1941 - Hughie Edwards, Bremen\n1941 - Jim Gordon, Djezzine, Lebanon\n1942 - Charles Groves Wright Anderson, Malaya\n1942 - Percy Gratwick, El Alamein, Egypt\n1942 - Stan Gurney, Egypt\n1942 - Jack French, Milne Bay, New Guinea\n1942 - Percy Gratwick\n1942 - Bill Kibby, El Alamein, Egypt\n1942 - Bruce Kingsbury, Kokoda Trail, Papua New Guinea\n1942 - Ron Middleton, Turin, Italy\n1943 - Tom Derrick, New Guinea\n1943 - Richard Kelliher, New Guinea\n1943 - Bill Newton, New Guinea\n1945 - Albert Chowne, Dagua, New Guinea\n1945 - Edward Kenna, New Guinea\n1945 - John Bernard Mackey, Tarakan Island, Borneo\n1945 - Frank Partridge, Bougainville Campaign, Solomon Islands\n1945 - Reg Rattey, Bougainville, Solomon Islands\n1945 - Leslie Thomas Starcevich, Battle of North Borneo\n1965 - Kevin Wheatley, Vietnam\n1967 - Peter Badcoe, Huong Tra, Vietnam\n1969 - Keith Payne, Ben Het Camp, Vietnam\n1969 -Ray Simpson, Vietnam"
+                },
+                {
+                  "alias": "E3",
+                  "title": "History of Europe",
+                  "section": null,
+                  "text": "Conflict intensified across the globe, in a chase for empires, where powerful countries turned less powerful ones into colonies, until the outbreak, in 1914, of the biggest war that had ever been fought up to that point in time. It was called the Great War but now most often called World War I or the First World War. In the desperation of war, the Russian Revolution promised the people \"peace, bread and land\" and led to the end of the Russian Empire and its replacement by the formation of the Soviet Union. The defeat of Germany came at the price of economic destruction, which was formally written into the Treaty of Versailles in 1919 where it was stated that the First World War had been entirely the fault of Germany and its allies and demanded that they pay back the entire amount the war had cost."
+                },
+                {
+                  "alias": "E4",
+                  "title": "September 11",
+                  "section": null,
+                  "text": "Events\nUp to 1900\n9 &ndash; The Battle of Teutoburg Forest finishes.\n1041 &ndash; Fire destroys most of Bremen's Old Town.\n1297 &ndash; Led by William Wallace, the Scots defeat the English at the Battle of Stirling Bridge.\n1390 &ndash; The Teutonic Knights besiege Vilnius.\n1541 &ndash; Santiago, Chile, is destroyed by indigenous warriors led by Michimalonko.\n1565 &ndash; Ottoman Empire forces retreat from Malta, ending the Great Siege of Malta.\n1609 &ndash; Henry Hudson arrives at the island of Manhattan.\n1649 &ndash; Under orders from Oliver Cromwell, the Drogheda Massacre is committed in Ireland.\n1708 &ndash; King Charles XII of Sweden stops his march to Moscow, by halting outside Smolensk, marking a turning point in the Great Northern War.\n1714 &ndash; Siege of Barcelona: Barcelona, capital city of Catalonia, surrenders to French and Spanish Bourbon armies in the War of the Spanish Succession.\n1758 &ndash; Seven Years' War: In the Battle of Saint Cast, France holds off a British invasion.\n1775 &ndash; American Revolutionary War: Benedict Arnold's expedition leaves Cambridge, Massachusetts, as part of the invasion of Quebec.\n1776 &ndash; A British–American peace conference on Staten Island fails to stop the already started American Revolutionary War.\n1789 &ndash; Alexander Hamilton becomes the first United States Secretary of the Treasury.\n1802 &ndash; France annexes the Kingdom of Piedmont.\n1813 &ndash; War of 1812: British troops arrive in Mount Vernon and prepare to march and invade Washington, DC.\n1814 &ndash; War of 1812: Climax of the Battle of Plattsburgh, a major US victory in the war.\n1852 &ndash; The State of Buenos Aires separates from the Argentine federal government, before re–joining on September 17, 1861.\n1857 &ndash; Mountain Meadows massacre: Mormon settlers and Paiutes massacre 120 pioneers at Mountain Meadows, Utah.\n1877 &ndash; British three–mast sailing boat collides with another vessel off the Isle of Portland, sinking shortly after, killing 106 people.\n1897 &ndash; After months of pursuit, generals of Menelik II of Ethiopia capture Gaki Sherocho, the last King of Kaffa, bringing the ancient kingdom of Kaffa to an end."
+                },
+                {
+                  "alias": "E5",
+                  "title": "Battle of Verdun",
+                  "section": null,
+                  "text": "The Battle of Verdun was a battle of World War I that started when the German Fifth Army attacked French positions, near Verdun, on February 21, 1916. It ended on December 18, but the front line had not changed very much. Both sides lost about 337,000 soldiers each. Never before had industrialization been so visible in war. The Battle of Verdun is considered the largest and longest in world history and has been called the \"Hell of Verdun\" or the \"Blood Pump\"."
+                }
+              ]
+            }
+          ],
+          "response": {
+            "findings": [
+              {
+                "statement": "The Gallipoli Campaign (1915) marked a major Australian military engagement in World War I, with multiple Australian soldiers awarded the Victoria Cross for bravery during the campaign.",
+                "evidence_refs": [
+                  "E2"
+                ],
+                "date_text": "1915"
+              },
+              {
+                "statement": "The Battle of Verdun (February 21, 1916 – December 18, 1916) was the longest and largest battle of World War I, resulting in heavy casualties for both German and French forces, with industrialized warfare prominently featured.",
+                "evidence_refs": [
+                  "E5"
+                ],
+                "date_text": "February 21, 1916 – December 18, 1916"
+              },
+              {
+                "statement": "The Russian Revolution (1917) led to the end of the Russian Empire and the formation of the Soviet Union, with the promise of 'peace, bread, and land' driving the uprising.",
+                "evidence_refs": [
+                  "E3"
+                ],
+                "date_text": null
+              }
+            ],
+            "gaps": [
+              "No direct evidence provided on the U.S. entry into World War I or its immediate military and strategic effects.",
+              "No specific details on the Battle of the Somme or its direct impact on the war’s trajectory, despite its significance.",
+              "No evidence referencing the Armistice of 1918 or its immediate causes and effects on the war’s conclusion."
+            ]
+          },
+          "error": null,
+          "wall_ms": 9505.64029099769,
+          "finish_reason": "stop"
+        },
+        {
+          "schema": "AnswerDraft",
+          "settings": {
+            "temperature": 0,
+            "max_tokens": 1200,
+            "stream": false,
+            "request_timeout": 90
+          },
+          "schema_sha256": "d41cb9d34c531e8e61907d2f75491012c02566761b4b7edbe35d5800b494ac1d",
+          "task_id": null,
+          "input": [
+            {
+              "original_intent": {
+                "question": "How did World War I start and what were its major turning points?",
+                "history": [],
+                "summary": "",
+                "history_truncated": false
+              },
+              "standalone_question": "How did World War I start and what were its major turning points?",
+              "tasks": [
+                {
+                  "task": {
+                    "label": "Causes and Immediate Triggers of World War I",
+                    "question": "Identify the primary long-term causes (e.g., alliances, militarism, imperialism, nationalism) and immediate triggers (e.g., assassination of Archduke Franz Ferdinand, July Crisis) of World War I, with a focus on their interconnectedness and regional dynamics (e.g., Balkans, Europe). Exclude secondary or speculative factors.",
+                    "needs_timeline": true,
+                    "task_id": "t1"
+                  },
+                  "status": "insufficient_evidence",
+                  "gaps": [
+                    "No explicit mention of the role of imperialism beyond empire formation; deeper analysis of colonial rivalries or resource competition is missing.",
+                    "The interconnectedness of economic factors (e.g., arms races, trade blocs) in fueling long-term tensions is not addressed.",
+                    "The specific dynamics of Italy’s shifting allegiance from the Triple Alliance to the Entente during the war are not detailed."
+                  ],
+                  "error": null
+                },
+                {
+                  "task": {
+                    "label": "Major Turning Points and Their Geopolitical Impact",
+                    "question": "List and analyze the key turning points of World War I (e.g., Gallipoli Campaign, Battle of Verdun, Russian Revolution, U.S. entry, Armistice) and their direct effects on the war’s trajectory, military strategies, and alliances, without extrapolating long-term consequences beyond the conflict’s end.",
+                    "needs_timeline": true,
+                    "task_id": "t2"
+                  },
+                  "status": "failed",
+                  "gaps": [],
+                  "error": "findings_invalid"
+                }
+              ],
+              "findings": [
+                {
+                  "alias": "F1",
+                  "finding_id": "t1.f1",
+                  "statement": "The long-term cause of World War I included the formation of competing empires across Europe, which heightened regional tensions and territorial disputes.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "313eeafd1f3c909d",
+                      "start": 0,
+                      "end": 336
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "9f998d98422af07b",
+                      "start": 0,
+                      "end": 785
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F2",
+                  "finding_id": "t1.f2",
+                  "statement": "Militarism intensified as European armies and weaponry expanded significantly, contributing to a climate of heightened military readiness and competition.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "313eeafd1f3c909d",
+                      "start": 0,
+                      "end": 336
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F3",
+                  "finding_id": "t1.f3",
+                  "statement": "The Triple Entente (France, United Kingdom, Russia) formed an alliance system to counter Germany’s growing power, while Germany responded by forming the Triple Alliance (Germany, Austria-Hungary, Italy) to avoid encirclement.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "e236a95f72f0bafc",
+                      "start": 0,
+                      "end": 981
+                    }
+                  ],
+                  "date_text": null
+                },
+                {
+                  "alias": "F4",
+                  "finding_id": "t1.f4",
+                  "statement": "The assassination of Archduke Franz Ferdinand on June 28, 1914, in Sarajevo served as the immediate trigger for the war, as Austria-Hungary blamed Serbia and issued an ultimatum.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "e236a95f72f0bafc",
+                      "start": 0,
+                      "end": 981
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "35ce0a3316163b5f",
+                      "start": 0,
+                      "end": 840
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "69b0a4785cf84b80",
+                      "start": 0,
+                      "end": 879
+                    }
+                  ],
+                  "date_text": "June 28, 1914"
+                },
+                {
+                  "alias": "F5",
+                  "finding_id": "t1.f5",
+                  "statement": "Serbia’s ties to the Black Hand, a secret society aiming to liberate Slavic nations from Austro-Hungarian rule, played a direct role in the assassination and subsequent escalation.",
+                  "evidence_refs": [
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "e236a95f72f0bafc",
+                      "start": 0,
+                      "end": 981
+                    },
+                    {
+                      "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                      "chunk_id": "69b0a4785cf84b80",
+                      "start": 0,
+                      "end": 879
+                    }
+                  ],
+                  "date_text": null
+                }
+              ],
+              "excerpts": [
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "313eeafd1f3c909d",
+                    "start": 0,
+                    "end": 336
+                  },
+                  "document_id": "698709",
+                  "title": "Causes of World War I",
+                  "section": null,
+                  "text": "The First World War, which lasted from 1914 to 1918, was caused by the build-up of tension between European countries. Three long-term causes were the formation of empires, the rising size of armies and weapons, and the number of alliances. The trigger cause, however, was the assassination of Austro-Hungarian Archduke Franz Ferdinand.",
+                  "text_hash": "0cbc7bea120253e09ce67b7ca9efbaa461efd3de47ea01bcd1196d71cb7f25ec",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "9f998d98422af07b",
+                    "start": 0,
+                    "end": 785
+                  },
+                  "document_id": "42874",
+                  "title": "Human history",
+                  "section": null,
+                  "text": "These were causes that made it likely that a war would start in Europe. The \"spark\" that started the war was the assassination of the heir to the throne in Austria-Hungary: Archduke Franz Ferdinand by a group of young Serbians. Austria-Hungary declared war on Serbia and each country's allies then joined the war. This created a bigger conflict which turned into World War I.\n\nEurope divided into two groups of allies: the Central Powers and the Allied Powers (the \"Allies\"). The Central Powers were made up of Germany, Austria-Hungary, the Ottoman Empire and Bulgaria. The Allies were made up of Britain, France, Russia, Italy and the United States.\n\nWorld War I was fought on two fronts; the Eastern Front and the Western Front. Trench warfare was commonly used on the Eastern Front.",
+                  "text_hash": "e3126f443101142df52417fe27f2194de0ca986f8a667127fe5885b5583f9c86",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "e236a95f72f0bafc",
+                    "start": 0,
+                    "end": 981
+                  },
+                  "document_id": "698709",
+                  "title": "Causes of World War I",
+                  "section": null,
+                  "text": "The third long-term cause was military alliances. The main countries in Europe formed two sides: the Triple Entente (France, the United Kingdom, and Russia) and the Triple Alliance (Germany, Austria-Hungary, and Italy). The Triple Entente, worried about the growing strength of Germany, agreed to help its members if any of them was attacked. Germany objected to that arrangement because with France and the United Kingdom on the west and Russia on the east, it would be surrounded. That made Germany form the Triple Alliance.\n\nThe trigger cause of the war was the assassination of Archduke Franz Ferdinand, who as the heir to the throne, was supposed to be the next Austro-Hungarian emperor. He and his wife, Sophie, Duchess of Hohenberg, were killed in Sarajevo, the capital of Bosnia, on June 28, 1914, while they on a state visit there. A Serbian secret society, the Black Hand, wanted Bosnia and other Slavic nations to break free from Austria-Hungary with the help of Russia.",
+                  "text_hash": "c11f0f6b2b779dd6f22e950749525d43d770b118acde036262a66bce138df7b0",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "35ce0a3316163b5f",
+                    "start": 0,
+                    "end": 840
+                  },
+                  "document_id": "377731",
+                  "title": "List of Medal of Honor recipients",
+                  "section": null,
+                  "text": "World War I, also known as the First World War and the Great War, was a global military conflict which took place primarily in Europe from 1914–1918. Over 40 million casualties resulted, including approximately 20 million military and civilian deaths. Over 60 million European soldiers were mobilized from 1914–1918. The immediate cause of the war was the June 28, 1914 assassination of Archduke Franz Ferdinand, heir to the Austro-Hungarian throne, by Gavrilo Princip, a Bosnian Serb citizen of Austria-Hungary and member of the Black Hand. The retaliation by Austria-Hungary against Serbia activated a series of alliances that set off a chain reaction of war declarations. Within a month, much of Europe was in a state of open warfare.\n\nDuring this War, 119 men received the Medal for their actions, 33 of them posthumously.\n\nWorld War II",
+                  "text_hash": "64308a34dfa7a4fc807c4f06c6d526930166abf12f1e35c3585094a0e3b18921",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                },
+                {
+                  "key": {
+                    "snapshot_id": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5",
+                    "chunk_id": "69b0a4785cf84b80",
+                    "start": 0,
+                    "end": 879
+                  },
+                  "document_id": "376908",
+                  "title": "List of Medal of Honor recipients for World War I",
+                  "section": null,
+                  "text": "World War I (also known as the First World War and the Great War) was a global military conflict that involved most of the world's great powers. The war was assembled in two opposing groups: the Entente and the Central Powers. The immediate cause of the war was the June 28, 1914 assassination of Archduke Franz Ferdinand. He was heir to the Austro-Hungarian throne. He was killed by Gavrilo Princip who was a Bosnian Serb citizen of Austria–Hungary. He was also a member of the Black Hand. The retaliation by Austria–Hungary against Serbia activated a series of alliances that set off a chain reaction of war declarations. Within a month, much of Europe was in a state of open warfare. This resulted in the mobilization of more than 65&nbsp;million European soldiers, and more than 40&nbsp;million casualties—including approximately 20&nbsp;million deaths by the end of the war.",
+                  "text_hash": "27ab50742d1884662ce9ae6f8bacc23dbea5074a95b0cc4491989af1e88f168c",
+                  "source_url": "",
+                  "presented_to": [
+                    "t1"
+                  ]
+                }
+              ],
+              "budget_omissions": [
+                "t1.f6: synthesis budget omitted supported material.",
+                "t1.f7: synthesis budget omitted supported material."
+              ]
+            }
+          ],
+          "response": {
+            "units": [
+              {
+                "text": "World War I originated from long-term tensions including empire formation, militarism, and alliance systems. Competing empires heightened regional tensions, while militarism intensified as European armies expanded, creating a climate of heightened military readiness. The Triple Entente (France, UK, Russia) formed to counter Germany’s growing power, prompting Germany to ally with Austria-Hungary and Italy in the Triple Alliance. The immediate trigger was the assassination of Archduke Franz Ferdinand on June 28, 1914, by a Serbian nationalist, which led Austria-Hungary to issue an ultimatum to Serbia, escalating into a broader conflict through alliance obligations.",
+                "finding_ids": [
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4"
+                ]
+              },
+              {
+                "text": "Serbia’s ties to the Black Hand, a secret society aiming to liberate Slavic nations from Austro-Hungarian rule, directly contributed to the assassination of Archduke Franz Ferdinand and the subsequent escalation of tensions. While the assassination served as the catalyst, the interconnected alliance systems ensured the conflict rapidly expanded into a global war.",
+                "finding_ids": [
+                  "F5"
+                ]
+              }
+            ],
+            "conflict_groups": [
+              [
+                "F4",
+                "F5"
+              ]
+            ]
+          },
+          "error": null,
+          "wall_ms": 18323.10112498817,
+          "finish_reason": "stop"
+        }
+      ]
+    }
+  ],
+  "retrieval": [],
+  "errors": [],
+  "native_startup_wall_ms": 1384.1699589975178,
+  "native_resources": {
+    "native_peak_sampled_rss_bytes": 8476835840,
+    "sample_count": 226,
+    "interval_seconds": 0.5,
+    "errors": [],
+    "scope": "RSS of llama-server matching benchmark endpoint port, sampled not exact peak"
+  },
+  "model_load_wall_ms": 3150.23291700345,
+  "checked_excerpt_count": 37,
+  "effective_config": {
+    "model": {
+      "provider": "llamacpp_server",
+      "base_url": "http://127.0.0.1:62524",
+      "model_name": "ministral-3-8b-instruct",
+      "temperature": 0.7,
+      "max_tokens": 2048,
+      "timeout_seconds": 60
+    },
+    "embeddings": {
+      "provider": "local",
+      "model_name": "intfloat/multilingual-e5-base",
+      "batch_size": 4,
+      "device": "mps"
+    },
+    "retrieval": {
+      "strategy": "hybrid",
+      "keyword_top_k": 20,
+      "vector_top_k": 20,
+      "merge_top_n": 50,
+      "rrf_k": 60,
+      "final_top_k": 5
+    },
+    "reranking": {
+      "enabled": false,
+      "provider": "cross_encoder",
+      "model_name": "BAAI/bge-reranker-v2-m3",
+      "device": "mps",
+      "batch_size": 1,
+      "max_length": 8192
+    },
+    "chunking": {
+      "strategy": "paragraph_aware",
+      "target_size": 1000,
+      "max_size": 1500,
+      "min_chunk_size": 100
+    },
+    "paths": {
+      "data_dir": "./data",
+      "raw_data": "./data/raw",
+      "processed_data": "./data/processed",
+      "indexes_dir": "./data/indexes",
+      "active_index": "./data/indexes/active",
+      "index_snapshots": "./data/indexes/snapshots"
+    },
+    "runs": {
+      "output_dir": "runs/reports/stage5-rerank-off-v1",
+      "logs_dir": "runs/reports/stage5-rerank-off-v1/logs",
+      "traces_dir": "./runs/traces",
+      "reports_dir": "./runs/reports"
+    },
+    "observability": {
+      "enable_tracing": true,
+      "enable_metrics": false,
+      "phoenix_endpoint": "http://127.0.0.1:6006",
+      "log_level": "INFO"
+    },
+    "context": {
+      "prompt_tokens": 6000,
+      "output_tokens": 1200,
+      "max_chunks_per_doc": 3
+    }
+  },
+  "fingerprints": [
+    {
+      "component": "code",
+      "identity": "e901b2403edd67a953b14a068d8219217b483f03f3292d80d07a2889da5956c7"
+    },
+    {
+      "component": "snapshot",
+      "identity": "local-6a477c15c691dfa7d7bc13452e3cf25a1e3a97522d805bbb940f10a88df7f5f5"
+    },
+    {
+      "component": "models",
+      "identity": "919cba8cffef4ed5becee72a5570012aa2b632a2af0c10765e1ea3ddbbbf1e5e"
+    },
+    {
+      "component": "config",
+      "identity": "23cc5f3af7c947ac12dc6049e2c9536af4cde96c9c91441db972c7c05d832a99"
+    },
+    {
+      "component": "evaluation_controls",
+      "identity": "{\"forced_single_task\": false, \"rerank\": false}"
+    },
+    {
+      "component": "prompts",
+      "identity": "a5bd7070ffc6a72adefa0ec7b711a8945f9600afd95af4cb03b94562a4dfe9b8"
+    }
+  ],
+  "resources": {
+    "parent_peak_rss_bytes": 1318371328,
+    "metal_driver_allocated_bytes_at_sample": 1164656640
+  },
+  "projection_source_sha256": "38267c220e491f0993907acc399e158509679508037a50ee55cea9cc2c1a29c5",
+  "selected_from": {
+    "total_results": 2,
+    "selected_ids": [
+      "c01",
+      "f01"
+    ],
+    "reason": "Fixed development/conversation/error examples; not an accuracy sample"
+  },
+  "source_report_path": "runs/reports/stage5-rerank-off-v1/report.json",
+  "source_report_sha256": "fbe2edbd677070d8f98f4634f65278a7ed383c0b1fecaa616a1ae5a11353e90e",
+  "recorded_dates": [
+    "2026-10-19"
+  ]
+}

@@ -1,94 +1,188 @@
-"""
-Unified graph runner: run any workbench graph with full observability.
+"""Canonical local application factory and safe execution/event boundary.
 
-This is the recommended entry point for running graphs.  It:
-    1. Builds all components from config
-    2. Builds the requested graph
-    3. Runs it within a traced ``run_context``
-    4. Logs, traces, and records metrics
-    5. Returns the final graph state dict
-
-Supported systems:
-    ``rag_graph``          — search → open → answer
-    ``researcher_graph``   — search → open → timeline → answer → validate
-    ``supervisor_graph``   — routes to specialist subgraphs
-                             (with optional task decomposition, Day 11)
-
-Usage::
-
-    from workbench.systems.runner import GraphRunner
-
-    runner = GraphRunner()                        # uses defaults.yaml
-    result = runner.run("researcher_graph", "When did the Roman Republic end?")
-    print(result["answer_text"])
-
-Usage (multi-turn chat)::
-
-    runner = GraphRunner()
-    result = runner.run(
-        "supervisor_graph",
-        "What was that battle about?",
-        chat_history=[
-            {"role": "user", "content": "Tell me about WW2"},
-            {"role": "assistant", "content": "World War II was..."},
-        ],
-        conversation_summary="Discussing WW2 and the Eastern Front.",
-    )
-
-Or as a one-liner::
-
-    from workbench.systems.runner import run_graph
-    result = run_graph("supervisor_graph", "What is photosynthesis?")
+Native calls drain before admission is released. Closing a stream cancels and
+joins its producer; raw graph updates never cross this public boundary.
 """
 
 from __future__ import annotations
 
+import copy
+import fcntl
+import hashlib
+import json
+import os
+import queue
+import tempfile
+import threading
 import time
+from contextlib import ExitStack
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from workbench.core.config import (
-    WorkbenchConfig,
-    create_config_snapshot,
-    load_config,
-)
+from opentelemetry import context as otel_context
+
+from workbench.core.config import WorkbenchConfig, load_config
+from workbench.core.offline import cached_model_path, validate_environment
 from workbench.core.run_context import run_context
-from workbench.graphs.rag_graph import build_rag_graph
-from workbench.graphs.researcher_graph import build_researcher_graph
-from workbench.graphs.supervisor_graph import build_supervisor_graph
+from workbench.graphs import execution as execution_module
+from workbench.graphs.base_state import application_state
+from workbench.graphs.execution import Execution, RunStopped
+from workbench.graphs.planning import bounded_conversation
+from workbench.graphs.research_models import (
+    ApplicationResult,
+    ConversationInput,
+    Fingerprint,
+    Limits,
+)
+from workbench.graphs.supervisor_graph import _message, build_supervisor_graph
 from workbench.models.llamacpp_server import LlamaCppServerModel
-from workbench.observability.logging import get_logger
-from workbench.observability.metrics import get_metrics_store
-from workbench.observability.tracing import setup_tracing, start_span
-from workbench.prompting.prompt_builder import PromptBuilder
+from workbench.observability.tracing import start_span
+from workbench.retrieval.evidence_packing import tokenizer_budget
 from workbench.retrieval.hybrid import HybridRetriever
 from workbench.retrieval.keyword_search import LanceDBKeywordSearcher
 from workbench.retrieval.vector_search import LanceDBVectorSearcher
 from workbench.stores.chunk_store import ChunkStore
-from workbench.tools.open_chunk import OpenChunkTool
-from workbench.tools.search_wikipedia import SearchWikipediaTool
-from workbench.tools.timeline import TimelineTool
 
-# Graphs that require only search + open + model
-_BASIC_GRAPHS = {"rag_graph"}
-# Graphs that also need a timeline tool
-_TIMELINE_GRAPHS = {"researcher_graph"}
-# Graphs that want every tool available
-_FULL_GRAPHS = {"supervisor_graph"}
-
-SUPPORTED_GRAPHS = _BASIC_GRAPHS | _TIMELINE_GRAPHS | _FULL_GRAPHS
+_RUN_GATE = threading.Lock()
 
 
-# ------------------------------------------------------------------ #
-#  Factory functions: build embedder / reranker from config            #
-# ------------------------------------------------------------------ #
+def digest(value):
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, default=str).encode()
+    ).hexdigest()
+
+
+@dataclass(frozen=True)
+class CacheKey:
+    config: str
+    models: str
+    snapshot: str
+    path: str
+
+
+def application_key(config: WorkbenchConfig) -> CacheKey:
+    """Resolve the active pointer before cache lookup. No mutable config keys."""
+    pinned = Path(config.paths["active_index"]).resolve(strict=True)
+    db = pinned / "lancedb"
+    if not db.is_dir():
+        raise FileNotFoundError(f"Provisioned local index missing: {db}")
+    # Legacy bundles lack manifests. Identify their actual path and immutable
+    # Lance version metadata honestly; Stage 4 supplies full provenance.
+    manifests = sorted(db.glob("**/_versions/*.manifest"))
+    identity = [
+        (str(p.relative_to(pinned)), p.stat().st_size, p.stat().st_mtime_ns)
+        for p in manifests
+    ]
+    manifest = pinned / "manifest.json"
+    if manifest.is_file():
+        identity.append(("manifest.json", manifest.read_text()))
+    bundle_manifest = json.loads(manifest.read_text()) if manifest.is_file() else {}
+    embedding_pin = None
+    if bundle_manifest.get("provenance") == "verified-build":
+        embedding_pin = bundle_manifest["inputs"]["embedding"]
+        if config.embeddings["model_name"] != embedding_pin["id"]:
+            raise ValueError(
+                "Snapshot embedding model mismatch; build a matching snapshot"
+            )
+        asset = Path(
+            cached_model_path(
+                config.embeddings.get("model_path") or config.embeddings["model_name"]
+            )
+        )
+        if asset.name != embedding_pin["revision"]:
+            raise ValueError(
+                "Snapshot embedding revision mismatch; use the pinned provisioned model"
+            )
+    assets = []
+    for section in (config.embeddings, config.reranking):
+        if section.get("provider") == "http" or not section.get("enabled", True):
+            continue
+        try:
+            asset = Path(
+                cached_model_path(section.get("model_path") or section["model_name"])
+            )
+            # Resolve cached revision and file metadata without reading weight contents.
+            assets.append(
+                (
+                    str(asset),
+                    [
+                        (
+                            str(p.relative_to(asset)),
+                            p.stat().st_size,
+                            p.stat().st_mtime_ns,
+                        )
+                        for p in sorted(asset.rglob("*"))
+                        if p.is_file()
+                    ],
+                )
+            )
+        except (FileNotFoundError, ImportError):
+            assets.append("not-provisioned")  # Actual load still fails explicitly.
+    snapshot_id = bundle_manifest.get("id", "local-" + digest((str(pinned), identity)))
+    stage_inputs = pinned / "inputs.json"
+    if (
+        not manifest.is_file()
+        and pinned.name.startswith(".build-")
+        and stage_inputs.is_file()
+    ):
+        input_fingerprint = digest(json.loads(stage_inputs.read_text()))
+        if pinned.name != ".build-" + input_fingerprint:
+            raise ValueError("Staging bundle fingerprint mismatch")
+        # Canonical build-smoke citations retain their identity after sealing/rename.
+        snapshot_id = input_fingerprint
+    return CacheKey(
+        digest(config.model_dump()),
+        digest((config.model, config.embeddings, config.reranking, assets)),
+        snapshot_id,
+        str(pinned),
+    )
+
+
+class ResourceBusy(RuntimeError):
+    pass
+
+
+class ResourceOwner:
+    """Host-local ownership is acquired before clients/heavy models load."""
+
+    def __init__(self, path: Path | None = None):
+        self.file = (
+            path
+            or Path(tempfile.gettempdir()) / f"workbench-resources-{os.getuid()}.lock"
+        ).open("a+")
+        try:
+            fcntl.flock(self.file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            self.file.close()
+            raise ResourceBusy(
+                "resource_busy: close the resident application first"
+            ) from exc
+
+    def close(self):
+        if not self.file.closed:
+            fcntl.flock(self.file, fcntl.LOCK_UN)
+            self.file.close()
+
+
+@dataclass(frozen=True)
+class Resources:
+    model: Any
+    retriever: Any
+    snapshot_id: str
+
+
+@dataclass(frozen=True)
+class EvaluationControls:
+    forced_single_task: bool = False
+    rerank: bool | None = None
 
 
 def build_embedder(cfg: WorkbenchConfig) -> Any:
     """
     Build an embedder based on config ``embeddings.provider``.
 
-    - ``"http"``  → lightweight :class:`HTTPEmbedder` (calls remote server)
+    - ``"http"`` → temporary baseline probe adapter; pending answer acceptance
     - ``"local"`` or ``"sentence_transformers"`` → heavyweight
       :class:`SentenceTransformerEmbedder` (loads model in-process)
 
@@ -99,7 +193,7 @@ def build_embedder(cfg: WorkbenchConfig) -> Any:
         Object satisfying the ``Embedder`` protocol.
     """
     emb_cfg = cfg.embeddings
-    provider = emb_cfg.get("provider", "http")
+    provider = emb_cfg.get("provider", "local")
 
     if provider == "http":
         from workbench.data_build.http_embedder import HTTPEmbedder
@@ -110,13 +204,15 @@ def build_embedder(cfg: WorkbenchConfig) -> Any:
             timeout_seconds=emb_cfg.get("timeout_seconds", 120),
         )
 
-    # Local fallback
+    if provider not in {"local", "sentence_transformers"}:
+        raise ValueError("Unsupported embedding provider")
     from workbench.data_build.embeddings import SentenceTransformerEmbedder
 
     return SentenceTransformerEmbedder(
         model_name=emb_cfg["model_name"],
+        model_path=emb_cfg.get("model_path"),
         device=emb_cfg.get("device", "mps"),
-        batch_size=emb_cfg.get("batch_size", 32),
+        batch_size=emb_cfg.get("batch_size", 4),
     )
 
 
@@ -124,7 +220,7 @@ def build_reranker(cfg: WorkbenchConfig) -> Any | None:
     """
     Build a reranker based on config ``reranking.provider``.
 
-    - ``"http"``           → lightweight :class:`HTTPReranker`
+    - ``"http"`` → temporary baseline probe adapter; pending answer acceptance
     - ``"cross_encoder"``  → heavyweight :class:`CrossEncoderReranker`
     - disabled             → ``None``
 
@@ -138,7 +234,7 @@ def build_reranker(cfg: WorkbenchConfig) -> Any | None:
     if not rr_cfg.get("enabled", True):
         return None
 
-    provider = rr_cfg.get("provider", "http")
+    provider = rr_cfg.get("provider", "cross_encoder")
 
     if provider == "http":
         from workbench.retrieval.http_reranker import HTTPReranker
@@ -149,390 +245,447 @@ def build_reranker(cfg: WorkbenchConfig) -> Any | None:
             timeout_seconds=rr_cfg.get("timeout_seconds", 60),
         )
 
-    # Local fallback
+    if provider != "cross_encoder":
+        raise ValueError("Unsupported reranking provider")
     from workbench.retrieval.rerankers import CrossEncoderReranker
 
     return CrossEncoderReranker(
         model_name=rr_cfg["model_name"],
+        model_path=rr_cfg.get("model_path"),
+        device=rr_cfg.get("device", "mps"),
+        batch_size=rr_cfg.get("batch_size", 1),
+        max_length=rr_cfg.get("max_length", 8192),
     )
 
 
-class GraphRunner:
-    """
-    Build components once, run any graph repeatedly.
-
-    Components are built lazily on the first ``run()`` call.
-
-    Args:
-        config_path: Path to YAML config (default: ``configs/defaults.yaml``).
-        config_overrides: Dict of overrides merged on top of the file.
-    """
-
+class Application:
     def __init__(
         self,
-        config_path: Path | None = None,
-        config_overrides: dict[str, Any] | None = None,
-    ) -> None:
-        self.config: WorkbenchConfig = load_config(
-            config_path=config_path,
-            overrides=config_overrides,
+        resources: Resources,
+        *,
+        config=None,
+        key=None,
+        limits=None,
+        evaluation=None,
+        owner=None,
+        telemetry=None,
+        event_sink=None,
+    ):
+        self.resources = resources
+        self.config = copy.deepcopy(config)
+        self.key = key
+        self.limits = limits or Limits()
+        self.evaluation = evaluation or EvaluationControls()
+        self._owner, self._telemetry, self._sink = owner, telemetry, event_sink
+        self._closed = False
+        self._lifecycle = threading.Lock()
+        self._active = None
+        self._graph = build_supervisor_graph(
+            model=resources.model,
+            retriever=resources.retriever,
+            snapshot_id=resources.snapshot_id,
+            limits=self.limits,
+            forced_single_task=self.evaluation.forced_single_task,
         )
-        self._components: dict[str, Any] | None = None
+        self.fingerprints = (
+            Fingerprint(
+                component="code",
+                identity=digest(
+                    [
+                        (str(p.relative_to(Path(__file__).parents[1])), p.read_text())
+                        for p in sorted(Path(__file__).parents[1].rglob("*.py"))
+                    ]
+                ),
+            ),
+            Fingerprint(component="snapshot", identity=resources.snapshot_id),
+            Fingerprint(component="models", identity=key.models if key else "injected"),
+            Fingerprint(
+                component="config",
+                identity=digest(
+                    (key.config if key else "injected", self.limits.model_dump())
+                ),
+            ),
+            Fingerprint(
+                component="evaluation_controls",
+                identity=json.dumps(self.evaluation.__dict__, sort_keys=True),
+            ),
+            Fingerprint(
+                component="prompts",
+                identity=digest(
+                    [
+                        (p.name, p.read_text())
+                        for p in sorted(
+                            (Path(__file__).parents[1] / "prompting/templates").glob(
+                                "*_v1.txt"
+                            )
+                        )
+                    ]
+                ),
+            ),
+        )
 
-    # ------------------------------------------------------------------ #
-    #  Component building                                                 #
-    # ------------------------------------------------------------------ #
+    def _publish(self, result, execution):
+        return ApplicationResult.model_validate(
+            result.model_dump()
+            | {
+                "fingerprints": tuple(f.model_dump() for f in self.fingerprints),
+                "diagnostics": result.diagnostics.model_dump()
+                | {
+                    "elapsed_ms": (time.monotonic() - execution.started) * 1000,
+                    "tokens_in": execution.tokens_in,
+                    "tokens_out": execution.tokens_out,
+                },
+            }
+        )
 
-    def _build_components(self) -> dict[str, Any]:
-        """Build all pipeline components from config (called once)."""
-        if self._components is not None:
-            return self._components
+    def stream(self, value: ConversationInput, config=None, *, cancel_event=None):
+        """Yield only typed progress and exactly one terminal result.
 
-        cfg = self.config
-        db_path = Path(cfg.paths["active_index"]) / "lancedb"
+        Consume to completion or close the generator. A synchronous hung call
+        keeps close/join waiting and holds admission; it cannot be preempted.
+        """
+        value = bounded_conversation(ConversationInput.model_validate(value))
+        config = copy.copy(config or {})
+        cancel = cancel_event if cancel_event is not None else threading.Event()
+        events = queue.Queue()
 
+        def sink(event):
+            events.put(event)
+            if self._sink:
+                try:
+                    self._sink(event)
+                except Exception:
+                    pass
+
+        execution = Execution(
+            self.resources.snapshot_id, self.limits, sink, cancel=cancel
+        )
+        with self._lifecycle:
+            admitted = not self._closed and _RUN_GATE.acquire(blocking=False)
+            if admitted:
+                self._active = execution
+        if not admitted:
+            code = "application_closed" if self._closed else "resource_busy"
+            result = self._publish(
+                _message(
+                    execution,
+                    "failed",
+                    code,
+                    "Application closed."
+                    if self._closed
+                    else "Another research run is active.",
+                ),
+                execution,
+            )
+            execution.emit("run_finished", result=result)
+            yield events.get()
+            return
+        parent = otel_context.get_current()
+
+        def produce():
+            result = None
+            stop = execution.watch_cancellation()
+            try:
+                with ExitStack() as stack:
+                    if self._telemetry:
+                        stack.enter_context(self._telemetry.run(execution.run_id))
+                    stack.enter_context(
+                        run_context({}, run_type="application", run_id=execution.run_id)
+                    )
+                    token = otel_context.attach(parent)
+                    stack.callback(otel_context.detach, token)
+                    stack.enter_context(
+                        start_span(
+                            "atlas_localis.question",
+                            attributes={
+                                "run_id": execution.run_id,
+                                "snapshot_id": execution.snapshot_id,
+                            },
+                        )
+                    )
+                    counter = getattr(self.resources.model, "exact_token_count", None)
+                    if callable(counter):
+                        stack.enter_context(tokenizer_budget(counter))
+                    execution.parent = otel_context.get_current()
+                    execution.emit("run_started")
+                    execution.check()
+                    runnable = {
+                        **config,
+                        "configurable": {
+                            **(config.get("configurable") or {}),
+                            "atlas_execution": execution,
+                        },
+                        "max_concurrency": max(4, config.get("max_concurrency") or 4),
+                    }
+                    with execution.bind():
+                        for state in self._graph.stream(
+                            application_state(value),
+                            config=runnable,
+                            stream_mode="values",
+                        ):
+                            if state.get("result"):
+                                result = ApplicationResult.model_validate(
+                                    state["result"]
+                                )
+                                if result.run_id != execution.run_id or any(
+                                    c.snapshot_id != execution.snapshot_id
+                                    for c in result.citations
+                                ):
+                                    raise ValueError("terminal identity mismatch")
+                        execution.check()  # reject cancellation/late finalization too
+                    if result is None:
+                        raise RuntimeError("missing terminal result")
+            except Exception as exc:
+                outcome = "cancelled" if cancel.is_set() else "failed"
+                code = (
+                    "run_deadline"
+                    if isinstance(exc, RunStopped)
+                    else "application_failed"
+                )
+                if execution_module._UNCONFIRMED.is_set():
+                    outcome, code = "failed", "resource_not_drained"
+                result = _message(
+                    execution,
+                    outcome,
+                    code,
+                    "Research cancelled after active operations drained."
+                    if outcome == "cancelled"
+                    else "Research could not complete safely.",
+                )
+            finally:
+                stop()
+                try:
+                    if cancel.is_set() and not execution_module._UNCONFIRMED.is_set():
+                        result = _message(
+                            execution,
+                            "cancelled",
+                            "cancelled",
+                            "Research cancelled after active operations drained.",
+                        )
+                    result = self._publish(result, execution)
+                    execution.emit("run_finished", result=result)
+                    if self._telemetry:
+                        try:
+                            with (
+                                self._telemetry.run(execution.run_id),
+                                run_context(
+                                    {}, run_type="application", run_id=execution.run_id
+                                ),
+                            ):
+                                self._telemetry.record(result)
+                        except Exception:
+                            pass
+                finally:
+                    with self._lifecycle:
+                        self._active = None
+                    _RUN_GATE.release()
+
+        thread = threading.Thread(
+            target=produce, name="workbench-application", daemon=True
+        )
+        thread.start()
+        try:
+            while True:
+                event = events.get()
+                yield event
+                if event.kind == "run_finished":
+                    break
+        finally:
+            if thread.is_alive():
+                cancel.set()
+            thread.join()
+
+    def invoke(
+        self, value: ConversationInput, config=None, *, cancel_event=None
+    ) -> ApplicationResult:
+        terminal = None
+        for event in self.stream(value, config, cancel_event=cancel_event):
+            if event.kind == "run_finished":
+                terminal = event.result
+        return terminal
+
+    def close(self):
+        with self._lifecycle:
+            if self._active is not None:
+                raise ResourceBusy(
+                    "resource_busy: drain the active stream before closing resources"
+                )
+            self._closed = True
+            self._graph = None
+            self.resources = Resources(None, None, self.resources.snapshot_id)
+            if self._owner:
+                self._owner.close()
+            elif self._telemetry:
+                self._telemetry.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
+
+def create_application(
+    *,
+    config=None,
+    config_path=None,
+    resources=None,
+    key=None,
+    limits=None,
+    evaluation=None,
+    event_sink=None,
+):
+    """One factory, with explicit resources for model-free consumers/tests."""
+    validate_environment()
+    evaluation = evaluation or EvaluationControls()
+    if resources is not None:
+        return Application(
+            resources,
+            config=config,
+            key=key,
+            limits=limits,
+            evaluation=evaluation,
+            event_sink=event_sink,
+        )
+    cfg = (config or load_config(config_path=config_path)).model_copy(deep=True)
+    if evaluation.rerank is not None:
+        cfg.reranking["enabled"] = evaluation.rerank
+    actual_key = application_key(cfg)
+    if key is not None and key != actual_key:
+        raise ValueError(
+            "Application cache key no longer matches configuration/snapshot"
+        )
+    context = cfg.model_extra.get("context", {})
+    limits = limits or Limits(
+        max_evidence=cfg.retrieval.get("final_top_k", 5),
+        max_per_document=context.get("max_chunks_per_doc", 3),
+        prompt_tokens=context.get("prompt_tokens", 6000),
+        output_tokens=context.get("output_tokens", 1200),
+    )
+    owner = ResourceOwner()
+    cleanup = ExitStack()
+    cleanup.callback(owner.close)
+    telemetry = None
+    try:
+        from workbench.observability.lifecycle import Telemetry
+
+        telemetry = Telemetry(cfg)
+        cleanup.callback(telemetry.close)
+        # Shared lease blocks conversion/prune/promotion while resources are live.
+        from workbench.data_build.lifecycle import Lease
+
+        index_root = Path(cfg.paths["indexes_dir"])
+        lease = Lease(index_root / ".lifecycle.lock", shared=True)
+        cleanup.callback(lease.close)
+        if application_key(cfg) != actual_key:
+            raise ValueError("Snapshot changed before lifecycle lease acquisition")
+        pinned = Path(actual_key.path) / "lancedb"
         model = LlamaCppServerModel(
             base_url=cfg.model["base_url"],
-            model_name=cfg.model.get("model_name", "local-model"),
+            model_name=cfg.model["model_name"],
             timeout_seconds=cfg.model.get("timeout_seconds", 60),
             default_temperature=cfg.model.get("temperature", 0.7),
             default_max_tokens=cfg.model.get("max_tokens", 2048),
         )
-
-        # --- Embedder and reranker via factory functions ---------------
+        if callable(getattr(model, "close", None)):
+            cleanup.callback(model.close)
+        check = getattr(model, "check_identity", None)
+        if callable(check):
+            try:
+                check()
+            except Exception as exc:
+                raise ValueError(
+                    "Native llama-server unavailable or model identity mismatch. "
+                    "Start the provisioned scripts/start_model_stack.sh; preserve any unowned listener."
+                ) from exc
         embedder = build_embedder(cfg)
+        if callable(getattr(embedder, "close", None)):
+            cleanup.callback(embedder.close)
+        bundle_manifest_path = Path(actual_key.path) / "manifest.json"
+        if bundle_manifest_path.is_file():
+            bundle_manifest = json.loads(bundle_manifest_path.read_text())
+            if bundle_manifest.get("provenance") == "verified-build":
+                pin = bundle_manifest["inputs"]["embedding"]
+                if (
+                    getattr(embedder, "dimension", None) != pin["dimension"]
+                    or getattr(embedder, "_query_prefix", None) != pin["query_prefix"]
+                    or getattr(embedder, "_passage_prefix", None)
+                    != pin["passage_prefix"]
+                    or pin.get("normalize") is not True
+                ):
+                    raise ValueError(
+                        "Snapshot vector schema/prefix/normalization incompatibility"
+                    )
         reranker = build_reranker(cfg)
-
-        keyword_searcher = LanceDBKeywordSearcher(db_path=db_path)
-        vector_searcher = LanceDBVectorSearcher(
-            db_path=db_path,
-            embedder=embedder,
-        )
-
-        chunk_store = ChunkStore(db_path=db_path)
-
-        retrieval_cfg = cfg.retrieval
+        if callable(getattr(reranker, "close", None)):
+            cleanup.callback(reranker.close)
+        store = ChunkStore(db_path=pinned)
+        keyword = LanceDBKeywordSearcher(db_path=pinned)
+        vector = LanceDBVectorSearcher(db_path=pinned, embedder=embedder)
+        # Bind every handle to the same existing Lance version, never latest.
+        version = store._table.version
+        for table in (store._table, keyword._table, vector._table):
+            table.checkout(version)
+        if application_key(cfg) != actual_key:
+            raise ValueError("Snapshot changed while resources were opening")
         retriever = HybridRetriever(
-            keyword_searcher=keyword_searcher,
-            vector_searcher=vector_searcher,
+            keyword_searcher=keyword,
+            vector_searcher=vector,
             reranker=reranker,
-            chunk_store=chunk_store,
-            keyword_top_k=retrieval_cfg.get("keyword_top_k", 20),
-            vector_top_k=retrieval_cfg.get("vector_top_k", 20),
-            merge_top_n=retrieval_cfg.get("merge_top_n", 50),
-            rrf_k=retrieval_cfg.get("rrf_k", 60),
+            chunk_store=store,
+            **{
+                k: cfg.retrieval.get(k, v)
+                for k, v in {
+                    "keyword_top_k": 20,
+                    "vector_top_k": 20,
+                    "merge_top_n": 50,
+                    "rrf_k": 60,
+                }.items()
+            },
         )
-
-        prompt_builder = PromptBuilder()
-        search_tool = SearchWikipediaTool(retriever=retriever)
-        open_chunk_tool = OpenChunkTool(chunk_store=chunk_store)
-        timeline_tool = TimelineTool(
-            model=model,
-            prompt_builder=prompt_builder,
-            generation_settings={"temperature": 0.3, "max_tokens": 2048},
+        return Application(
+            Resources(model, retriever, actual_key.snapshot),
+            config=cfg,
+            key=actual_key,
+            limits=limits,
+            evaluation=evaluation,
+            owner=cleanup,
+            telemetry=telemetry,
+            event_sink=event_sink,
         )
+    except BaseException:
+        cleanup.close()
+        raise
 
-        # Optional Day-5 tools (imported lazily to avoid hard failures)
-        web_search_tool = None
-        calculator_tool = None
-        try:
-            from workbench.tools.web_search import WebSearchTool
 
-            ws_cfg = getattr(cfg, "web_search", {}) or {}
-            if ws_cfg.get("enabled", True):
-                web_search_tool = WebSearchTool(
-                    provider=ws_cfg.get("provider", "duckduckgo"),
-                )
-        except Exception:
-            pass
+class ApplicationCache:
+    """Keep one resource owner; invalidate only while idle, by explicit identity."""
 
-        try:
-            from workbench.tools.utility.calculator import CalculatorTool
+    def __init__(self, factory=create_application):
+        self.factory = factory
+        self.application = None
+        self.key = None
+        self.lock = threading.Lock()
 
-            calculator_tool = CalculatorTool()
-        except Exception:
-            pass
-
-        self._components = {
-            "model": model,
-            "search_tool": search_tool,
-            "open_chunk_tool": open_chunk_tool,
-            "prompt_builder": prompt_builder,
-            "timeline_tool": timeline_tool,
-            "web_search_tool": web_search_tool,
-            "calculator_tool": calculator_tool,
-            "chunk_store": chunk_store,
-            "config": cfg,
-        }
-        return self._components
-
-    # ------------------------------------------------------------------ #
-    #  Graph building                                                     #
-    # ------------------------------------------------------------------ #
-
-    def build_graph(
-        self,
-        graph_name: str,
-        **overrides: Any,
-    ) -> Any:
-        """
-        Build and compile a named graph.
-
-        Args:
-            graph_name: One of ``rag_graph``, ``researcher_graph``,
-                        ``supervisor_graph``.
-            **overrides: Per-graph overrides (``open_top_n``, etc.).
-
-        Returns:
-            Compiled LangGraph ready for ``.invoke()`` or ``.stream()``.
-        """
-        if graph_name not in SUPPORTED_GRAPHS:
-            raise ValueError(
-                f"Unknown graph {graph_name!r}. Supported: {sorted(SUPPORTED_GRAPHS)}"
-            )
-
-        c = self._build_components()
-        cfg = c["config"]
-        retrieval_cfg = cfg.retrieval
-
-        common = dict(
-            search_tool=c["search_tool"],
-            open_chunk_tool=c["open_chunk_tool"],
-            model=c["model"],
-            prompt_builder=c["prompt_builder"],
-            open_top_n=overrides.get("open_top_n", retrieval_cfg.get("final_top_k", 5)),
-            search_top_k=overrides.get(
-                "search_top_k", retrieval_cfg.get("vector_top_k", 10)
-            ),
-        )
-
-        if graph_name == "rag_graph":
-            return build_rag_graph(
-                **common,
-                web_search_tool=c.get("web_search_tool"),
-                confidence_threshold=overrides.get(
-                    "confidence_threshold",
-                    getattr(cfg, "web_search", {}).get("confidence_threshold", 2),
-                ),
-            )
-
-        if graph_name == "researcher_graph":
-            return build_researcher_graph(
-                **common,
-                timeline_tool=c["timeline_tool"],
-                generation_settings=overrides.get("generation_settings"),
-                citation_policy=overrides.get("citation_policy"),
-            )
-
-        if graph_name == "supervisor_graph":
-            sup_cfg = getattr(cfg, "supervisor", {}) or {}
-            decomposer_cfg = getattr(cfg, "decomposer", {}) or {}  # ← NEW (Day 11)
-            return build_supervisor_graph(
-                **common,
-                timeline_tool=c["timeline_tool"],
-                web_search_tool=c.get("web_search_tool"),
-                calculator_tool=c.get("calculator_tool"),
-                routing_mode=overrides.get(
-                    "routing_mode",
-                    sup_cfg.get("routing_mode", "hybrid"),
-                ),
-                # ← NEW (Day 11): decomposer settings from config
-                decomposer_enabled=overrides.get(
-                    "decomposer_enabled",
-                    decomposer_cfg.get("enabled", True),
-                ),
-                decomposer_max_workers=overrides.get(
-                    "decomposer_max_workers",
-                    decomposer_cfg.get("max_workers", 4),
-                ),
-            )
-
-        raise ValueError(f"Unhandled graph: {graph_name!r}")  # pragma: no cover
-
-    # ------------------------------------------------------------------ #
-    #  Run                                                                #
-    # ------------------------------------------------------------------ #
-
-    def run(
-        self,
-        graph_name: str,
-        question: str,
-        *,
-        search_top_k: int | None = None,
-        open_top_n: int | None = None,
-        chat_history: list[dict[str, str]] | None = None,
-        conversation_summary: str | None = None,
-        run_type: str | None = None,
-        **graph_overrides: Any,
-    ) -> dict[str, Any]:
-        """
-        Build a graph, invoke it, and return the result with full observability.
-
-        Args:
-            graph_name: Which graph to run.
-            question: The user's question.
-            search_top_k: Override default retrieval count.
-            open_top_n: Override default open count.
-            chat_history: Recent conversation turns for multi-turn chat.
-                          Each turn is ``{"role": "user"|"assistant",
-                          "content": "..."}``.
-            conversation_summary: Rolling summary of older conversation
-                                  turns (used alongside chat_history).
-            run_type: Label for the run context (default: ``graph_name``).
-            **graph_overrides: Forwarded to ``build_graph()``.
-
-        Returns:
-            Final graph state dict.
-        """
-        run_type = run_type or graph_name
-        service_name = f"agentic-workbench-{graph_name}"
-        config_snapshot = create_config_snapshot(self.config)
-
-        setup_tracing(service_name=service_name)
-        graph = self.build_graph(graph_name, **graph_overrides)
-
-        with run_context(config_snapshot, run_type=run_type) as ctx:
-            logger = get_logger(run_id=ctx.run_id)
-            metrics = get_metrics_store()
-
-            logger.log_run_started(ctx.run_id, run_type, config_snapshot)
-            logger.log_query(question)
-
-            with start_span(
-                f"{graph_name}.run",
-                attributes={"question": question[:200]},
+    def get(self, config, key):
+        with self.lock:
+            if (
+                self.application is not None
+                and not self.application._closed
+                and self.key == key
             ):
-                t0 = time.time()
+                return self.application
+            if self.application is not None:
+                self.application.close()  # busy close fails before loading another stack
+                self.application = None
+                self.key = None
+            self.application = self.factory(config=config, key=key)
+            self.key = key
+            return self.application
 
-                initial_state: dict[str, Any] = {"question": question}
-                if search_top_k is not None:
-                    initial_state["search_top_k"] = search_top_k
-                if open_top_n is not None:
-                    initial_state["open_top_n"] = open_top_n
-                if chat_history is not None:
-                    initial_state["chat_history"] = chat_history
-                if conversation_summary is not None:
-                    initial_state["conversation_summary"] = conversation_summary
-
-                result: dict[str, Any] = graph.invoke(initial_state)
-                total_ms = (time.time() - t0) * 1000
-
-            # --- Logging ---
-            logger.log_event(
-                f"{graph_name}_completed",
-                {
-                    "question": question[:200],
-                    "rewritten_query": (result.get("rewritten_query") or "")[:200],
-                    "answer_length": len(result.get("answer_text") or ""),
-                    "citation_count": len(result.get("citations") or []),
-                    "retrieved_count": len(result.get("retrieved") or []),
-                    "opened_count": len(result.get("opened") or []),
-                    "timeline_count": len(result.get("timeline") or []),
-                    "chat_turns": len(chat_history) if chat_history else 0,
-                    "tokens_in": result.get("tokens_in") or 0,
-                    "tokens_out": result.get("tokens_out") or 0,
-                    # ← NEW (Day 11): decomposition metadata in logs
-                    "is_decomposed": result.get("is_decomposed", False),
-                    "sub_question_count": len(result.get("sub_questions") or []),
-                    "decompose_latency_ms": result.get("decompose_latency_ms") or 0.0,
-                    "error": result.get("error"),
-                    "total_ms": round(total_ms, 1),
-                },
-            )
-
-            if result.get("retrieved"):
-                logger.log_retrieval(
-                    query=result.get("rewritten_query") or question,
-                    num_results=len(result["retrieved"]),
-                    retrieval_method="hybrid",
-                    duration_ms=total_ms,
-                )
-
-            tokens_out = result.get("tokens_out") or 0
-            model_name = self.config.model.get("model_name", "local-model")
-            if tokens_out > 0:
-                logger.log_model_call(
-                    model_name=model_name,
-                    tokens_in=result.get("tokens_in") or 0,
-                    tokens_out=tokens_out,
-                    duration_ms=result.get("model_latency_ms") or 0.0,
-                )
-
-            # --- Metrics ---
-            metrics.record_component_latency(
-                component_name=f"{graph_name}.run",
-                duration_ms=total_ms,
-                component_type="graph",
-            )
-
-            if tokens_out > 0:
-                metrics.record_model_tokens(
-                    model_name=model_name,
-                    tokens_in=result.get("tokens_in") or 0,
-                    tokens_out=tokens_out,
-                    duration_ms=result.get("model_latency_ms") or 0.0,
-                )
-
-            metrics.record_retrieval(
-                final_count=len(result.get("opened") or []),
-                query=result.get("rewritten_query") or question,
-                keyword_candidates=len(result.get("retrieved") or []),
-                vector_candidates=len(result.get("retrieved") or []),
-                reranked=len(result.get("retrieved") or []),
-                duration_ms=total_ms,
-            )
-
-            # ← NEW (Day 11): decomposer latency metric
-            decompose_ms = result.get("decompose_latency_ms") or 0.0
-            if decompose_ms > 0:
-                metrics.record_component_latency(
-                    component_name=f"{graph_name}.decomposer",
-                    duration_ms=decompose_ms,
-                    component_type="decomposer",
-                )
-
-            print(f"\nRun ID: {ctx.run_id}")
-            return result
-
-
-# ------------------------------------------------------------------ #
-#  Module-level convenience                                           #
-# ------------------------------------------------------------------ #
-
-
-def run_graph(
-    graph_name: str,
-    question: str,
-    *,
-    config_path: Path | None = None,
-    config_overrides: dict[str, Any] | None = None,
-    chat_history: list[dict[str, str]] | None = None,
-    conversation_summary: str | None = None,
-    **kwargs: Any,
-) -> dict[str, Any]:
-    """
-    One-shot convenience: build a runner, run a question, return result.
-
-    Args:
-        graph_name: Which graph to run.
-        question: The user's question.
-        config_path: Optional config file path.
-        config_overrides: Optional config overrides.
-        chat_history: Optional conversation history for multi-turn.
-        conversation_summary: Optional rolling summary.
-        **kwargs: Forwarded to ``GraphRunner.run()``.
-
-    Returns:
-        Final graph state dict.
-    """
-    runner = GraphRunner(
-        config_path=config_path,
-        config_overrides=config_overrides,
-    )
-    return runner.run(
-        graph_name,
-        question,
-        chat_history=chat_history,
-        conversation_summary=conversation_summary,
-        **kwargs,
-    )
+    def close(self):
+        with self.lock:
+            if self.application is not None:
+                self.application.close()
+                self.application = None
+                self.key = None

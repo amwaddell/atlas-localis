@@ -29,6 +29,8 @@ import time
 
 import numpy as np
 
+from workbench.core.offline import cached_model_path
+from workbench.models.local_inference import inference, local_device
 from workbench.observability.tracing import add_span_attributes, start_span
 
 # Models that use the E5 "query: " / "passage: " prefix convention.
@@ -49,9 +51,10 @@ class SentenceTransformerEmbedder:
     ``workbench.core.interfaces``.
 
     Args:
-        model_name: HuggingFace model ID or local path.
-        device: ``"cpu"``, ``"mps"`` (Apple Silicon GPU), or ``"cuda"``.
-                ``None`` lets sentence-transformers pick automatically.
+        model_name: Semantic HuggingFace identity; used for E5 prefix detection.
+        model_path: Optional independent provisioned asset path.
+        device: ``"cpu"``, ``"mps"`` or ``"auto"``. Metal-unavailable hosts
+                use CPU; inference/allocation failures are never retried.
         batch_size: Internal encode batch size (passed to model.encode).
         query_prefix: Prefix prepended to queries.  Auto-detected for
                       E5 models (``"query: "``).  Set to ``""`` to disable.
@@ -66,12 +69,28 @@ class SentenceTransformerEmbedder:
         batch_size: int = 32,
         query_prefix: str | None = None,
         passage_prefix: str | None = None,
+        model_path: str | None = None,
     ) -> None:
+        if not 1 <= batch_size <= 32:
+            raise ValueError("Embedding batch_size must be between 1 and 32")
+        self.model_path = cached_model_path(model_path or model_name)
+        device = local_device(device)
         from sentence_transformers import SentenceTransformer
 
         self.model_name = model_name
         self.batch_size = batch_size
-        self._model = SentenceTransformer(model_name, device=device)
+        try:
+            self._model = SentenceTransformer(
+                self.model_path,
+                device=device,
+                local_files_only=True,
+                trust_remote_code=False,
+            )
+        except (OSError, ValueError) as exc:
+            raise RuntimeError(
+                f"Cannot load local model assets: {model_name}. "
+                "Verify/provision the complete cache during explicit online setup/update."
+            ) from exc
         self.dimension: int = self._model.get_sentence_embedding_dimension()
 
         # --- Auto-detect prefixes for E5 models ---
@@ -126,13 +145,14 @@ class SentenceTransformerEmbedder:
             },
         ):
             t0 = time.time()
-            embeddings: np.ndarray = self._model.encode(
-                texts,
-                batch_size=self.batch_size,
-                show_progress_bar=False,
-                convert_to_numpy=True,
-                normalize_embeddings=True,
-            )
+            with inference():
+                embeddings: np.ndarray = self._model.encode(
+                    texts,
+                    batch_size=self.batch_size,
+                    show_progress_bar=False,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                )
             duration_ms = (time.time() - t0) * 1000
 
             add_span_attributes(
@@ -170,13 +190,14 @@ class SentenceTransformerEmbedder:
                 "device": self.device,
             },
         ):
-            vec: np.ndarray = self._model.encode(
-                [prefixed],
-                batch_size=1,
-                show_progress_bar=False,
-                convert_to_numpy=True,
-                normalize_embeddings=True,
-            )
+            with inference():
+                vec: np.ndarray = self._model.encode(
+                    [prefixed],
+                    batch_size=1,
+                    show_progress_bar=False,
+                    convert_to_numpy=True,
+                    normalize_embeddings=True,
+                )
             return vec[0].tolist()
 
     # ------------------------------------------------------------------

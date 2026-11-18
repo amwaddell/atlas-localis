@@ -23,6 +23,7 @@ from pathlib import Path
 
 import lancedb
 
+from workbench.core.offline import local_path
 from workbench.core.types import Query, RetrievalResult
 from workbench.observability.tracing import add_span_attributes, start_span
 
@@ -44,6 +45,7 @@ class LanceDBKeywordSearcher:
         db_path: Path,
         table_name: str = "chunks",
     ) -> None:
+        db_path = local_path(db_path)
         self.db_path = db_path
         self.table_name = table_name
 

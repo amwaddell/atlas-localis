@@ -3,7 +3,7 @@
 # Start the Infinity embedding server.
 #
 # Serves intfloat/multilingual-e5-base on port 8081.
-# The model is downloaded on first run and cached thereafter.
+# Models must already be provisioned; startup is offline.
 #
 # Prerequisites:
 #   pip install "infinity-emb[all]"
@@ -15,11 +15,12 @@
 # -------------------------------------------------------------------
 
 set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/runtime_env.sh"
 
 # Configurable via environment
 MODEL="${EMBEDDING_MODEL:-intfloat/multilingual-e5-base}"
 PORT="${EMBEDDING_PORT:-8081}"
-HOST="${EMBEDDING_HOST:-0.0.0.0}"
+HOST="${EMBEDDING_HOST:-127.0.0.1}"
 
 # Parse CLI args (override env)
 while [[ $# -gt 0 ]]; do
@@ -51,22 +52,14 @@ if ! command -v infinity_emb &> /dev/null; then
     exit 1
 fi
 
-# Workaround: optimum >= 1.24 removed bettertransformer, which
-# infinity_emb imports unconditionally at startup.  Uninstalling
-# optimum avoids the crash; torch SDPA replaces it anyway.
-if python3 -c "from optimum.bettertransformer import BetterTransformer" 2>/dev/null; then
-    : # optimum is fine
-else
-    if python3 -c "import optimum" 2>/dev/null; then
-        echo "⚠️  Detected incompatible 'optimum' version (missing bettertransformer)."
-        echo "   Removing it — torch SDPA provides the same optimization natively."
-        pip uninstall optimum -y --quiet 2>/dev/null || true
-    fi
-fi
+# Validate before starting Infinity. Keep the semantic model ID client-side.
+SERVED_MODEL="$MODEL"
+MODEL="$("$ATLAS_PYTHON" -B "$ATLAS_ROOT/scripts/runtime_guard.py" --host "$HOST" --port "$PORT" --model "$MODEL")"
 
 # Launch
 exec infinity_emb v2 \
     --model-id "${MODEL}" \
+    --served-model-name "${SERVED_MODEL}" \
     --port "${PORT}" \
     --host "${HOST}" \
     --engine torch

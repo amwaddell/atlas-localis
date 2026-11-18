@@ -2,7 +2,7 @@
 Citation extraction, validation, and numberization.
 
 This is the single source of truth for citation parsing and policy
-enforcement.  Both ``rag_graph`` and ``researcher_graph`` import
+enforcement.  Canonical orchestration and evidence consumers import
 from here — no duplicated extraction logic.
 
 Two policy presets are provided:
@@ -24,18 +24,12 @@ Numberization (post-processing):
     Returns the cleaned text plus a structured citation map for
     display in the UI.
 
-``numberize_result``
-    Convenience wrapper that applies ``numberize_citations`` to a
-    graph result dict in-place.
-
 Usage::
 
     from workbench.prompting.citations import (
         extract_citations,
-        extract_web_citations,
         validate_citations,
         numberize_citations,
-        numberize_result,
         RESEARCHER_STRICT,
     )
 
@@ -53,8 +47,6 @@ Usage::
     # Post-process: replace hashes with [1], [2], etc.
     clean_text, citation_map = numberize_citations(answer_text, opened_chunks)
 
-    # Or, on a full graph result dict:
-    numberize_result(graph_result)
 """
 
 from __future__ import annotations
@@ -189,24 +181,6 @@ def extract_citations(answer_text: str, known_ids: list[str]) -> list[str]:
     return cited
 
 
-def extract_web_citations(answer_text: str, urls: list[str]) -> list[str]:
-    """
-    Find URLs mentioned in the answer text.
-
-    Args:
-        answer_text: The generated answer string.
-        urls: List of URLs from web search results.
-
-    Returns:
-        List of cited URLs found in the text.
-    """
-    cited: list[str] = []
-    for url in urls:
-        if url and url in answer_text:
-            cited.append(url)
-    return cited
-
-
 def find_all_bracket_ids(text: str) -> list[str]:
     """
     Extract every ``[some_id]`` token from *text*.
@@ -248,7 +222,7 @@ def numberize_citations(
     the same chunk_id reuse the same number.
 
     Only chunk_ids that match an entry in *opened_chunks* are
-    numberized.  Unknown IDs (hallucinated or web-style) are left
+    numberized.  Unknown IDs (hallucinated) are left
     untouched.
 
     Example::
@@ -359,45 +333,6 @@ def _make_snippet(text: str, max_len: int = 150) -> str:
     return snippet
 
 
-def numberize_result(result: dict[str, Any]) -> dict[str, Any]:
-    """
-    Post-process a graph result dict: numberize citations in-place.
-
-    This is the convenience wrapper meant to be called after any
-    graph returns.  It reads ``answer_text`` and ``opened`` from the
-    result, applies :func:`numberize_citations`, and writes back:
-
-    - ``answer_text`` — rewritten with ``[1]``, ``[2]``, etc.
-    - ``citation_map`` — ordered list of citation metadata dicts.
-
-    The original ``citations`` list (raw chunk IDs) is preserved
-    untouched for backward compatibility and logging.
-
-    Args:
-        result: The graph result dict (mutated in-place and returned).
-
-    Returns:
-        The same dict with ``answer_text`` rewritten and
-        ``citation_map`` added.
-    """
-    answer_text = result.get("answer_text", "")
-    opened = result.get("opened", [])
-
-    if answer_text and opened:
-        numbered_text, citation_map = numberize_citations(answer_text, opened)
-        result["answer_text"] = numbered_text
-        result["citation_map"] = citation_map
-    else:
-        result["citation_map"] = []
-
-    return result
-
-
-# ------------------------------------------------------------------ #
-#  Validation                                                         #
-# ------------------------------------------------------------------ #
-
-
 def _split_paragraphs(text: str) -> list[str]:
     """Split text on blank lines; drop empty segments."""
     paras = re.split(r"\n\s*\n", text.strip())
@@ -487,3 +422,88 @@ def validate_citations(
     # --- Final verdict ---------------------------------------------
     result.valid = len(result.errors) == 0
     return result
+
+
+def project_answer(draft, packet):
+    """Validate aliases/coverage, then derive immutable canonical units and numbers.
+
+    Registry membership comes exclusively from the packet's hydrated records.
+    This proves reference integrity, never entailment.
+    """
+    from workbench.graphs.research_models import CanonicalUnit, finding_aliases
+
+    aliases = finding_aliases(packet)
+    used = {a for unit in draft.units for a in unit.finding_ids}
+    conflicts = {a for group in draft.conflict_groups for a in group}
+    if not used | conflicts <= aliases.keys():
+        raise ValueError("unknown finding alias")
+    required = {f.finding_id.split(".")[0] for f in aliases.values()}
+    covered = {aliases[a].finding_id.split(".")[0] for a in used}
+    if required != covered:
+        raise ValueError("draft omits admitted task")
+    units = tuple(
+        CanonicalUnit(
+            text=unit.text,
+            finding_ids=tuple(
+                dict.fromkeys(aliases[a].finding_id for a in unit.finding_ids)
+            ),
+            evidence_refs=tuple(
+                dict.fromkeys(
+                    key for a in unit.finding_ids for key in aliases[a].evidence_refs
+                )
+            ),
+        )
+        for unit in draft.units
+    )
+    evidence = tuple(e for result in packet.results for e in result.evidence)
+    text, citations = render_canonical_units(units, evidence)
+    return units, text, citations
+
+
+def render_canonical_units(units, evidence):
+    """Pure numbering by first source appearance; retain exact spans/associations."""
+    from workbench.graphs.research_models import Citation
+
+    registry = {}
+    for record in evidence:
+        previous = registry.get(record.key)
+        if previous and previous.model_dump(
+            exclude={"presented_to"}
+        ) != record.model_dump(exclude={"presented_to"}):
+            raise ValueError("conflicting evidence")
+        if previous:
+            record = record.model_copy(
+                update={
+                    "presented_to": tuple(
+                        dict.fromkeys((*previous.presented_to, *record.presented_to))
+                    )
+                }
+            )
+        registry[record.key] = record
+    sources = {}
+    lines = []
+    for unit in units:
+        numbers = []
+        for key in unit.evidence_refs:
+            if key not in registry:
+                raise ValueError("unknown evidence reference")
+            source = (key.snapshot_id, key.chunk_id)
+            entry = sources.setdefault(
+                source, {"number": len(sources) + 1, "excerpts": {}, "findings": {}}
+            )
+            entry["excerpts"][key] = registry[key]
+            entry["findings"].update(dict.fromkeys(unit.finding_ids))
+            if entry["number"] not in numbers:
+                numbers.append(entry["number"])
+        lines.append(unit.text + " " + "".join(f"[{n}]" for n in numbers))
+    citations = tuple(
+        Citation(
+            number=e["number"],
+            snapshot_id=s[0],
+            chunk_id=s[1],
+            excerpts=tuple(e["excerpts"].values()),
+            finding_ids=tuple(e["findings"]),
+        )
+        for s, e in sources.items()
+    )
+    return "\n\n".join(lines), citations

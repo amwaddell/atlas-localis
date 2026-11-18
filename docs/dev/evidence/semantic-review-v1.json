@@ -1,0 +1,221 @@
+{
+  "version": "semantic-review-v1",
+  "rubric": "history-rubric-v1",
+  "reviewer": "codex-agent",
+  "independent_human_reviewers": 0,
+  "status": "Provisional agent review, no human historical-accuracy or utility score claimed.",
+  "selection": "Fixed development f01/f05/i01: all findings admitted to the synthesis packet and final units. All four conversation cases receive separate rewrite review. No whole-suite factual-accuracy score.",
+  "judgments": [
+    {
+      "planner": {
+        "label": "scope_expansion",
+        "note": "One task, but adds primary authors, 19th-21st century secondary analyses, and a large contextual agenda absent from the question."
+      },
+      "worker": [
+        {
+          "finding_id": "t1.f1",
+          "label": "partial",
+          "note": "Assassination, date and civil wars appear in E1/E5; dictatorship end and destabilization are interpretive additions."
+        },
+        {
+          "finding_id": "t1.f2",
+          "label": "partial",
+          "note": "E5 names the three rulers and their loyalty, but 43 BC formation, avenging motive and suppression of factions are absent from cited E2/E5."
+        },
+        {
+          "finding_id": "t1.f3",
+          "label": "partial",
+          "note": "E2 supports Actium date and Octavian victory, not Cleopatra or elimination of all major opposition."
+        },
+        {
+          "finding_id": "t1.f4",
+          "label": "partial",
+          "note": "E2 supports title and date, not unprecedented powers or an official formal Republic-to-Empire transition."
+        },
+        {
+          "finding_id": "t1.f5",
+          "label": "partial",
+          "note": "E3 supports Caesar dictatorship as a candidate boundary, not dictator perpetuo wording or a precise appointment date."
+        }
+      ],
+      "units": [
+        {
+          "unit_id": "u1",
+          "label": "partial",
+          "note": "Broad date outline follows findings, but Republic technically persisted and contested symbolic continuity are not established by the cited finding set."
+        },
+        {
+          "unit_id": "u2",
+          "label": "partial",
+          "note": "Caesar death as an end boundary is not in cited F2/F3/F4; alleged definitive Senate decree and uneven collapse also exceed those findings."
+        }
+      ],
+      "uncited_material_clauses": [
+        "Republic technically persisted until 27 BC",
+        "Caesar death as a scholarly end date in unit 2 without finding F1",
+        "institutional collapse was uneven"
+      ],
+      "rewrite": {
+        "label": "preserved",
+        "note": "No conversation; identity normalization, no rewrite call."
+      },
+      "budget_omission_note": "Finding t1.f6 was inspected but omitted from the final synthesis packet by its budget gate. It is not included in admitted-finding support denominators.",
+      "question_id": "f01",
+      "run_id": "de0a8c8ce4c14f2c8b9342baada28628",
+      "result_sha256": "9f866fbeaf4e5bc9b5ece9bed7c10615353f369e89eb30efdf70aa9960018113"
+    },
+    {
+      "planner": {
+        "label": "scope_expansion",
+        "note": "Correct referents but adds dynastic lineage, political conditions and primary-source/scholarly limits from the 1860s-1870s. The requested answer was the emperor name."
+      },
+      "worker": [
+        {
+          "finding_id": "t1.f1",
+          "label": "partial",
+          "note": "E1 supports alliance/year/Emperor Meiji but says nothing about Jimmu or Yamato lineage; repair retains the unsupported detail."
+        },
+        {
+          "finding_id": "t1.f2",
+          "label": "supported",
+          "note": "E1 explicitly describes low imperial power and alliance support for regaining it."
+        },
+        {
+          "finding_id": "t1.f3",
+          "label": "supported",
+          "note": "E2 and E3 together cover residual authority, war in 1868-1869 and shogunate defeat."
+        },
+        {
+          "finding_id": "t1.f4",
+          "label": "partial",
+          "note": "E3 supports Choshu/Tosa at Toba-Fushimi and the war range; its clipped caption does not identify Satsuma and does not separately date that battle to 1868."
+        },
+        {
+          "finding_id": "t1.f5",
+          "label": "supported",
+          "note": "E2 explicitly states oligarchs held real power and ruled in the emperor name."
+        }
+      ],
+      "units": [
+        {
+          "unit_id": "u1",
+          "label": "partial",
+          "note": "Lineage is faithfully copied from an unsupported finding, but assertion about what the prior discussion explicitly referenced is absent from findings. Source support and synthesis faithfulness are different."
+        },
+        {
+          "unit_id": "u2",
+          "label": "partial",
+          "note": "Defeat and oligarchy follow findings, but the purported contradiction of purely symbolic authority is an added inference and is not established by them."
+        }
+      ],
+      "uncited_material_clauses": [
+        "alliance explicitly referenced his role in the prior discussion",
+        "contradicting the notion of a purely symbolic imperial authority"
+      ],
+      "rewrite": {
+        "label": "preserved",
+        "note": "Resolves they to Satsuma and Choshu and preserves the question asking which emperor."
+      },
+      "question_id": "f05",
+      "run_id": "dca5816bbbdd46d0a402aba7cf35a4f7",
+      "result_sha256": "e3e2dd92d4c481b3a545a1f952f55bb69e8b2b1fa5511fe2018d6d922c559ee1"
+    },
+    {
+      "planner": {
+        "label": "scope_expansion",
+        "note": "Three tasks cover industrial and political facets, but add financing, labor, elite groups, constitutional clauses and a new 1889-1900 focus. Those extra constraints were not requested."
+      },
+      "rewrite": {
+        "label": "preserved",
+        "note": "Summary-only context correctly resolves it to Japan during the Meiji Restoration, preserving modernization and political-power facets."
+      },
+      "question_id": "c03",
+      "run_id": "e4c5193bb3844bd9bc240d346e8519c2",
+      "result_sha256": "a589c9268468ebcbd13e37a29c860310751c5abd101c63adbdaaada380d73b9f",
+      "worker": [],
+      "units": []
+    },
+    {
+      "planner": {
+        "label": "scope_expansion",
+        "note": "A self-contained timeline task is appropriate, but additional primary-record/scholarly-consensus constraints and specific proposed endpoints are introduced before retrieval."
+      },
+      "rewrite": {
+        "label": "preserved",
+        "note": "Prior turns correctly resolve its to the American Civil War. Start, phases, turning points and end remain within timeline scope."
+      },
+      "question_id": "t02",
+      "run_id": "6fab3c2ceb8b40099aa3fb5aefa1a2ff",
+      "result_sha256": "91becfee5efc51a248fc74e92f833c09b00599871cd843d3832d82d88cdd3af9",
+      "worker": [],
+      "units": []
+    },
+    {
+      "planner": {
+        "label": "scope_drift",
+        "note": "Transforms an impossible request for exact unrecorded speech into plausible linguistic reconstruction; invents a Latium setting and a reconstruction task."
+      },
+      "scope_response": "failed_to_abstain",
+      "worker": [
+        {
+          "finding_id": "t1.f1",
+          "label": "unsupported",
+          "note": "Cited E3 describes Latin history and later religious usage. It contains none of the invented quotation, translation, agricultural invocation or attestation claimed by this finding."
+        },
+        {
+          "finding_id": "t1.f2",
+          "label": "unsupported",
+          "note": "Cited E3 describes Latin history and later religious usage. It contains none of the invented quotation, translation, agricultural invocation or attestation claimed by this finding."
+        },
+        {
+          "finding_id": "t1.f3",
+          "label": "unsupported",
+          "note": "Cited E3 describes Latin history and later religious usage. It contains none of the invented quotation, translation, agricultural invocation or attestation claimed by this finding."
+        },
+        {
+          "finding_id": "t1.f4",
+          "label": "unsupported",
+          "note": "Cited E3 describes Latin history and later religious usage. It contains none of the invented quotation, translation, agricultural invocation or attestation claimed by this finding."
+        }
+      ],
+      "units": [
+        {
+          "unit_id": "u1",
+          "label": "partial",
+          "note": "Copies speculative quotations from findings, then upgrades them to attested linguistic patterns and documented curses/blessings. Those claims are absent from the cited findings; uncertainty wording does not establish support."
+        }
+      ],
+      "uncited_material_clauses": [
+        "based on attested linguistic patterns and agricultural invocations",
+        "align with documented curses/blessings"
+      ],
+      "rewrite": {
+        "label": "preserved",
+        "note": "No conversation: identity normalization preserves the original impossible request. Scope drift occurs in planning."
+      },
+      "question_id": "i01",
+      "run_id": "83118e766b8a422b935f26f2c01943b8",
+      "result_sha256": "dee7bedf1ef3ec9d4d3a24f86fb9b42961310c5d126ce004d749f32f7c7e4cf7"
+    },
+    {
+      "planner": {
+        "label": "propagated_scope_drift",
+        "note": "Plans both revolutions and adds causes/context after normalization expanded an ambiguous singular follow-up. The final answer covers only Russia."
+      },
+      "rewrite": {
+        "label": "drift",
+        "note": "Prior context mentions both French and Russian revolutions. Rather than ask which singular it refers to, normalization requests both start dates and adds historical context, causes and key initial events."
+      },
+      "question_id": "i06",
+      "run_id": "35cc40cadf1d4a45821d09e248e53923",
+      "result_sha256": "da9930b9d5e89a8d1c1012a192fb28b00e75045373f0b2d7fbc7782aacdb82a8",
+      "worker": [],
+      "units": []
+    }
+  ],
+  "limitations": [
+    "Support/faithfulness only against exact captured excerpts/findings, not external historical truth.",
+    "Single agent, no independent agreement estimate.",
+    "No held-out tuning or runtime changes from observed failures."
+  ]
+}

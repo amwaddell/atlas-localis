@@ -22,7 +22,9 @@ from __future__ import annotations
 
 import time
 
+from workbench.core.offline import cached_model_path
 from workbench.core.types import Chunk, Query, RerankResult
+from workbench.models.local_inference import inference, local_device
 from workbench.observability.tracing import add_span_attributes, start_span
 
 
@@ -32,8 +34,9 @@ class CrossEncoderReranker:
 
     Args:
         model_name: HuggingFace model ID (e.g. ``"BAAI/bge-reranker-v2-m3"``).
-        device: ``"cpu"``, ``"mps"``, or ``"cuda"``.
-                ``None`` lets sentence-transformers pick automatically.
+        device: ``"cpu"``, ``"mps"`` or ``"auto"``; unavailable Metal uses CPU.
+        model_path: Optional asset path, separate from semantic model_name.
+        max_length: Bounded pair token window (default 8192).
         batch_size: Batch size for ``model.predict``.
     """
 
@@ -41,13 +44,31 @@ class CrossEncoderReranker:
         self,
         model_name: str = "BAAI/bge-reranker-v2-m3",
         device: str | None = None,
-        batch_size: int = 32,
+        batch_size: int = 1,
+        model_path: str | None = None,
+        max_length: int = 8192,
     ) -> None:
+        if not 1 <= batch_size <= 32 or not 1 <= max_length <= 8192:
+            raise ValueError("Reranker batch_size must be 1..32 and max_length 1..8192")
+        self.model_path = cached_model_path(model_path or model_name)
+        self.device = local_device(device)
         from sentence_transformers import CrossEncoder
 
         self.model_name = model_name
         self.batch_size = batch_size
-        self._model = CrossEncoder(model_name, device=device)
+        try:
+            self._model = CrossEncoder(
+                self.model_path,
+                device=self.device,
+                max_length=max_length,
+                local_files_only=True,
+                trust_remote_code=False,
+            )
+        except (OSError, ValueError) as exc:
+            raise RuntimeError(
+                f"Cannot load local model assets: {model_name}. "
+                "Verify/provision the complete cache during explicit online setup/update."
+            ) from exc
 
     def rerank(
         self,
@@ -66,6 +87,10 @@ class CrossEncoderReranker:
         Returns:
             List of RerankResult sorted by rerank_score descending.
         """
+        if len(candidates) > 50:
+            raise ValueError("Reranker accepts at most 50 candidates")
+        if top_n < 1:
+            raise ValueError("top_n must be positive")
         if not candidates:
             return []
 
@@ -84,14 +109,15 @@ class CrossEncoderReranker:
             pairs = [(query.text, chunk.text) for chunk in candidates]
 
             # Score all pairs
-            scores = self._model.predict(
-                pairs,
-                batch_size=self.batch_size,
-                show_progress_bar=False,
-            )
+            with inference():
+                scores = self._model.predict(
+                    pairs,
+                    batch_size=self.batch_size,
+                    show_progress_bar=False,
+                )
 
             # Pair each candidate with its score
-            scored = list(zip(candidates, scores))
+            scored = list(zip(candidates, scores, strict=True))
 
             # Sort by score descending
             scored.sort(key=lambda x: float(x[1]), reverse=True)

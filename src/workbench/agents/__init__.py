@@ -1,23 +1,5 @@
-"""
-Agent state and types.
+"""Useful local evidence payloads."""
 
-``AgentState`` and its supporting types (``OpenedChunk``,
-``RetrievedChunkSummary``, ``TimelineItem``) are the primary exports
-of this package and are used throughout the codebase.
+from workbench.agents.state import OpenedChunk, RetrievedChunkSummary, TimelineItem
 
-Orchestration is handled by the LangGraph graphs in ``workbench.graphs``.
-"""
-
-from workbench.agents.state import (
-    AgentState,
-    OpenedChunk,
-    RetrievedChunkSummary,
-    TimelineItem,
-)
-
-__all__ = [
-    "AgentState",
-    "OpenedChunk",
-    "RetrievedChunkSummary",
-    "TimelineItem",
-]
+__all__ = ["OpenedChunk", "RetrievedChunkSummary", "TimelineItem"]

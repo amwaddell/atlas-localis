@@ -11,6 +11,8 @@ from typing import Any
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
 
+from workbench.core.offline import local_path, local_url, validate_environment
+
 
 class WorkbenchConfig(BaseModel):
     """
@@ -32,6 +34,23 @@ class WorkbenchConfig(BaseModel):
 
     def model_post_init(self, __context):
         """Validate configuration after initialization."""
+        validate_environment()
+        for retired in ("web_search", "source_fetch", "supervisor", "decomposer"):
+            if retired in (self.model_extra or {}):
+                raise ValueError(
+                    f"{retired} was removed; questions use local evidence only"
+                )
+        for section in (
+            self.model,
+            self.embeddings,
+            self.reranking,
+            self.observability,
+        ):
+            for key, value in section.items():
+                if key.endswith(("base_url", "endpoint")) and value:
+                    section[key] = local_url(value)
+        for value in self.paths.values():
+            local_path(value)
         # Validate paths
         required_path_keys = ["data_dir", "indexes_dir"]
         for key in required_path_keys:
@@ -43,6 +62,22 @@ class WorkbenchConfig(BaseModel):
         for key in required_model_keys:
             if key not in self.model:
                 raise ValueError(f"Missing required model config: {key}")
+
+        if self.model.get("provider") != "llamacpp_server":
+            raise ValueError(
+                "Only the local llamacpp_server model provider is supported"
+            )
+        if self.embeddings.get("provider", "local") not in {
+            "http",
+            "local",
+            "sentence_transformers",
+        }:
+            raise ValueError("Unsupported embedding provider")
+        if self.reranking.get("provider", "cross_encoder") not in {
+            "http",
+            "cross_encoder",
+        }:
+            raise ValueError("Unsupported reranking provider")
 
 
 def load_yaml_file(path: Path) -> dict[str, Any]:

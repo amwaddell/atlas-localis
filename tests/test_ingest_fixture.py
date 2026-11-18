@@ -197,6 +197,7 @@ class TestIngestWikipediaDump:
         for text, length in zip(
             table.column("text").to_pylist(),
             table.column("text_length").to_pylist(),
+            strict=True,
         ):
             assert len(text) == length
 
@@ -222,3 +223,6 @@ class TestIngestWikipediaDump:
         table_b = pq.read_table(out_b)
         for col in ("page_id", "title", "text", "source", "text_length"):
             assert table_a.column(col).to_pylist() == table_b.column(col).to_pylist()
+
+
+pytestmark = pytest.mark.fixture_integration

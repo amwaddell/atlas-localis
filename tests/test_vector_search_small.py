@@ -87,9 +87,37 @@ SAMPLE_CHUNKS = [
 ]
 
 
-@pytest.fixture(scope="module")
-def embedder() -> SentenceTransformerEmbedder:
+@pytest.fixture(
+    scope="module",
+    params=[
+        pytest.param("fixture", marks=pytest.mark.fixture_integration),
+        pytest.param("real", marks=pytest.mark.acceptance),
+    ],
+)
+def embedder(request) -> SentenceTransformerEmbedder:
     """Load the embedding model once for all tests in this module."""
+    if request.param == "fixture":
+
+        class FixtureEmbedder:
+            @staticmethod
+            def embed_query(text):
+                groups = [
+                    ("photo", "plant", "sunlight"),
+                    ("gravit", "newton"),
+                    ("python", "programming"),
+                    ("ocean", "water"),
+                    ("music", "composer"),
+                ]
+                vector = [
+                    float(any(word in text.lower() for word in group))
+                    for group in groups
+                ]
+                return vector if any(vector) else [1.0] * 5
+
+            def embed_texts(self, texts):
+                return [self.embed_query(text) for text in texts]
+
+        return FixtureEmbedder()
     return SentenceTransformerEmbedder(
         model_name="intfloat/multilingual-e5-base",
         device="mps",
@@ -118,7 +146,7 @@ def vector_searcher(
 
     # Build records
     records = []
-    for chunk, vec in zip(SAMPLE_CHUNKS, vectors):
+    for chunk, vec in zip(SAMPLE_CHUNKS, vectors, strict=True):
         records.append(
             {
                 "chunk_id": chunk["chunk_id"],

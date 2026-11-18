@@ -1,71 +1,36 @@
 #!/usr/bin/env python3
-"""
-Run the agent chatbot from the command line.
-
-Usage:
-    python scripts/run_agent_chat.py "When did the Roman Republic end?"
-    python scripts/run_agent_chat.py --graph researcher_graph "Timeline of the fall of Rome"
-
-Prerequisites:
-    1. LanceDB indexes built (vector + keyword FTS)
-    2. Local model server running: bash scripts/start_model_server.sh
-"""
+"""Run one local research question through the shared application."""
 
 import argparse
 
-from workbench.systems.runner import GraphRunner
+from workbench.graphs.planning import conversation_input
+from workbench.systems.presentation import project_result
+from workbench.systems.runner import ResourceBusy, create_application
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Run agent chatbot")
-    parser.add_argument("question", nargs="+", help="Question to ask")
-    parser.add_argument(
-        "--graph",
-        default="rag_graph",
-        choices=["rag_graph", "researcher_graph", "supervisor_graph"],
-        help="Which graph to run (default: rag_graph)",
+def run_question(application, question, *, history=(), summary=""):
+    return application.invoke(
+        conversation_input(question=question, history=history, summary=summary)
     )
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Local historical research")
+    parser.add_argument("question", nargs="+")
     args = parser.parse_args()
-
-    question = " ".join(args.question)
-    graph_name = args.graph
-
-    print(f"Question: {question}")
-    print(f"Graph:    {graph_name}\n")
-
-    runner = GraphRunner()
-    result = runner.run(graph_name, question)
-
-    # Print results
-    print("\n" + "=" * 60)
-
-    if result.get("error"):
-        print(f"ERROR: {result['error']}")
-    else:
-        print(f"Answer:\n{result.get('answer_text', '(no answer)')}")
-
-    print("\n--- Metadata ---")
-    print(f"  Retrieved:      {len(result.get('retrieved', []))} chunks")
-    print(f"  Opened:         {len(result.get('opened', []))} chunks")
-    print(f"  Citations:      {result.get('citations', [])}")
-    print(
-        f"  Tokens in/out:  {result.get('tokens_in', 0)} / {result.get('tokens_out', 0)}"
-    )
-    print(f"  Model latency:  {result.get('model_latency_ms', 0):.0f} ms")
-
-    if result.get("timeline"):
-        print(f"\n--- Timeline ({len(result['timeline'])} events) ---")
-        for item in result["timeline"]:
-            date = item.get("date", "?")
-            event = item.get("event", "?")
-            print(f"  {date}: {event}")
-
-    if result.get("opened"):
-        print("\n--- Evidence used ---")
-        for chunk in result["opened"]:
-            cid = chunk.get("chunk_id", "?")
-            title = chunk.get("title", "?")
-            print(f"  [{cid}] {title}")
+    try:
+        with create_application() as app:
+            result = run_question(app, " ".join(args.question))
+    except ResourceBusy as exc:
+        parser.exit(1, str(exc) + "\n")
+    view = project_result(result)
+    print(view["answer_text"])
+    for gap in view["gaps"]:
+        print(f"Evidence gap: {gap}")
+    for citation in view["citations"]:
+        for excerpt in citation["excerpts"]:
+            print(f"[{citation['number']}] {excerpt['title']}: {excerpt['text']}")
+    print(f"{view['outcome']} · Run {view['run_id']}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,145 @@
+{
+  "format": 1,
+  "models": [
+    {
+      "id": "intfloat/multilingual-e5-base",
+      "revision": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+      "license": "mit",
+      "license_reference": "https://huggingface.co/intfloat/multilingual-e5-base/blob/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/README.md",
+      "files": {
+        "1_Pooling/config.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/1_Pooling/config.json",
+          "sha256": "f586ab6c734af7b8d14d898bfa7faa886f23b46f86dd1730514309893af13d75",
+          "size": 200,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "README.md": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/README.md",
+          "sha256": "9d129cb0b912b55c7b5378f976a9c35ae4796c80466b659ad63930d8ca090fca",
+          "size": 179345,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "config.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/config.json",
+          "sha256": "9dab198f24c8c0879e481cf7822005d5ecbceedbacb390ffafa594e28d31bac4",
+          "size": 694,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "model.safetensors": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/model.safetensors",
+          "sha256": "a18a44fad1d0b46ded15928144138cff1135d5cc8233bdd90be5f18822de09a7",
+          "size": 1112201288,
+          "verification": "publisher-lfs-sha256"
+        },
+        "modules.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/modules.json",
+          "sha256": "c6e29747481e8b5dd2b58401966aeac910de39092f90cda9a704b1545f902b04",
+          "size": 387,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "sentence_bert_config.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/sentence_bert_config.json",
+          "sha256": "948201d8329907aae938fa62f9ceeed53f5694dacc2b87b9f3b78b37ee986529",
+          "size": 57,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "sentencepiece.bpe.model": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/sentencepiece.bpe.model",
+          "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+          "size": 5069051,
+          "verification": "publisher-lfs-sha256"
+        },
+        "special_tokens_map.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/special_tokens_map.json",
+          "sha256": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f",
+          "size": 280,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "tokenizer.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/tokenizer.json",
+          "sha256": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626",
+          "size": 17082660,
+          "verification": "publisher-lfs-sha256"
+        },
+        "tokenizer_config.json": {
+          "url": "https://huggingface.co/intfloat/multilingual-e5-base/resolve/835193815a3936a24a0ee7dc9e3d48c1fbb19c55/tokenizer_config.json",
+          "sha256": "efb5c0d09722e5fe59a462cd2a9976ee216d55b037597d997cd3fe833216da15",
+          "size": 418,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        }
+      }
+    },
+    {
+      "id": "BAAI/bge-reranker-v2-m3",
+      "revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+      "license": "apache-2.0",
+      "license_reference": "https://huggingface.co/BAAI/bge-reranker-v2-m3/blob/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/README.md",
+      "files": {
+        "README.md": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/README.md",
+          "sha256": "c887aa6dd2598f908bf0582ca7068cc816585c7a1b6a07df305b631ede0cb174",
+          "size": 17229,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "config.json": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/config.json",
+          "sha256": "13dcd6c31d9fec9d1d8e158702072f62d7fa7d312a64b9fe057bec9a08cfe41a",
+          "size": 795,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "model.safetensors": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/model.safetensors",
+          "sha256": "d9e3e081faff1eefb84019509b2f5558fd74c1a05a2c7db22f74174fcedb5286",
+          "size": 2271071852,
+          "verification": "publisher-lfs-sha256"
+        },
+        "sentencepiece.bpe.model": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/sentencepiece.bpe.model",
+          "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+          "size": 5069051,
+          "verification": "publisher-lfs-sha256"
+        },
+        "special_tokens_map.json": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/special_tokens_map.json",
+          "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+          "size": 964,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        },
+        "tokenizer.json": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/tokenizer.json",
+          "sha256": "69564b696052886ed0ac63fa393e928384e0f8caada38c1f4864a9bfbf379c15",
+          "size": 17098273,
+          "verification": "publisher-lfs-sha256"
+        },
+        "tokenizer_config.json": {
+          "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3/resolve/953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e/tokenizer_config.json",
+          "sha256": "7e4c1cc848840aeccdd763458c18dd525eb0f795c992e00ebe9c28554e7db2d4",
+          "size": 1173,
+          "verification": "publisher-git-blob-verified-local-sha256"
+        }
+      }
+    },
+    {
+      "id": "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+      "revision": "0102285ad796bd99af90f58de616092e5630e970",
+      "license": "apache-2.0",
+      "license_reference": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/blob/0102285ad796bd99af90f58de616092e5630e970/README.md",
+      "files": {
+        "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf": {
+          "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512-GGUF/resolve/0102285ad796bd99af90f58de616092e5630e970/Ministral-3-8B-Instruct-2512-Q4_K_M.gguf",
+          "size": 5198911904,
+          "sha256": "33e7a72cf5e6e2cfc2f2847075acc013d68bba023e35310cef86b5cf8fdca761",
+          "verification": "publisher-lfs-sha256"
+        }
+      }
+    }
+  ],
+  "embedding": {
+    "id": "intfloat/multilingual-e5-base",
+    "revision": "835193815a3936a24a0ee7dc9e3d48c1fbb19c55",
+    "dimension": 768,
+    "normalize": true,
+    "query_prefix": "query: ",
+    "passage_prefix": "passage: "
+  }
+}

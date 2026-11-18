@@ -65,7 +65,7 @@ def main():
         print("  Phoenix not available, using basic tracing")
         print("  To use Phoenix:")
         print("    1. pip install arize-phoenix arize-phoenix-otel")
-        print("    2. phoenix serve")
+        print("    2. bash scripts/run_phoenix.sh")
         setup_tracing(console_export=True)
 
     # Create run context
@@ -157,7 +157,7 @@ def main():
         print("To view traces in Phoenix, install and start it:")
         print("=" * 70)
         print("\n  pip install arize-phoenix arize-phoenix-otel")
-        print("  phoenix serve")
+        print("  bash scripts/run_phoenix.sh")
 
     print("\n" + "=" * 70)
     print("✓ Smoke test complete!")

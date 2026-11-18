@@ -95,7 +95,7 @@ class TestFixedSizeChunkerDeterminism:
         run_b = chunker.chunk(DOC_ID, TITLE, SAMPLE_TEXT)
 
         assert len(run_a) == len(run_b)
-        for a, b in zip(run_a, run_b):
+        for a, b in zip(run_a, run_b, strict=True):
             assert a.chunk_id == b.chunk_id
 
     def test_boundaries_identical_across_runs(self):
@@ -103,7 +103,7 @@ class TestFixedSizeChunkerDeterminism:
         run_a = chunker.chunk(DOC_ID, TITLE, SAMPLE_TEXT)
         run_b = chunker.chunk(DOC_ID, TITLE, SAMPLE_TEXT)
 
-        for a, b in zip(run_a, run_b):
+        for a, b in zip(run_a, run_b, strict=True):
             assert a.start_char == b.start_char
             assert a.end_char == b.end_char
             assert a.text == b.text
@@ -145,7 +145,7 @@ class TestParagraphAwareChunkerDeterminism:
         run_b = chunker.chunk(DOC_ID, TITLE, SAMPLE_TEXT)
 
         assert len(run_a) == len(run_b)
-        for a, b in zip(run_a, run_b):
+        for a, b in zip(run_a, run_b, strict=True):
             assert a.chunk_id == b.chunk_id
 
     def test_boundaries_identical_across_runs(self):
@@ -153,7 +153,7 @@ class TestParagraphAwareChunkerDeterminism:
         run_a = chunker.chunk(DOC_ID, TITLE, SAMPLE_TEXT)
         run_b = chunker.chunk(DOC_ID, TITLE, SAMPLE_TEXT)
 
-        for a, b in zip(run_a, run_b):
+        for a, b in zip(run_a, run_b, strict=True):
             assert a.start_char == b.start_char
             assert a.end_char == b.end_char
             assert a.text == b.text

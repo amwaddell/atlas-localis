@@ -175,7 +175,7 @@ def iter_articles_from_dump(dump_path: Path) -> Iterator[dict]:
         is_redirect = False
         raw_text = None
 
-        for event, elem in context:
+        for _event, elem in context:
             tag = elem.tag
 
             if tag == _TITLE:

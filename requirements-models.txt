@@ -1,7 +1,2 @@
-# Model server dependencies
-# 
-# Install with Metal acceleration on macOS:
-# pip install "llama-cpp-python[server]" --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/metal
-#
-# Or without acceleration (slower):
-# pip install "llama-cpp-python[server]"
+# Native llama.cpp is provisioned separately; E5/BGE dependencies are in pyproject.toml.
+-e .

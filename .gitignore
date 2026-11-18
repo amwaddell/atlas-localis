@@ -14,7 +14,7 @@
 
 # Model directories
 data/models/
-models/
+/models/
 checkpoints/
 
 # ----------------------------------------------------------------------------
@@ -234,3 +234,5 @@ credentials/
 
 # Keep example data (small files only)
 !examples/data/*.txt
+# Dedicated setup environment; preserve the existing developer venv.
+.atlas-venv/

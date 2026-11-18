@@ -21,14 +21,12 @@ from __future__ import annotations
 
 from workbench.core.types import Chunk
 from workbench.observability.tracing import add_span_attributes, start_span
-
-# Rough chars-per-token estimate used when token_count is unavailable.
-_CHARS_PER_TOKEN = 4
+from workbench.retrieval.evidence_packing import token_bound
 
 
 def _estimate_tokens(text: str) -> int:
-    """Cheap token estimate: characters / 4."""
-    return len(text) // _CHARS_PER_TOKEN
+    """Use the run tokenizer, or a conservative UTF-8 byte bound offline."""
+    return token_bound(text)
 
 
 class SimpleContextBuilder:
@@ -96,25 +94,33 @@ class SimpleContextBuilder:
                     continue
 
                 # 3. Token budget
-                chunk_tokens = (
-                    chunk.token_count
-                    if chunk.token_count > 0
-                    else _estimate_tokens(chunk.text)
+                header = self.header_template.format(
+                    title=chunk.title,
+                    section=chunk.section or "",
+                    chunk_id=chunk.chunk_id,
                 )
-                # Account for header + separator overhead
-                overhead = _estimate_tokens(self.separator) + _estimate_tokens(
-                    self.header_template
+                rendered = self.separator.join(
+                    [
+                        *(
+                            self.header_template.format(
+                                title=c.title,
+                                section=c.section or "",
+                                chunk_id=c.chunk_id,
+                            )
+                            + c.text
+                            for c in selected
+                        ),
+                        header + chunk.text,
+                    ]
                 )
-                if tokens_used + chunk_tokens + overhead > max_tokens:
-                    # If we haven't selected anything yet, include at least one
-                    if selected:
-                        break
+                if _estimate_tokens(rendered) > max_tokens:
+                    continue
 
                 # Accept this chunk
                 seen_ids.add(chunk.chunk_id)
                 doc_counts[doc_id] = doc_counts.get(doc_id, 0) + 1
                 selected.append(chunk)
-                tokens_used += chunk_tokens + overhead
+                tokens_used = _estimate_tokens(rendered)
 
             # Assemble context string
             parts: list[str] = []

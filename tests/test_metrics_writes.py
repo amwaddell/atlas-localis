@@ -14,7 +14,7 @@ def test_metrics_store_creates_database():
     """Test that metrics store creates database file."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = Path(tmpdir) / "metrics.sqlite"
-        store = MetricsStore(db_path)
+        MetricsStore(db_path)
 
         assert db_path.exists()
 
@@ -23,7 +23,7 @@ def test_metrics_store_creates_tables():
     """Test that all required tables are created."""
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = Path(tmpdir) / "metrics.sqlite"
-        store = MetricsStore(db_path)
+        MetricsStore(db_path)
 
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()

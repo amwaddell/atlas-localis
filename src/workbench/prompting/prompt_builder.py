@@ -11,8 +11,8 @@ produced it.
 Usage (original render API)::
 
     pb = PromptBuilder()
-    prompt = pb.render("timeline_extract", question="...", evidence="...")
-    print(pb.get_version("timeline_extract"))   # e.g. "v-3a8c1f"
+    prompt = pb.render("derive_findings_v1", input_json="...")
+    print(pb.get_version("derive_findings_v1"))   # e.g. "v-3a8c1f"
 
 Usage (new build API — returns messages + metadata)::
 
@@ -96,7 +96,7 @@ class PromptBuilder:
         Render a template with the given placeholder values.
 
         Args:
-            template_name: Name of the template (e.g. "timeline_extract").
+            template_name: Name of the template (e.g. "derive_findings_v1").
             **kwargs: Values for ``{placeholder}`` substitution.
 
         Returns:

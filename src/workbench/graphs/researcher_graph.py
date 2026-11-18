@@ -1,50 +1,4 @@
-"""
-Researcher graph: search → open → timeline → answer → validate (→ repair).
-
-This graph extends the basic RAG graph with two additional capabilities:
-
-1. **Timeline extraction** — calls the ``TimelineTool`` to build a
-   chronological timeline from evidence *before* generating the answer.
-   The timeline is included in the answer prompt so the model can
-   write a better-structured, time-aware response.
-
-2. **Citation validation + repair** — after the answer is generated,
-   a validation node checks citation quality against a ``CitationPolicy``
-   (default: ``RESEARCHER_STRICT``).  If validation fails *and*
-   ``max_repair_attempts`` has not been exhausted, the graph routes
-   to a repair node that re-prompts the model with explicit instructions
-   to fix its citations, then re-validates.
-
-Graph topology::
-
-    retrieve → open → timeline → answer → validate ──[valid]──→ END
-                                              ↑        │
-                                              │   [invalid &
-                                              │    retries left]
-                                              │        │
-                                              └─ repair ┘
-
-Usage (standalone)::
-
-    graph = build_researcher_graph(
-        search_tool=search_tool,
-        open_chunk_tool=open_chunk_tool,
-        timeline_tool=timeline_tool,
-        model=llm,
-        prompt_builder=PromptBuilder(),
-    )
-    result = graph.invoke({"question": "When did the Roman Republic end?"})
-    print(result["answer_text"])
-    print(result["timeline"])
-
-Usage (with observability)::
-
-    result = run_researcher_graph(
-        graph=graph,
-        question="When did the Roman Republic end?",
-        config_snapshot=snapshot,
-    )
-"""
+"""Isolated bounded evidence worker with typed task output."""
 
 from __future__ import annotations
 
@@ -52,683 +6,378 @@ import time
 from typing import Any
 
 from langgraph.graph import END, StateGraph
+from pydantic import ValidationError
 
-from workbench.agents.state import OpenedChunk, TimelineItem
-from workbench.graphs.base_state import ResearcherState
-from workbench.observability.tracing import add_span_attributes, start_span
-from workbench.prompting.citations import (
-    RESEARCHER_STRICT,
-    CitationPolicy,
-    ValidationResult,
-    extract_citations,
-    validate_citations,
+from workbench.core.offline import validate_environment
+from workbench.core.types import Query
+from workbench.graphs.base_state import (
+    WorkerChannels,
+    WorkerOutput,
+    WorkerState,
 )
-from workbench.prompting.prompt_builder import (
-    PromptBuilder,
-    format_evidence_block,
-    format_timeline_section,
+from workbench.graphs.constrained_evidence import findings_schema, source_statements
+from workbench.graphs.evidence_support import support_errors
+from workbench.graphs.execution import worker_phase
+from workbench.graphs.research_models import (
+    Diagnostics,
+    Findings,
+    Notice,
+    ResearchResult,
+    StageError,
+    ValidationReport,
+    WorkerInput,
+    admit_findings,
 )
-
-# Re-export for convenience — rag_graph.extract_citations already
-# existed; researcher_graph users can import from either place.
-__all__ = [
-    "build_researcher_graph",
-    "run_researcher_graph",
-]
-
-
-# ------------------------------------------------------------------ #
-#  Node factories                                                     #
-# ------------------------------------------------------------------ #
+from workbench.models.structured_json import json_instruction
+from workbench.retrieval.evidence_packing import (
+    REPAIR_RESERVE,
+    findings_messages,
+    pack_evidence,
+    request_bound,
+    token_bound,
+)
+from workbench.retrieval.hybrid import HydratedRetrieval
 
 
-def _make_retrieve_node(
-    search_tool: Any,
-    default_top_k: int,
-) -> Any:
+def _error(stage: str, code: str, message: str) -> StageError:
+    return StageError(stage=stage, code=code, message=message[:1900] or code)
+
+
+def build_evidence_worker(*, retriever: Any, model: Any, snapshot_id: str) -> Any:
+    """Compile a worker with only WorkerInput in and ResearchResult out.
+
+    The retriever/store is already pinned by the caller; the input pin must
+    match. Services are injected, never channels. No checkpoint or chat memory.
     """
-    Create the retrieve node (identical to rag_graph's version).
+    validate_environment()
+    if not snapshot_id.strip():
+        raise ValueError("worker requires a pinned snapshot identity")
 
-    Calls ``search_tool.execute()`` with the question and writes
-    the result into ``state["retrieved"]``.
-    """
-
-    def retrieve_node(state: ResearcherState) -> dict[str, Any]:
-        question = state["question"]
-        top_k = state.get("search_top_k", default_top_k)
-
-        with start_span(
-            "graph.retrieve_node",
-            attributes={"question": question[:200], "top_k": top_k},
-        ):
-            try:
-                result = search_tool.execute(query=question, top_k=top_k)
-                chunks = result.get("chunks", [])
-                add_span_attributes({"results_count": len(chunks)})
-                return {"retrieved": chunks}
-
-            except Exception as exc:
-                return {
-                    "retrieved": [],
-                    "error": f"retrieve_node: {type(exc).__name__}: {exc}",
-                }
-
-    return retrieve_node
-
-
-def _make_open_node(
-    open_chunk_tool: Any,
-    default_top_n: int,
-) -> Any:
-    """
-    Create the open node (identical to rag_graph's version).
-
-    Opens the top N retrieved chunks and writes full evidence
-    into ``state["opened"]``.
-    """
-
-    def open_node(state: ResearcherState) -> dict[str, Any]:
-        retrieved = state.get("retrieved", [])
-        top_n = state.get("open_top_n", default_top_n)
-
-        if state.get("error"):
-            return {}
-
-        with start_span(
-            "graph.open_node",
-            attributes={
-                "retrieved_count": len(retrieved),
-                "open_top_n": top_n,
-            },
-        ):
-            opened: list[dict[str, Any]] = []
-            for chunk_summary in retrieved[:top_n]:
-                chunk_id = chunk_summary.get("chunk_id", "")
-                if not chunk_id:
-                    continue
-                try:
-                    result = open_chunk_tool.execute(chunk_id=chunk_id)
-                    if result.get("found") and result.get("chunk"):
-                        opened.append(result["chunk"])
-                except Exception:
-                    pass  # skip; don't abort the run
-
-            add_span_attributes({"opened_count": len(opened)})
-            return {"opened": opened}
-
-    return open_node
-
-
-def _make_timeline_node(
-    timeline_tool: Any,
-) -> Any:
-    """
-    Create the timeline node.
-
-    Calls the ``TimelineTool`` with the opened evidence and writes
-    a structured timeline (plus the raw model output) into state.
-    """
-
-    def timeline_node(state: ResearcherState) -> dict[str, Any]:
-        opened_dicts = state.get("opened", [])
-        question = state["question"]
-
-        if state.get("error"):
-            return {}
-
-        if not opened_dicts:
-            return {"timeline": [], "timeline_raw": ""}
-
-        with start_span(
-            "graph.timeline_node",
-            attributes={"evidence_count": len(opened_dicts)},
-        ):
-            try:
-                result = timeline_tool.execute(
-                    question=question,
-                    opened_chunks=opened_dicts,
-                )
-
-                timeline_items = result.get("timeline", [])
-                raw_output = result.get("raw_model_output", "")
-
-                add_span_attributes(
-                    {
-                        "timeline_count": len(timeline_items),
-                        "cited_chunk_count": len(result.get("cited_chunk_ids", [])),
-                    }
-                )
-
-                return {
-                    "timeline": timeline_items,
-                    "timeline_raw": raw_output,
-                }
-
-            except Exception as exc:
-                # Timeline failure is non-fatal: continue without it.
-                return {
-                    "timeline": [],
-                    "timeline_raw": "",
-                    "error": (f"timeline_node: {type(exc).__name__}: {exc}"),
-                }
-
-    return timeline_node
-
-
-def _make_answer_node(
-    model: Any,
-    prompt_builder: PromptBuilder | None,
-    generation_settings: dict[str, Any] | None,
-) -> Any:
-    """
-    Create the answer node.
-
-    Same as rag_graph's answer node but always includes the
-    timeline section in the prompt when available.
-    """
-    gen_settings = generation_settings or {}
-
-    fallback_system = (
-        "You are a meticulous historical researcher. Answer the user's "
-        "question using ONLY the evidence provided below. For each claim, "
-        "cite the source by writing [chunk_id] immediately after the claim. "
-        "Every paragraph of your answer must contain at least one citation.\n\n"
-        "A TIMELINE of events has been extracted from the evidence. Use it "
-        "to structure your answer chronologically when appropriate.\n\n"
-        "If the evidence does not contain enough information, say so honestly."
-    )
-
-    def answer_node(state: ResearcherState) -> dict[str, Any]:
-        opened_dicts = state.get("opened", [])
-        timeline_dicts = state.get("timeline", [])
-        question = state["question"]
-
-        # If upstream failed fatally, propagate
-        if state.get("error") and not opened_dicts:
-            return {}
-
-        if not opened_dicts:
-            return {
-                "answer_text": (
-                    "I don't have enough evidence in the provided "
-                    "articles to fully answer this question."
-                ),
-                "citations": [],
-                "tokens_in": 0,
-                "tokens_out": 0,
-                "model_latency_ms": 0.0,
-                "prompt_meta": {},
-            }
-
-        with start_span(
-            "graph.answer_node",
-            attributes={
-                "evidence_count": len(opened_dicts),
-                "timeline_count": len(timeline_dicts),
-            },
-        ):
-            try:
-                # --- Build prompt ---------------------------------
-                if prompt_builder is not None:
-                    messages, meta = prompt_builder.build(
-                        "answer_with_citations",
-                        question=question,
-                        opened_chunks=opened_dicts,
-                        timeline=timeline_dicts,
-                    )
-                else:
-                    # Fallback: inline prompt
-                    opened_objs = [OpenedChunk(**d) for d in opened_dicts]
-                    evidence_block = format_evidence_block(opened_objs)
-
-                    tl_objs = [TimelineItem(**t) for t in timeline_dicts]
-                    tl_section = format_timeline_section(tl_objs)
-
-                    user_message = f"Evidence:\n{evidence_block}\n\n"
-                    if tl_section:
-                        user_message += f"{tl_section}\n\n"
-                    user_message += (
-                        f"Question: {question}\n\n"
-                        "Answer the question using the evidence above. "
-                        "Cite sources using [chunk_id] notation. "
-                        "Every paragraph must have at least one citation."
-                    )
-                    messages = [
-                        {"role": "system", "content": fallback_system},
-                        {"role": "user", "content": user_message},
-                    ]
-                    meta = {
-                        "variant": "fallback_researcher",
-                        "template": "inline",
-                    }
-
-                # --- Call model -----------------------------------
-                response = model.generate(messages, **gen_settings)
-
-                # --- Extract citations ----------------------------
-                known_ids = [d.get("chunk_id", "") for d in opened_dicts]
-                citations = extract_citations(response.text, known_ids)
-
-                add_span_attributes(
-                    {
-                        "answer_length": len(response.text),
-                        "citation_count": len(citations),
-                        "tokens_in": response.tokens_in,
-                        "tokens_out": response.tokens_out,
-                    }
-                )
-
-                return {
-                    "answer_text": response.text,
-                    "citations": citations,
-                    "tokens_in": response.tokens_in,
-                    "tokens_out": response.tokens_out,
-                    "model_latency_ms": response.latency_ms,
-                    "prompt_meta": meta,
-                }
-
-            except Exception as exc:
-                return {
-                    "answer_text": "",
-                    "citations": [],
-                    "tokens_in": 0,
-                    "tokens_out": 0,
-                    "model_latency_ms": 0.0,
-                    "prompt_meta": {},
-                    "error": f"answer_node: {type(exc).__name__}: {exc}",
-                }
-
-    return answer_node
-
-
-def _make_validate_node(
-    policy: CitationPolicy,
-) -> Any:
-    """
-    Create the citation-validation node.
-
-    Runs ``validate_citations()`` against the configured policy
-    and writes the result into ``state["citation_validation"]``.
-    The conditional edge after this node reads ``citation_validation``
-    to decide whether to repair or finish.
-    """
-
-    def validate_node(state: ResearcherState) -> dict[str, Any]:
-        answer_text = state.get("answer_text", "")
-        opened_dicts = state.get("opened", [])
-        timeline_dicts = state.get("timeline", [])
-        opened_ids = [d.get("chunk_id", "") for d in opened_dicts]
-
-        # Skip validation if we already have an error or empty answer
-        if state.get("error") or not answer_text:
-            return {
-                "citation_validation": ValidationResult(valid=True).to_dict(),
-            }
-
-        with start_span(
-            "graph.validate_node",
-            attributes={
-                "opened_count": len(opened_ids),
-                "repair_attempts": state.get("repair_attempts", 0),
-            },
-        ):
-            vr = validate_citations(
-                answer_text=answer_text,
-                opened_ids=opened_ids,
-                policy=policy,
-                timeline=timeline_dicts or None,
+    def retrieve(state):
+        value = WorkerInput.model_validate(state["input"])
+        fresh = dict(
+            input=value,
+            started=time.monotonic(),
+            packed_evidence=(),
+            findings_draft=None,
+            validation=ValidationReport(),
+            repair_count=0,
+            error=None,
+            warnings=(),
+            diagnostics=Diagnostics(),
+            retrieval=HydratedRetrieval((), 0, 0),
+        )
+        if value.snapshot_id != snapshot_id:
+            fresh["error"] = _error(
+                "retrieve",
+                "snapshot_mismatch",
+                "Worker snapshot does not match pinned resources.",
             )
-
-            add_span_attributes(
-                {
-                    "validation_valid": vr.valid,
-                    "validation_errors": len(vr.errors),
-                    "validation_warnings": len(vr.warnings),
-                    "cited_count": len(vr.cited_ids),
-                    "hallucinated_count": len(vr.hallucinated_ids),
-                }
+            return fresh
+        try:
+            result = retriever.retrieve_hydrated(
+                Query(text=value.task.question), top_k=50
             )
-
-            return {"citation_validation": vr.to_dict()}
-
-    return validate_node
-
-
-def _make_repair_node(
-    model: Any,
-    prompt_builder: PromptBuilder | None,
-    generation_settings: dict[str, Any] | None,
-) -> Any:
-    """
-    Create the repair node.
-
-    Re-prompts the model with the original evidence, the previous
-    (failed) answer, and explicit instructions to fix citations.
-    Increments ``repair_attempts``.
-    """
-    gen_settings = generation_settings or {}
-
-    def repair_node(state: ResearcherState) -> dict[str, Any]:
-        opened_dicts = state.get("opened", [])
-        timeline_dicts = state.get("timeline", [])
-        question = state["question"]
-        previous_answer = state.get("answer_text", "")
-        validation = state.get("citation_validation", {})
-        repair_attempts = state.get("repair_attempts", 0)
-
-        opened_ids = [d.get("chunk_id", "") for d in opened_dicts]
-
-        with start_span(
-            "graph.repair_node",
-            attributes={"repair_attempt": repair_attempts + 1},
-        ):
-            try:
-                # Build evidence + timeline context
-                opened_objs = [OpenedChunk(**d) for d in opened_dicts]
-                evidence_block = format_evidence_block(opened_objs)
-
-                tl_objs = (
-                    [TimelineItem(**t) for t in timeline_dicts]
-                    if timeline_dicts
-                    else []
-                )
-                tl_section = format_timeline_section(tl_objs)
-
-                errors_text = "\n".join(f"- {e}" for e in validation.get("errors", []))
-
-                repair_prompt = (
-                    f"Your previous answer had citation problems:\n"
-                    f"{errors_text}\n\n"
-                    f"ALLOWED chunk IDs: {opened_ids}\n\n"
-                    f"Evidence:\n{evidence_block}\n\n"
-                )
-                if tl_section:
-                    repair_prompt += f"{tl_section}\n\n"
-                repair_prompt += (
-                    f"Question: {question}\n\n"
-                    f"Your previous answer:\n{previous_answer}\n\n"
-                    "Rewrite the answer. Rules:\n"
-                    "1. Use ONLY chunk IDs from the ALLOWED set above.\n"
-                    "2. Every paragraph must end with at least one "
-                    "[chunk_id] citation.\n"
-                    "3. Do NOT invent or hallucinate chunk IDs.\n"
-                    "4. Keep the factual content; just fix the citations."
-                )
-
-                messages = [{"role": "user", "content": repair_prompt}]
-                response = model.generate(messages, **gen_settings)
-
-                citations = extract_citations(response.text, opened_ids)
-
-                add_span_attributes(
-                    {
-                        "repair_answer_length": len(response.text),
-                        "repair_citation_count": len(citations),
-                    }
-                )
-
-                return {
-                    "answer_text": response.text,
-                    "citations": citations,
-                    "tokens_in": (state.get("tokens_in", 0) + response.tokens_in),
-                    "tokens_out": (state.get("tokens_out", 0) + response.tokens_out),
-                    "model_latency_ms": (
-                        state.get("model_latency_ms", 0.0) + response.latency_ms
+            fresh["retrieval"] = result
+            fresh["diagnostics"] = Diagnostics(
+                retrieved=result.retrieved, opened=result.opened
+            )
+            if result.missing_ids:
+                fresh["warnings"] = (
+                    Notice(
+                        code="hydration_partial",
+                        message=f"{len(result.missing_ids)} candidate chunks unavailable.",
                     ),
-                    "repair_attempts": repair_attempts + 1,
+                )
+            if result.retrieved and not result.chunks:
+                fresh["error"] = _error(
+                    "retrieve",
+                    "hydration_failed",
+                    "Search matched candidates but no hydrated evidence survived.",
+                )
+        except Exception as exc:
+            fresh["error"] = _error(
+                "retrieve", "retrieval_failed", f"{type(exc).__name__}: {exc}"
+            )
+        return fresh
+
+    def timed_out(state):
+        return time.monotonic() - state["started"] >= state["input"].limits.task_seconds
+
+    def pack(state):
+        if state["error"]:
+            return {}
+        try:
+            if timed_out(state):
+                raise TimeoutError("task deadline exceeded")
+            value = state["input"]
+            # Fail an impossible request budget even when no chunk could fit.
+            if (
+                request_bound(findings_messages(value, ()))
+                + value.limits.output_tokens
+                + REPAIR_RESERVE
+                > value.limits.prompt_tokens
+            ):
+                raise ValueError(
+                    "instructions/question/schema/output exceed task budget"
+                )
+            evidence = pack_evidence(value, state["retrieval"].chunks)
+            return {
+                "packed_evidence": evidence,
+                "diagnostics": state["diagnostics"].model_copy(
+                    update={"presented": len(evidence)}
+                ),
+            }
+        except Exception as exc:
+            return {"error": _error("pack_evidence", "packing_failed", str(exc))}
+
+    def generate(state, repairing=False):
+        if state["error"] or not state["packed_evidence"]:
+            return {}
+        update = {"repair_count": int(repairing)}
+        value = state["input"]
+        errors = state["validation"].errors if repairing else ()
+        messages = findings_messages(value, state["packed_evidence"], errors)
+        try:
+            if timed_out(state):
+                raise TimeoutError("task deadline exceeded")
+            if (
+                request_bound(messages, state["packed_evidence"])
+                + value.limits.output_tokens
+                > value.limits.prompt_tokens
+            ):
+                raise ValueError("rendered request exceeds task budget")
+            started = time.monotonic()
+            response = model.generate(
+                [
+                    {
+                        "role": "system",
+                        "content": json_instruction(
+                            Findings,
+                            generation_schema=findings_schema(state["packed_evidence"]),
+                        ),
+                    },
+                    *messages,
+                ],
+                temperature=0,
+                max_tokens=min(value.limits.output_tokens, 4096),
+                stream=False,
+                json_schema=findings_schema(state["packed_evidence"]),
+            )
+            update["diagnostics"] = state["diagnostics"].model_copy(
+                update={
+                    "tokens_in": state["diagnostics"].tokens_in
+                    + max(0, response.tokens_in),
+                    "tokens_out": state["diagnostics"].tokens_out
+                    + max(0, response.tokens_out),
                 }
+            )
+            if (
+                timed_out(state)
+                or time.monotonic() - started > value.limits.request_seconds
+            ):
+                raise TimeoutError("model/task deadline exceeded")
+        except Exception as exc:
+            update["error"] = _error(
+                "repair_findings" if repairing else "derive_findings",
+                "model_failed",
+                f"{type(exc).__name__}: {exc}",
+            )
+            return update
+        try:
+            if (
+                response.finish_reason == "length"
+                or response.tokens_out > value.limits.output_tokens
+                or token_bound(response.text) > value.limits.output_tokens
+            ):
+                raise ValueError("truncated or over-budget findings output")
+            draft = Findings.model_validate_json(response.text)
+            update.update(findings_draft=draft, validation=ValidationReport())
+        except ValueError as exc:
+            if isinstance(exc, ValidationError):
+                # Report schema locations/messages, never echo invalid model
+                # prose or raw input values into the repair context.
+                message = "; ".join(
+                    f"{'.'.join(map(str, e['loc'])) or 'root'}: {e['msg']}"
+                    for e in exc.errors(
+                        include_input=False, include_context=False, include_url=False
+                    )
+                )
+            else:
+                message = str(exc)
+            update.update(
+                findings_draft=None,
+                validation=ValidationReport(status="failed", errors=(message[:1900],)),
+            )
+        return update
 
-            except Exception as exc:
-                return {
-                    "repair_attempts": repair_attempts + 1,
-                    "error": f"repair_node: {type(exc).__name__}: {exc}",
-                }
-
-    return repair_node
-
-
-# ------------------------------------------------------------------ #
-#  Routing                                                            #
-# ------------------------------------------------------------------ #
-
-
-def _make_should_repair(policy: CitationPolicy) -> Any:
-    """
-    Create the conditional routing function after validate_node.
-
-    Returns ``"repair"`` if the validation failed and the repair
-    budget has not been exhausted; otherwise returns ``"end"``.
-    """
-
-    def should_repair(state: ResearcherState) -> str:
-        validation = state.get("citation_validation", {})
-        repair_attempts = state.get("repair_attempts", 0)
-
+    def validate(state):
         if (
-            not validation.get("valid", True)
-            and repair_attempts < policy.max_repair_attempts
+            state["error"]
+            or not state["packed_evidence"]
+            or state["findings_draft"] is None
         ):
-            return "repair"
-        return "end"
+            return {}
+        try:
+            value, draft, evidence = (
+                state["input"],
+                state["findings_draft"],
+                state["packed_evidence"],
+            )
+            # No IDs or alias translation until every proposal passes.
+            aliases = {f"E{i}": e for i, e in enumerate(evidence, 1)}
+            errors = []
+            seen = set()
+            for i, f in enumerate(draft.findings):
+                location = f"findings.{i}"
+                if f.statement in seen:
+                    errors.append(
+                        f"{location}.statement: duplicate source statement; select each statement once"
+                    )
+                seen.add(f.statement)
+                if any(a not in aliases for a in f.evidence_refs):
+                    errors.append(
+                        f"{location}: unknown or not-presented evidence reference"
+                    )
+                    continue
+                if f.date_text and (
+                    f.date_text not in f.statement
+                    or not any(f.date_text in aliases[a].text for a in f.evidence_refs)
+                ):
+                    errors.append(
+                        f"{location}.date_text: date expression absent from referenced excerpt; copy ONE exact span or use null"
+                    )
+                if not any(
+                    f.statement in source_statements(aliases[a].text)
+                    for a in f.evidence_refs
+                ):
+                    errors.append(
+                        f"{location}.statement: requires one offered verbatim span from a cited excerpt"
+                    )
+                errors.extend(
+                    f"{location}.statement: {error}"
+                    for error in support_errors(
+                        f.statement, tuple(aliases[a].text for a in f.evidence_refs)
+                    )
+                )
+            if errors:
+                return {
+                    "validation": ValidationReport(
+                        status="failed", errors=tuple(errors[:24])
+                    )
+                }
+            for e in evidence:
+                if e.key.snapshot_id != snapshot_id or e.presented_to != (
+                    value.task.task_id,
+                ):
+                    raise ValueError("invalid presented-span provenance")
+                original = next(
+                    c for c in state["retrieval"].chunks if c.chunk_id == e.key.chunk_id
+                )
+                e.verify_chunk(original.text)
+            return {"validation": ValidationReport(status="passed")}
+        except (ValueError, StopIteration) as exc:
+            return {
+                "validation": ValidationReport(
+                    status="failed",
+                    errors=(str(exc)[:1900] or "missing hydrated chunk",),
+                )
+            }
 
-    return should_repair
+    def finish(state):
+        value = state["input"]
+        error = state["error"]
+        if not error and state["validation"].status == "failed":
+            error = _error(
+                "validate_findings",
+                "findings_invalid",
+                "; ".join(state["validation"].errors),
+            )
+        if not error and timed_out(state):
+            error = _error("finish_task", "task_timeout", "Task deadline exceeded.")
+        findings, gaps = (), ()
+        if not error:
+            draft = state["findings_draft"]
+            if state["validation"].status == "passed" and draft is not None:
+                findings = admit_findings(
+                    value.task.task_id, draft, state["packed_evidence"]
+                )
+                gaps = draft.gaps
+            if not findings and not gaps:
+                gaps = ("No supported findings in the presented evidence.",)
+            if value.task.needs_timeline and not any(f.date_text for f in findings):
+                gaps = (
+                    *gaps,
+                    "Requested chronology is not supported by dated findings.",
+                )
+            if state["warnings"]:
+                gaps = (*gaps, "Some retrieved evidence could not be hydrated.")
+            if state["retrieval"].chunks and not state["packed_evidence"]:
+                gaps = (*gaps, "No evidence fits the task prompt budget.")
+            gaps = tuple(dict.fromkeys(gaps))
+            if len(gaps) > 3:
+                # Wire output is byte-bounded; its three model gaps plus these
+                # short code notices fit one Text field without losing gaps.
+                gaps = (*gaps[:2], " ".join(gaps[2:]))
+        result = ResearchResult(
+            task_id=value.task.task_id,
+            snapshot_id=value.snapshot_id,
+            status="failed"
+            if error
+            else "insufficient_evidence"
+            if gaps or not findings
+            else "complete",
+            findings=findings,
+            evidence=state["packed_evidence"],
+            gaps=gaps,
+            warnings=state["warnings"],
+            error=error,
+            diagnostics=state["diagnostics"].model_copy(
+                update={"elapsed_ms": (time.monotonic() - state["started"]) * 1000}
+            ),
+        )
+        return {"result": result}
 
-
-# ------------------------------------------------------------------ #
-#  Graph builder                                                      #
-# ------------------------------------------------------------------ #
-
-
-def build_researcher_graph(
-    search_tool: Any,
-    open_chunk_tool: Any,
-    timeline_tool: Any,
-    model: Any,
-    prompt_builder: PromptBuilder | None = None,
-    generation_settings: dict[str, Any] | None = None,
-    open_top_n: int = 5,
-    search_top_k: int = 10,
-    citation_policy: CitationPolicy | None = None,
-) -> Any:
-    """
-    Build and compile the researcher graph.
-
-    Topology::
-
-        retrieve → open → timeline → answer → validate ─→ END
-                                                  ↑   │
-                                                  │   └─ repair ─┘
-
-    Args:
-        search_tool:  SearchWikipediaTool or equivalent.
-        open_chunk_tool:  OpenChunkTool or equivalent.
-        timeline_tool:  TimelineTool or equivalent.
-        model:  LanguageModel with ``.generate()``.
-        prompt_builder:  Optional ``PromptBuilder`` instance.
-        generation_settings:  Extra kwargs for ``model.generate()``.
-        open_top_n:  Default chunks to open (overridable per-invoke).
-        search_top_k:  Default chunks to retrieve (overridable).
-        citation_policy:  Validation policy.  Defaults to
-                          ``RESEARCHER_STRICT``.
-
-    Returns:
-        Compiled LangGraph ready for ``.invoke()``.
-    """
-    policy = citation_policy or RESEARCHER_STRICT
-
-    builder: StateGraph = StateGraph(ResearcherState)
-
-    # --- Register nodes -------------------------------------------
-    builder.add_node(
+    graph = StateGraph(
+        WorkerState, input_schema=WorkerChannels, output_schema=WorkerOutput
+    )
+    graph.add_node("retrieve", worker_phase("retrieve", retrieve))
+    graph.add_node("pack_evidence", worker_phase("pack_evidence", pack))
+    graph.add_node("derive_findings", worker_phase("derive_findings", generate))
+    graph.add_node("validate_findings", worker_phase("validate_findings", validate))
+    graph.add_node(
+        "repair_findings",
+        worker_phase("repair_findings", lambda s: generate(s, repairing=True)),
+    )
+    graph.add_node("finish_task", worker_phase("finish_task", finish))
+    graph.set_entry_point("retrieve")
+    graph.add_conditional_edges(
         "retrieve",
-        _make_retrieve_node(search_tool, default_top_k=search_top_k),
+        lambda s: (
+            "finish_task"
+            if s["error"] or not s["retrieval"].chunks
+            else "pack_evidence"
+        ),
     )
-    builder.add_node(
-        "open",
-        _make_open_node(open_chunk_tool, default_top_n=open_top_n),
+    graph.add_conditional_edges(
+        "pack_evidence",
+        lambda s: (
+            "finish_task"
+            if s["error"] or not s["packed_evidence"]
+            else "derive_findings"
+        ),
     )
-    builder.add_node(
-        "timeline",
-        _make_timeline_node(timeline_tool),
+    graph.add_edge("derive_findings", "validate_findings")
+    graph.add_conditional_edges(
+        "validate_findings",
+        lambda s: (
+            "repair_findings"
+            if not s["error"]
+            and s["validation"].status == "failed"
+            and s["repair_count"] == 0
+            else "finish_task"
+        ),
     )
-    builder.add_node(
-        "answer",
-        _make_answer_node(model, prompt_builder, generation_settings),
-    )
-    builder.add_node(
-        "validate",
-        _make_validate_node(policy),
-    )
-    builder.add_node(
-        "repair",
-        _make_repair_node(model, prompt_builder, generation_settings),
-    )
-
-    # --- Wire edges -----------------------------------------------
-    builder.set_entry_point("retrieve")
-    builder.add_edge("retrieve", "open")
-    builder.add_edge("open", "timeline")
-    builder.add_edge("timeline", "answer")
-    builder.add_edge("answer", "validate")
-
-    # Conditional: repair or finish
-    builder.add_conditional_edges(
-        "validate",
-        _make_should_repair(policy),
-        {"repair": "repair", "end": END},
-    )
-    builder.add_edge("repair", "validate")
-
-    return builder.compile()
-
-
-# ------------------------------------------------------------------ #
-#  Convenience runner (observability wrapper)                          #
-# ------------------------------------------------------------------ #
-
-
-def run_researcher_graph(
-    graph: Any,
-    question: str,
-    config_snapshot: dict[str, Any] | None = None,
-    *,
-    search_top_k: int | None = None,
-    open_top_n: int | None = None,
-    run_type: str = "researcher_graph",
-    service_name: str = "agentic-workbench-researcher-graph",
-) -> ResearcherState:
-    """
-    Invoke the researcher graph with full observability setup.
-
-    Sets up ``run_context``, tracing, logging, and metrics around
-    a single graph invocation.
-
-    Args:
-        graph:  Compiled researcher graph.
-        question:  The user question.
-        config_snapshot:  Frozen config for run record.
-        search_top_k:  Override default search_top_k.
-        open_top_n:  Override default open_top_n.
-        run_type:  Run type label.
-        service_name:  Service name for tracing.
-
-    Returns:
-        Final ``ResearcherState`` dict.
-    """
-    from workbench.core.run_context import run_context
-    from workbench.observability.logging import get_logger
-    from workbench.observability.metrics import get_metrics_store
-    from workbench.observability.tracing import setup_tracing
-
-    snapshot = config_snapshot or {}
-    setup_tracing(service_name=service_name)
-
-    with run_context(snapshot, run_type=run_type) as ctx:
-        logger = get_logger(run_id=ctx.run_id)
-        metrics = get_metrics_store()
-
-        logger.log_run_started(ctx.run_id, run_type, snapshot)
-        logger.log_query(question)
-
-        with start_span(
-            "researcher_graph.run",
-            attributes={"question": question[:200]},
-        ):
-            t0 = time.time()
-
-            # --- Build initial state ------------------------------
-            initial_state: dict[str, Any] = {"question": question}
-            if search_top_k is not None:
-                initial_state["search_top_k"] = search_top_k
-            if open_top_n is not None:
-                initial_state["open_top_n"] = open_top_n
-
-            # --- Invoke -------------------------------------------
-            result: ResearcherState = graph.invoke(initial_state)
-
-            total_ms = (time.time() - t0) * 1000
-
-        # --- Log results ------------------------------------------
-        validation = result.get("citation_validation", {})
-        logger.log_event(
-            "researcher_graph_completed",
-            {
-                "question": question[:200],
-                "answer_length": len(result.get("answer_text", "")),
-                "citation_count": len(result.get("citations", [])),
-                "retrieved_count": len(result.get("retrieved", [])),
-                "opened_count": len(result.get("opened", [])),
-                "timeline_count": len(result.get("timeline", [])),
-                "tokens_in": result.get("tokens_in", 0),
-                "tokens_out": result.get("tokens_out", 0),
-                "repair_attempts": result.get("repair_attempts", 0),
-                "validation_valid": validation.get("valid"),
-                "validation_errors": validation.get("errors", []),
-                "error": result.get("error"),
-                "total_ms": round(total_ms, 1),
-            },
-        )
-
-        if result.get("retrieved"):
-            logger.log_retrieval(
-                query=question,
-                num_results=len(result["retrieved"]),
-                retrieval_method="hybrid",
-                duration_ms=total_ms,
-            )
-
-        tokens_out = result.get("tokens_out", 0)
-        if tokens_out > 0:
-            logger.log_model_call(
-                model_name="local-model",
-                tokens_in=result.get("tokens_in", 0),
-                tokens_out=tokens_out,
-                duration_ms=result.get("model_latency_ms", 0.0),
-            )
-
-        # --- Record metrics ---------------------------------------
-        metrics.record_component_latency(
-            component_name="researcher_graph.run",
-            duration_ms=total_ms,
-            component_type="graph",
-        )
-
-        if tokens_out > 0:
-            metrics.record_model_tokens(
-                model_name="local-model",
-                tokens_in=result.get("tokens_in", 0),
-                tokens_out=tokens_out,
-                duration_ms=result.get("model_latency_ms", 0.0),
-            )
-
-        metrics.record_retrieval(
-            final_count=len(result.get("opened", [])),
-            query=question,
-            keyword_candidates=len(result.get("retrieved", [])),
-            vector_candidates=len(result.get("retrieved", [])),
-            reranked=len(result.get("retrieved", [])),
-            duration_ms=total_ms,
-        )
-
-        print(f"\nRun ID: {ctx.run_id}")
-        return result
+    graph.add_edge("repair_findings", "validate_findings")
+    graph.add_edge("finish_task", END)
+    return graph.compile()

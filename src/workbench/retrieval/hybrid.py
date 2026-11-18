@@ -34,9 +34,10 @@ Usage:
 from __future__ import annotations
 
 import time
+from dataclasses import dataclass
 from typing import Any
 
-from workbench.core.types import ChunkRef, Query, RerankResult, RetrievalResult
+from workbench.core.types import Chunk, ChunkRef, Query, RerankResult, RetrievalResult
 from workbench.observability.tracing import add_span_attributes, start_span
 
 # Snippet length included in ChunkRef objects
@@ -105,6 +106,16 @@ def reciprocal_rank_fusion(
 # ---------------------------------------------------------------------------
 
 
+@dataclass(frozen=True)
+class HydratedRetrieval:
+    """One search's ranked records and explicit hydration losses."""
+
+    chunks: tuple[Chunk, ...]
+    retrieved: int
+    opened: int
+    missing_ids: tuple[str, ...] = ()
+
+
 class HybridRetriever:
     """
     Retriever that fuses keyword + vector search and optionally reranks.
@@ -145,9 +156,9 @@ class HybridRetriever:
         self.vector_searcher = vector_searcher
         self.reranker = reranker
         self.chunk_store = chunk_store
-        self.keyword_top_k = keyword_top_k
-        self.vector_top_k = vector_top_k
-        self.merge_top_n = merge_top_n
+        self.keyword_top_k = max(1, min(keyword_top_k, 20))
+        self.vector_top_k = max(1, min(vector_top_k, 20))
+        self.merge_top_n = max(1, min(merge_top_n, 50))
         self.rrf_k = rrf_k
 
     # ------------------------------------------------------------------
@@ -176,8 +187,8 @@ class HybridRetriever:
             vec_results = self.vector_searcher.search(query, top_k=self.vector_top_k)
 
             merged = reciprocal_rank_fusion(
-                kw_results,
-                vec_results,
+                kw_results[: self.keyword_top_k],
+                vec_results[: self.vector_top_k],
                 k=self.rrf_k,
                 top_n=self.merge_top_n,
             )
@@ -194,6 +205,38 @@ class HybridRetriever:
             )
 
             return merged
+
+    def retrieve_hydrated(self, query: Query, top_k: int = 50) -> HydratedRetrieval:
+        """Merge, hydrate once and rerank once; never reopen ranked records.
+
+        Missing rows are observable even if enough other candidates survive.
+        Store/reranker exceptions propagate as technical failures.
+        """
+        if self.chunk_store is None:
+            raise ValueError("hydrated retrieval requires a pinned chunk store")
+        top_k = max(1, min(top_k, 50))
+        merged = self.merge(query)
+        ids = [r.chunk_id for r in merged]
+        if not ids:
+            return HydratedRetrieval((), 0, 0)
+        with start_span("retrieve.hydrate"):
+            by_id = {
+                c.chunk_id: c
+                for c in self.chunk_store.get_many(ids)
+                if c.chunk_id in ids and c.text.strip()
+            }
+            chunks = [by_id[cid] for cid in ids if cid in by_id]
+        missing = tuple(cid for cid in ids if cid not in by_id)
+        if self.reranker is not None and chunks:
+            with start_span("retrieve.rerank"):
+                ranked = self.reranker.rerank(query, chunks, top_n=top_k)
+                ranked_ids = [r.chunk_id for r in ranked]
+                if len(set(ranked_ids)) != len(ranked_ids) or any(
+                    cid not in by_id for cid in ranked_ids
+                ):
+                    raise ValueError("reranker returned unknown/duplicate records")
+                chunks = [by_id[cid] for cid in ranked_ids[:top_k]]
+        return HydratedRetrieval(tuple(chunks[:top_k]), len(ids), len(by_id), missing)
 
     def retrieve(self, query: Query, top_k: int = 5) -> list[ChunkRef]:
         """

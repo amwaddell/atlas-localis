@@ -10,7 +10,7 @@ Usage:
 
 Prerequisites:
     pip install -r requirements.txt
-    (optional) pip install -r requirements-phoenix.txt && phoenix serve
+    (optional) pip install -r requirements-phoenix.txt && bash scripts/run_phoenix.sh
 """
 
 from __future__ import annotations

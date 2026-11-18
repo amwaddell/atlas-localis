@@ -19,9 +19,9 @@ from pathlib import Path
 
 import lancedb
 import pytest
-from workbench.stores.chunk_store import ChunkStore
 
 from workbench.core.types import Chunk
+from workbench.stores.chunk_store import ChunkStore
 
 # --- Fixture data (matches keyword/vector test corpora) ----------------------
 
@@ -267,3 +267,6 @@ class TestChunkStoreRepr:
         chunk_store.get("photo_001")
         r = repr(chunk_store)
         assert "5" in r
+
+
+pytestmark = pytest.mark.fixture_integration
