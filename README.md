@@ -6,6 +6,10 @@ Atlas Localis is a local-first research application that turns historical questi
 
 **Python 3.12 · LangGraph · LanceDB · llama.cpp / Metal · Streamlit · OpenTelemetry**
 
+![Atlas Localis answering a historical question with numbered local citations](docs/images/atlas-localis-research.png)
+
+*Live local research over Wikipedia. [Inspect an expanded source](docs/images/atlas-localis-evidence.png) · [View the welcome screen](docs/images/atlas-localis-welcome.png).*
+
 ## From question to evidence
 
 Ask a question, follow the research progress, and inspect the local excerpts behind each numbered citation. Follow-up questions use bounded conversation context. Questions without sufficient evidence can return partial answers, evidence gaps or a request for clarification.

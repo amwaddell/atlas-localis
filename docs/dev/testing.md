@@ -21,7 +21,7 @@ Use a fresh venv path if `.venv` already contains an environment you need to pre
 
 ## Release polish verification — 18 November 2026
 
-In the existing Python 3.12 environment: **765 model-free tests passed; 40 real-model acceptance tests deselected**. Source/test/script Ruff lint, the CI format selection, `pip check`, model-free preflight, 24-case/rubric validation and five retained report validations passed. Local documentation links resolve. Streamlit AppTest exercised the empty state, clear-chat action and missing-assets guidance with injected resources; the real launcher started on loopback. No browser screenshot or fresh real-model answer/acceptance run was captured in this pass.
+In the existing Python 3.12 environment: **765 model-free tests passed; 40 real-model acceptance tests deselected**. Source/test/script Ruff lint, the CI format selection, `pip check`, model-free preflight, 24-case/rubric validation and five retained report validations passed. Local documentation links resolve. Streamlit AppTest exercised the empty state, clear-chat action and missing-assets guidance with injected resources; the real launcher started on loopback. A subsequent live Chrome capture verified the welcome screen and a real local answer to “When did the Roman Republic end?”, including numbered citations and an expanded source excerpt. Screenshots are under `docs/images/`. This is a single-question UI smoke check, not a fresh real-model acceptance-suite run.
 
 ## Real-model checks and evaluation
 

@@ -18,7 +18,7 @@ def apply_theme():
     [data-testid="stHeader"] { background: #070b09; }
     [data-testid="stSidebar"] { background: #0c130e; border-right: 1px solid #294532; }
     [data-testid="stSidebar"] .stButton button { width: 100%; }
-    .block-container { max-width: 1040px; padding-top: 3rem; padding-bottom: 3rem; }
+    .block-container { max-width: 1040px; padding-top: 5rem; padding-bottom: 3rem; }
     [data-testid="stChatMessage"] {
         background: #0c130e; border: 1px solid #294532;
         border-left: 3px solid #548d62; border-radius: 4px;

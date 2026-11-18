@@ -84,6 +84,7 @@ def main():
             {"role": "assistant", "content": result.answer_text, "result": result}
         )
         st.session_state.cancel_event = None
+        st.rerun()
 
 
 if __name__ == "__main__":
