@@ -18,10 +18,9 @@ def render_result(result):
                 for gap in task["gaps"]:
                     st.text(gap)
     for citation in view["citations"]:
-        with st.expander(
-            f"[{citation['number']}] Local source · {citation['chunk_id']}"
-        ):
-            st.caption(f"Snapshot: {citation['snapshot_id']}")
+        with st.expander(f"[{citation['number']}] Local source"):
+            st.text(f"Snapshot: {citation['snapshot_id']}")
+            st.text(f"Chunk: {citation['chunk_id']}")
             for excerpt in citation["excerpts"]:
                 st.text(excerpt["title"])
                 if excerpt["section"]:

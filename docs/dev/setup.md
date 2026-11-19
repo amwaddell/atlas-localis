@@ -39,6 +39,14 @@ python scripts/run_agent_chat.py "When did the Roman Republic end?"
 
 Close the UI process before running another application consumer. The model server can stay running; the application resource lease prevents competing UI/CLI/evaluation owners. Use Ctrl+C in each launcher terminal to stop it.
 
+## Using the research interface
+
+Type a question into the field at the bottom of the welcome screen. Once research starts, Atlas moves into the sidebar and the main area shows progress followed by the answer. Ask a follow-up in the same field to retain the conversation context.
+
+Expand **Research tasks** to inspect task coverage and evidence gaps. Each numbered **Local source** contains the exact excerpt, title, section, snapshot identifier and chunk identifier. The sidebar's **Session details** shows the snapshot used for the current session.
+
+**Clear chat** clears the transcript and conversation summary and restores the welcome screen. On a narrow screen, use the sidebar toggle to reach session controls. **Cancel active research** requests cancellation; an interrupted run can leave the question without a final cancellation message. See [known limitations](testing.md#known-limitations).
+
 ## Common problems
 
 | Symptom | Action |

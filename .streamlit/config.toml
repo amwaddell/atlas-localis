@@ -10,5 +10,13 @@ base = "dark"
 primaryColor = "#7dff9b"
 backgroundColor = "#070b09"
 secondaryBackgroundColor = "#101a13"
-textColor = "#bcefc8"
-font = "monospace"
+textColor = "#C8E8CE"
+font = "IBM Plex Mono, monospace"
+headingFont = "VT323, monospace"
+headingFontWeights = 400
+codeFont = "IBM Plex Mono, monospace"
+baseFontSize = 16
+baseFontWeight = 400
+
+[theme.sidebar]
+headingFontWeights = 400

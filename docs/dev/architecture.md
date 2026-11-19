@@ -190,7 +190,8 @@ model stack beside a resident UI. The ownership lock lasts until resource close.
 All consumers use the same pure whole-exchange conversation selection: up to 100
 recent input turns, then the 6,000-character history/summary budget (at most 2,000
 summary characters), with explicit truncation. The UI never makes summary-model
-calls. Clearing chat clears the transcript; the application keeps no chat memory.
+calls. Clearing chat resets the transcript and conversation summary and restores
+the welcome screen; the application keeps no chat memory.
 Evaluation alone exposes recorded forced-single-task and rerank controls; single
 research tasks still go through validated findings and final synthesis.
 

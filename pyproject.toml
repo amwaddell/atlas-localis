@@ -42,6 +42,7 @@ where = ["src"]
 [tool.setuptools.package-data]
 "workbench.evaluation" = ["data/*.json"]
 "workbench.prompting" = ["templates/*.txt"]
+"workbench.ui" = ["assets/*.png", "assets/fonts/*.ttf", "assets/fonts/*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

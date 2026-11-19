@@ -357,6 +357,7 @@ def test_fake_streamlit_walkthrough_has_canonical_sources_and_no_selector(monkey
     path = Path(__file__).parents[1] / "src/workbench/ui/streamlit_app.py"
     ui = AppTest.from_file(str(path)).run(timeout=10)
     assert not ui.exception and not ui.selectbox
+    assert sum('class="atlas-welcome"' in e.proto.body for e in ui.get("html")) == 1
     ui.chat_input[0].set_value("When did Rome change?").run(timeout=10)
     assert not ui.exception
     text = [element.value for element in ui.text]
@@ -364,6 +365,20 @@ def test_fake_streamlit_walkthrough_has_canonical_sources_and_no_selector(monkey
     assert "Rome changed in 27 BC." in text
     assert not any("derive-findings/v1" in item for item in text)
     assert ui.session_state.messages[-1]["result"].outcome == "complete"
+    assert not any('class="atlas-welcome"' in e.proto.body for e in ui.get("html"))
+    assert (
+        sum(
+            'class="atlas-sprite atlas-sprite--sidebar"' in e.proto.body
+            for e in ui.get("html")
+        )
+        == 1
+    )
+    ui.session_state.conversation_summary = "Earlier research"
+    next(button for button in ui.button if button.label == "Clear chat").click().run()
+    assert not ui.exception
+    assert not ui.session_state.messages and not ui.session_state.conversation_summary
+    assert sum('class="atlas-welcome"' in e.proto.body for e in ui.get("html")) == 1
+    assert not ui.chat_message
 
 
 @pytest.mark.fixture_integration

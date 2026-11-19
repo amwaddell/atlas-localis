@@ -10,6 +10,7 @@ Atlas Localis ships one research workflow. The distribution is `atlas-localis`; 
 | [Data lifecycle](data-lifecycle.md) | Acquisition, resumable indexing, snapshots and rollback |
 | [Development and testing](testing.md) | Model-free checks, evaluation, acceptance and known limitations |
 | [Observability](observability.md) | Logs, metrics, tracing and local Phoenix integration |
+| [UI implementation and review](../design/ATLAS_LOCALIS_RETRO_UI_REVIEW.md) | Terminal design, bundled assets, screenshots and browser verification |
 
 ## Source map
 
@@ -18,7 +19,7 @@ Atlas Localis ships one research workflow. The distribution is `atlas-localis`; 
 - `src/workbench/retrieval/`: hybrid search, reranking and evidence packing.
 - `src/workbench/data_build/`: acquisition, ingestion, indexes and snapshots.
 - `src/workbench/models/`: local inference, native process and structured generation.
-- `src/workbench/ui/`: Streamlit chat, progress and citation rendering.
+- `src/workbench/ui/`: Streamlit chat, terminal theme, bundled artwork/fonts, progress and inert source rendering.
 - `tests/`: unit, fixture integration and explicit real-model acceptance.
 - `configs/`, `locks/`: defaults, artifact manifests and exact dependency versions.
 
