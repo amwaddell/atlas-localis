@@ -511,10 +511,10 @@ def test_checked_in_artifact_pins_and_exact_locks_are_well_formed():
             assert pin.operator == "==" and "*" not in pin.version
             if requirement.marker:
                 assert path.name == "ci-py312.txt"
-                assert requirement.name == "torch"
-                assert str(requirement.marker) in {
-                    'sys_platform == "darwin"',
-                    'sys_platform == "linux"',
+                assert (requirement.name, str(requirement.marker)) in {
+                    ("torch", 'sys_platform == "darwin"'),
+                    ("torch", 'sys_platform == "linux"'),
+                    ("watchdog", 'sys_platform == "linux"'),
                 }
         assert len(entries) == len(set(entries))
         assert "lancedb==0.29.2" in entries
